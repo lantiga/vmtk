@@ -71,7 +71,50 @@ public:
 
   template<typename TImage>
   static void
-  ITKToVTKImage(typename TImage::Pointer input, vtkImageData* output) {
+  VTKToITKImage2D(vtkImageData* input, typename TImage::Pointer output) {
+
+    typedef TImage ImageType;
+    typedef typename ImageType::Pointer ImagePointer;
+    typedef typename ImageType::PixelType PixelType;
+
+    int dims[3];
+    input->GetDimensions(dims);
+    double spacing[3];
+    input->GetSpacing(spacing);
+
+    double outputSpacing[2];
+    outputSpacing[0] = spacing[0];
+    outputSpacing[1] = spacing[1];
+
+    output->GetPixelContainer()->SetImportPointer(static_cast<PixelType*>(input->GetScalarPointer()),dims[0]*dims[1],false);
+    typename ImageType::RegionType region;
+    typename ImageType::IndexType index;
+    typename ImageType::SizeType size;
+    index[0] = index[1] = 0;
+    size[0] = dims[0];
+    size[1] = dims[1];
+    region.SetIndex(index);
+    region.SetSize(size);
+    output->SetLargestPossibleRegion(region);
+    output->SetBufferedRegion(region);
+    output->SetSpacing(outputSpacing);
+  }
+
+  template<typename TImage>
+  static void
+  ITKToVTKImage(const TImage* input, vtkImageData* output) {
+
+    typedef TImage ImageType;
+    typedef typename ImageType::PixelType PixelType;
+
+    //TODO: make sure output has the right number of pixels
+
+    memcpy(static_cast<PixelType*>(output->GetScalarPointer()),input->GetBufferPointer(),input->GetBufferedRegion().GetNumberOfPixels()*sizeof(PixelType));
+  }
+
+  template<typename TImage>
+  static void
+  ITKToVTKImage(const typename TImage::Pointer input, vtkImageData* output) {
 
     typedef TImage ImageType;
     typedef typename ImageType::Pointer ImagePointer;

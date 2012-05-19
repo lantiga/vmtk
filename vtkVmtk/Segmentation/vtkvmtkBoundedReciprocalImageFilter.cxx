@@ -24,8 +24,29 @@ Version:   $Revision: 1.1 $
 =========================================================================*/
 
 #include "vtkvmtkBoundedReciprocalImageFilter.h"
+#include "vtkImageData.h"
 #include "vtkObjectFactory.h"
+
+#include "vtkvmtkITKFilterUtilities.h"
+
+#include "itkBoundedReciprocalImageFilter.h"
 
 vtkCxxRevisionMacro(vtkvmtkBoundedReciprocalImageFilter, "$Revision: 1.3 $");
 vtkStandardNewMacro(vtkvmtkBoundedReciprocalImageFilter);
 
+void vtkvmtkBoundedReciprocalImageFilter::SimpleExecute(vtkImageData *input, vtkImageData *output)
+{
+  typedef itk::Image<float,3> ImageType;
+
+  ImageType::Pointer inImage = ImageType::New();
+
+  vtkvmtkITKFilterUtilities::VTKToITKImage<ImageType>(input,inImage);
+
+  typedef itk::BoundedReciprocalImageFilter<ImageType,ImageType> ImageFilterType;
+
+  ImageFilterType::Pointer imageFilter = ImageFilterType::New();
+  imageFilter->SetInput(inImage);
+  imageFilter->Update();
+
+  vtkvmtkITKFilterUtilities::ITKToVTKImage<ImageType>(imageFilter->GetOutput(),output);
+}

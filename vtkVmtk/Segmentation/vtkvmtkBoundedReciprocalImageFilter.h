@@ -32,25 +32,21 @@ Version:   $Revision: 1.3 $
 #define __vtkvmtkBoundedReciprocalImageFilter_h
 
 
-#include "vtkvmtkITKImageToImageFilterFF.h"
-#include "itkBoundedReciprocalImageFilter.h"
+#include "vtkSimpleImageToImageFilter.h"
 #include "vtkvmtkWin32Header.h"
 
-class VTK_VMTK_SEGMENTATION_EXPORT vtkvmtkBoundedReciprocalImageFilter : public vtkvmtkITKImageToImageFilterFF
+class VTK_VMTK_SEGMENTATION_EXPORT vtkvmtkBoundedReciprocalImageFilter : public vtkSimpleImageToImageFilter
 {
  public:
   static vtkvmtkBoundedReciprocalImageFilter *New();
-  vtkTypeRevisionMacro(vtkvmtkBoundedReciprocalImageFilter, vtkvmtkITKImageToImageFilterFF);
+  vtkTypeRevisionMacro(vtkvmtkBoundedReciprocalImageFilter, vtkSimpleImageToImageFilter);
 
 protected:
-  //BTX
-  typedef itk::BoundedReciprocalImageFilter<Superclass::InputImageType,Superclass::OutputImageType> ImageFilterType;
-  vtkvmtkBoundedReciprocalImageFilter() : Superclass ( ImageFilterType::New() ){};
+  vtkvmtkBoundedReciprocalImageFilter() {};
   ~vtkvmtkBoundedReciprocalImageFilter() {};
-  ImageFilterType* GetImageFilterPointer() { return dynamic_cast<ImageFilterType*> ( m_Filter.GetPointer() ); }
 
-  //ETX
-  
+  virtual void SimpleExecute(vtkImageData* input, vtkImageData* output);
+
 private:
   vtkvmtkBoundedReciprocalImageFilter(const vtkvmtkBoundedReciprocalImageFilter&);  // Not implemented.
   void operator=(const vtkvmtkBoundedReciprocalImageFilter&);  // Not implemented.

@@ -23,61 +23,52 @@ Version:   $Revision: 1.3 $
 
 =========================================================================*/
 
-// .NAME vtkvmtkGradientMagnitudeImageFilter - Wrapper class around itk::GradientMagnitudeImageFilterImageFilter
+// .NAME vtkvmtkSigmoidImageFilter - Wrapper class around itk::SigmoidImageFilter
 // .SECTION Description
-// vtkvmtkGradientMagnitudeImageFilter
+// vtkvmtkSigmoidImageFilter
 
 
 #ifndef __vtkvmtkSigmoidImageFilter_h
 #define __vtkvmtkSigmoidImageFilter_h
 
 
-#include "vtkvmtkITKImageToImageFilterFF.h"
-#include "itkSigmoidImageFilter.h"
+#include "vtkSimpleImageToImageFilter.h"
 #include "vtkvmtkWin32Header.h"
 
-class VTK_VMTK_SEGMENTATION_EXPORT vtkvmtkSigmoidImageFilter : public vtkvmtkITKImageToImageFilterFF
+class VTK_VMTK_SEGMENTATION_EXPORT vtkvmtkSigmoidImageFilter : public vtkSimpleImageToImageFilter
 {
  public:
   static vtkvmtkSigmoidImageFilter *New();
-  vtkTypeRevisionMacro(vtkvmtkSigmoidImageFilter, vtkvmtkITKImageToImageFilterFF);
+  vtkTypeRevisionMacro(vtkvmtkSigmoidImageFilter,vtkSimpleImageToImageFilter);
 
-  void SetAlpha ( float value )
-  {
-    DelegateITKInputMacro ( SetAlpha, value );
-  };
+  vtkSetMacro(Alpha,double);
+  vtkGetMacro(Alpha,double);
 
-  void SetBeta ( float value )
-  {
-    DelegateITKInputMacro ( SetBeta, value );
-  };
+  vtkSetMacro(Beta,double);
+  vtkGetMacro(Beta,double);
 
-  void SetOutputMinimum ( float value )
-  {
-    DelegateITKInputMacro ( SetOutputMinimum, value );
-  };
+  vtkSetMacro(OutputMinimum,double);
+  vtkGetMacro(OutputMinimum,double);
 
-  void SetOutputMaximum ( float value )
-  {
-    DelegateITKInputMacro ( SetOutputMaximum, value );
-  };
+  vtkSetMacro(OutputMaximum,double);
+  vtkGetMacro(OutputMaximum,double);
 
 protected:
-
-  //BTX
-  typedef itk::SigmoidImageFilter<Superclass::InputImageType,Superclass::OutputImageType> ImageFilterType;
-  vtkvmtkSigmoidImageFilter() : Superclass ( ImageFilterType::New() ){};
+  vtkvmtkSigmoidImageFilter();
   ~vtkvmtkSigmoidImageFilter() {};
-  ImageFilterType* GetImageFilterPointer() { return dynamic_cast<ImageFilterType*> ( m_Filter.GetPointer() ); }
-  //ETX
   
+  void SimpleExecute(vtkImageData *input, vtkImageData *output);
+
+  double Alpha;
+  double Beta;
+  double OutputMinimum;
+  double OutputMaximum;
+
 private:
   vtkvmtkSigmoidImageFilter(const vtkvmtkSigmoidImageFilter&);  // Not implemented.
   void operator=(const vtkvmtkSigmoidImageFilter&);  // Not implemented.
 };
 
 #endif
-
-
 
 

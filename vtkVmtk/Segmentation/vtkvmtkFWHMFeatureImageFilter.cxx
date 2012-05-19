@@ -24,10 +24,58 @@ Version:   $Revision: 1.1 $
 =========================================================================*/
 
 #include "vtkvmtkFWHMFeatureImageFilter.h"
+#include "vtkImageData.h"
 #include "vtkObjectFactory.h"
+
+#include "vtkvmtkITKFilterUtilities.h"
+
+#include "itkFWHMFeatureImageFilter.h"
 
 vtkCxxRevisionMacro(vtkvmtkFWHMFeatureImageFilter, "$Revision: 1.3 $");
 vtkStandardNewMacro(vtkvmtkFWHMFeatureImageFilter);
 
+vtkvmtkFWHMFeatureImageFilter::vtkvmtkFWHMFeatureImageFilter()
+{
+  this->UseImageSpacing = 1;
+  this->BackgroundValue = 0.0;
+  this->Radius = NULL;
+}
 
+vtkvmtkFWHMFeatureImageFilter::~vtkvmtkFWHMFeatureImageFilter()
+{
+  if (this->Radius)
+    {
+    delete[] this->Radius;
+    this->Radius = NULL;
+    }
+}
+
+void vtkvmtkFWHMFeatureImageFilter::SimpleExecute(vtkImageData *input, vtkImageData *output)
+{
+  typedef itk::Image<float,3> ImageType;
+
+  ImageType::Pointer inImage = ImageType::New();
+
+  vtkvmtkITKFilterUtilities::VTKToITKImage<ImageType>(input,inImage);
+
+  typedef itk::FWHMFeatureImageFilter<ImageType,ImageType> ImageFilterType;
+
+  ImageFilterType::Pointer imageFilter = ImageFilterType::New();
+  imageFilter->SetInput(inImage);
+
+  typedef ImageFilterType::StructuringElementRadiusType RadiusType;
+  long unsigned int radiusValue[3];
+  radiusValue[0] = static_cast<long unsigned int>(this->Radius[0]);
+  radiusValue[1] = static_cast<long unsigned int>(this->Radius[1]);
+  radiusValue[2] = static_cast<long unsigned int>(this->Radius[2]);
+
+  RadiusType radius;
+  radius.SetSize(radiusValue);
+  imageFilter->SetRadius(radius);
+  imageFilter->SetUseImageSpacing(this->UseImageSpacing);
+  imageFilter->SetBackgroundValue(this->BackgroundValue);
+  imageFilter->Update();
+
+  vtkvmtkITKFilterUtilities::ITKToVTKImage<ImageType>(imageFilter->GetOutput(),output);
+}
 

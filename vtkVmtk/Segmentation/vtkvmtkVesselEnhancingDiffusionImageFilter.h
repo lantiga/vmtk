@@ -31,7 +31,103 @@ Version:   $Revision: 1.2 $
 #ifndef __vtkvmtkVesselEnhancingDiffusionImageFilter_h
 #define __vtkvmtkVesselEnhancingDiffusionImageFilter_h
 
+#include "vtkSimpleImageToImageFilter.h"
+#include "vtkvmtkWin32Header.h"
 
+class VTK_VMTK_SEGMENTATION_EXPORT vtkvmtkVesselEnhancingDiffusionImageFilter : public vtkSimpleImageToImageFilter
+{
+ public:
+  static vtkvmtkVesselEnhancingDiffusionImageFilter *New();
+  vtkTypeRevisionMacro(vtkvmtkVesselEnhancingDiffusionImageFilter, vtkSimpleImageToImageFilter);
+
+  vtkSetMacro(SigmaMin,double);
+  vtkGetMacro(SigmaMin,double);
+
+  vtkSetMacro(SigmaMax,double);
+  vtkGetMacro(SigmaMax,double);
+
+  vtkSetMacro(NumberOfSigmaSteps,int);
+  vtkGetMacro(NumberOfSigmaSteps,int);
+
+  vtkGetMacro(SigmaStepMethod,int);
+  vtkSetMacro(SigmaStepMethod,int);
+  void SetSigmaStepMethodToEquispaced()
+  {
+    this->SetSigmaStepMethod(EQUISPACED);
+  }
+  
+  void SetSigmaStepMethodToLogarithmic()
+  {
+    this->SetSigmaStepMethod(LOGARITHMIC);
+  }
+
+  vtkSetMacro(TimeStep,double);
+  vtkGetMacro(TimeStep,double);
+
+  vtkSetMacro(Epsilon,double);
+  vtkGetMacro(Epsilon,double);
+
+  vtkSetMacro(WStrength,double);
+  vtkGetMacro(WStrength,double);
+
+  vtkSetMacro(Sensitivity,double);
+  vtkGetMacro(Sensitivity,double);
+
+  vtkSetMacro(NumberOfIterations,int);
+  vtkGetMacro(NumberOfIterations,int);
+
+  vtkSetMacro(Alpha,double);
+  vtkGetMacro(Alpha,double);
+
+  vtkSetMacro(Beta,double);
+  vtkGetMacro(Beta,double);
+
+  vtkSetMacro(Gamma,double);
+  vtkGetMacro(Gamma,double);
+
+  vtkSetMacro(C,double);
+  vtkGetMacro(C,double);
+
+  vtkSetMacro(NumberOfDiffusionSubIterations,int);
+  vtkGetMacro(NumberOfDiffusionSubIterations,int);
+
+//BTX
+  enum
+  {
+    EQUISPACED,
+    LOGARITHMIC
+  };
+//ETX
+
+protected:
+  vtkvmtkVesselEnhancingDiffusionImageFilter(); 
+  ~vtkvmtkVesselEnhancingDiffusionImageFilter(); 
+
+  void SimpleExecute(vtkImageData *input, vtkImageData *output);
+
+  double SigmaMin;
+  double SigmaMax;
+  int NumberOfSigmaSteps;
+  int SigmaStepMethod;
+
+  double TimeStep;
+  double Epsilon;
+  double WStrength;
+  double Sensitivity;
+  int NumberOfIterations;
+  double Alpha;
+  double Beta;
+  double Gamma;
+  double C;
+  int NumberOfDiffusionSubIterations;
+
+private:
+  vtkvmtkVesselEnhancingDiffusionImageFilter(const vtkvmtkVesselEnhancingDiffusionImageFilter&);  // Not implemented.
+  void operator=(const vtkvmtkVesselEnhancingDiffusionImageFilter&);  // Not implemented.
+};
+
+
+/*
 #include "vtkvmtkITKImageToImageFilterFF.h"
 #include "itkAnisotropicDiffusionVesselEnhancementImageFilter.h"
 #include "itkMultiScaleHessianBasedMeasureImageFilter.h"
@@ -261,6 +357,6 @@ private:
   vtkvmtkVesselEnhancingDiffusionImageFilter(const vtkvmtkVesselEnhancingDiffusionImageFilter&);  // Not implemented.
   void operator=(const vtkvmtkVesselEnhancingDiffusionImageFilter&);  // Not implemented.
 };
-
+*/
 #endif
 

@@ -4,7 +4,7 @@ Program:   VMTK
 Module:    $RCSfile: vtkvmtkGradientMagnitudeRecursiveGaussian2DImageFilter.h,v $
 Language:  C++
 Date:      $Date: 2006/04/06 16:48:25 $
-Version:   $Revision: 1.2 $
+Version:   $Revision: 1.3 $
 
   Copyright (c) Luca Antiga, David Steinman. All rights reserved.
   See LICENCE file for details.
@@ -23,56 +23,44 @@ Version:   $Revision: 1.2 $
 
 =========================================================================*/
 
-// .NAME vtkvmtkGradientMagnitudeRecursiveGaussian2DImageFilter - Wrapper class around itk::GradientMagnitudeRecursiveGaussian2DImageFilter
+// .NAME vtkvmtkGradientMagnitudeRecursiveGaussian2DImageFilter - Wrapper class around itk::GradientMagnitudeRecursiveGaussianImageFilter
 // .SECTION Description
-// vtkvmtkGradientMagnitudeImageFilter
+// vtkvmtkGradientMagnitude2DImageFilter
 
 
 #ifndef __vtkvmtkGradientMagnitudeRecursiveGaussian2DImageFilter_h
 #define __vtkvmtkGradientMagnitudeRecursiveGaussian2DImageFilter_h
 
 
-#include "vtkvmtkITKImageToImageFilter2DFF.h"
-#include "itkGradientMagnitudeRecursiveGaussianImageFilter.h"
+#include "vtkSimpleImageToImageFilter.h"
 #include "vtkvmtkWin32Header.h"
 
-class VTK_VMTK_SEGMENTATION_EXPORT vtkvmtkGradientMagnitudeRecursiveGaussian2DImageFilter : public vtkvmtkITKImageToImageFilter2DFF
+class VTK_VMTK_SEGMENTATION_EXPORT vtkvmtkGradientMagnitudeRecursiveGaussian2DImageFilter : public vtkSimpleImageToImageFilter
 {
  public:
   static vtkvmtkGradientMagnitudeRecursiveGaussian2DImageFilter *New();
-  vtkTypeRevisionMacro(vtkvmtkGradientMagnitudeRecursiveGaussian2DImageFilter, vtkvmtkITKImageToImageFilter2DFF);
+  vtkTypeRevisionMacro(vtkvmtkGradientMagnitudeRecursiveGaussian2DImageFilter,vtkSimpleImageToImageFilter);
 
-  void SetSigma ( float value )
-  {
-    DelegateITKInputMacro ( SetSigma, value );
-  };
+  vtkSetMacro(Sigma,double);
+  vtkGetMacro(Sigma,double);
 
-  void SetNormalizeAcrossScale ( int value )
-  {
-    DelegateITKInputMacro ( SetNormalizeAcrossScale, value );
-  };
-
-  int GetNormalizeAcrossScale()
-  {
-    DelegateITKOutputMacro( GetNormalizeAcrossScale );
-  };
+  vtkSetMacro(NormalizeAcrossScale,int);
+  vtkGetMacro(NormalizeAcrossScale,int);
+  vtkBooleanMacro(NormalizeAcrossScale,int);
 
 protected:
-  //BTX
-  typedef itk::GradientMagnitudeRecursiveGaussianImageFilter<Superclass::InputImageType,Superclass::OutputImageType> ImageFilterType;
-  vtkvmtkGradientMagnitudeRecursiveGaussian2DImageFilter() : Superclass ( ImageFilterType::New() ){};
+  vtkvmtkGradientMagnitudeRecursiveGaussian2DImageFilter();
   ~vtkvmtkGradientMagnitudeRecursiveGaussian2DImageFilter() {};
-  ImageFilterType* GetImageFilterPointer() { return dynamic_cast<ImageFilterType*> ( m_Filter.GetPointer() ); }
-
-  //ETX
   
+  void SimpleExecute(vtkImageData *input, vtkImageData *output);
+
 private:
   vtkvmtkGradientMagnitudeRecursiveGaussian2DImageFilter(const vtkvmtkGradientMagnitudeRecursiveGaussian2DImageFilter&);  // Not implemented.
   void operator=(const vtkvmtkGradientMagnitudeRecursiveGaussian2DImageFilter&);  // Not implemented.
+
+  double Sigma;
+  int NormalizeAcrossScale;
 };
 
 #endif
-
-
-
 

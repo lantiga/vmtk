@@ -32,189 +32,94 @@ Version:   $Revision: 1.4 $
 #define __vtkvmtkCurvesLevelSetImageFilter_h
 
 
-#include "vtkvmtkITKImageToImageFilterFF.h"
-#include "itkCurvesLevelSetImageFilter.h"
+#include "vtkSimpleImageToImageFilter.h"
+#include "vtkImageData.h"
 #include "vtkvmtkWin32Header.h"
 
-class VTK_VMTK_SEGMENTATION_EXPORT vtkvmtkCurvesLevelSetImageFilter : public vtkvmtkITKImageToImageFilterFF
+class VTK_VMTK_SEGMENTATION_EXPORT vtkvmtkCurvesLevelSetImageFilter : public vtkSimpleImageToImageFilter
 {
  public:
   static vtkvmtkCurvesLevelSetImageFilter *New();
-  vtkTypeRevisionMacro(vtkvmtkCurvesLevelSetImageFilter, vtkvmtkITKImageToImageFilterFF);
+  vtkTypeRevisionMacro(vtkvmtkCurvesLevelSetImageFilter, vtkSimpleImageToImageFilter);
 
-  float GetIsoSurfaceValue ()
-  {
-    DelegateITKOutputMacro(GetIsoSurfaceValue) ;
-  };
-
-  void SetIsoSurfaceValue ( float value )
-  {
-     DelegateITKInputMacro ( SetIsoSurfaceValue, value );
-  };
+  vtkSetMacro(IsoSurfaceValue,double);
+  vtkGetMacro(IsoSurfaceValue,double);
+ 
+  vtkSetMacro(NumberOfIterations,int);
+  vtkGetMacro(NumberOfIterations,int);
   
-  void SetNumberOfIterations ( int value )
-  {
-    DelegateITKInputMacro ( SetNumberOfIterations, value );
-  };
+  vtkSetMacro(PropagationScaling,double);
+  vtkGetMacro(PropagationScaling,double);
 
-  void SetPropagationScaling ( float value )
-  {
-    DelegateITKInputMacro ( SetPropagationScaling, value );
-  };
+  vtkSetMacro(CurvatureScaling,double);
+  vtkGetMacro(CurvatureScaling,double);
 
-  void SetCurvatureScaling ( float value )
-  {
-    DelegateITKInputMacro ( SetCurvatureScaling, value );
-  };
+  vtkSetMacro(AdvectionScaling,double);
+  vtkGetMacro(AdvectionScaling,double);
+ 
+  vtkSetMacro(MaximumRMSError,double);
+  vtkGetMacro(MaximumRMSError,double);
+ 
+  vtkSetMacro(UseNegativeFeatures,int);
+  vtkGetMacro(UseNegativeFeatures,int);
+  vtkBooleanMacro(UseNegativeFeatures,int);
+ 
+  vtkSetMacro(UseImageSpacing,int);
+  vtkGetMacro(UseImageSpacing,int);
+  vtkBooleanMacro(UseImageSpacing,int);
 
-  void SetAdvectionScaling ( float value )
-  {
-    DelegateITKInputMacro ( SetAdvectionScaling, value );
-  };
+  vtkSetMacro(AutoGenerateSpeedAdvection,int);
+  vtkGetMacro(AutoGenerateSpeedAdvection,int);
+  vtkBooleanMacro(AutoGenerateSpeedAdvection,int);
 
-  void SetMaximumRMSError ( float value )
-  {
-    DelegateITKInputMacro ( SetMaximumRMSError, value );
-  };
+  vtkSetMacro(InterpolateSurfaceLocation,int);
+  vtkGetMacro(InterpolateSurfaceLocation,int);
+  vtkBooleanMacro(InterpolateSurfaceLocation,int);
 
-  void SetUseNegativeFeatures (int value )
-  {
-    DelegateITKInputMacro( SetUseNegativeFeatures, value);
-  }
-
-  void SetUseImageSpacing (int value )
-  {
-    DelegateITKInputMacro( SetUseImageSpacing, value);
-  }
-
-  void SetAutoGenerateSpeedAdvection (int value )
-  {
-    DelegateITKInputMacro( SetAutoGenerateSpeedAdvection, value);
-  }
-
-  void SetInterpolateSurfaceLocation (int value )
-  {
-    DelegateITKInputMacro( SetInterpolateSurfaceLocation, value);
-  }
+  vtkSetMacro(DerivativeSigma,double);
+  vtkGetMacro(DerivativeSigma,double);
+ 
+  vtkSetObjectMacro(FeatureImage,vtkImageData);
+  vtkGetObjectMacro(FeatureImage,vtkImageData);
+ 
+  vtkSetObjectMacro(SpeedImage,vtkImageData);
+  vtkGetObjectMacro(SpeedImage,vtkImageData);
+ 
+  vtkSetMacro(FeatureScaling,double);
+  vtkGetMacro(FeatureScaling,double);
+ 
+  vtkGetMacro(RMSChange,double);
+ 
+  vtkGetMacro(ElapsedIterations,int);
   
-  void SetDerivativeSigma ( float value )
-  {
-    DelegateITKInputMacro ( SetDerivativeSigma, value );
-  };
-
-  void SetFeatureImage ( vtkImageData *value)
-  {
-    this->vtkFeatureExporter->SetInput(value);
-  }
-
-  vtkImageData *GetSpeedImage()
-  {
-    this->vtkSpeedImporter->Update();
-    return this->vtkSpeedImporter->GetOutput();
-  }
-
-  void SetFeatureScaling ( float value )
-  {
-    DelegateITKInputMacro ( SetFeatureScaling, value );
-  };
-
-   float GetRMSChange ()
-  {
-    DelegateITKOutputMacro(GetRMSChange);
-  };
-
-  int GetElapsedIterations()
-  {
-    DelegateITKOutputMacro(GetElapsedIterations);
-  };
-
-  float GetPropagationScaling ( )
-  {
-    DelegateITKOutputMacro ( GetPropagationScaling );
-  };
-
-  float GetCurvatureScaling ( )
-  {
-    DelegateITKOutputMacro ( GetCurvatureScaling );
-  };
-
-  float GetAdvectionScaling ( )
-  {
-    DelegateITKOutputMacro ( GetAdvectionScaling );
-  };
-
-  int GetAutoGenerateSpeedAdvection ( )
-  {
-    DelegateITKOutputMacro( GetAutoGenerateSpeedAdvection );
-  }
-
-  int GetInterpolateSurfaceLocation ( )
-  {
-    DelegateITKOutputMacro( GetInterpolateSurfaceLocation );
-  }
-
-  float GetDerivativeSigma ( float value )
-  {
-    DelegateITKOutputMacro ( GetDerivativeSigma );
-  };
-  
-  // Description: Override vtkSource's Update so that we can access this class's GetOutput(). vtkSource's GetOutput is not virtual.
-  void Update()
-  {
-    if (this->vtkFeatureExporter->GetInput())
-      {
-        this->itkFeatureImporter->Update();
-        
-        if (this->GetOutput(0))
-          {
-            this->GetOutput(0)->Update();
-            if ( this->GetOutput(0)->GetSource() )
-              {
-                //          this->SetErrorCode( this->GetOutput(0)->GetSource()->GetErrorCode() );
-              }
-          }
-      }
-  }
-
 protected:
-  //BTX
-  typedef itk::CurvesLevelSetImageFilter<Superclass::InputImageType,Superclass::OutputImageType> ImageFilterType;
-  typedef itk::VTKImageImport<InputImageType> FeatureImageImportType;
-  typedef itk::VTKImageExport<InputImageType> SpeedImageExportType;
-  
-  vtkvmtkCurvesLevelSetImageFilter() : Superclass ( ImageFilterType::New() )
-  {
-    this->vtkFeatureExporter = vtkImageExport::New();
-    this->itkFeatureImporter = FeatureImageImportType::New();
-    this->itkSpeedExporter = SpeedImageExportType::New();
-    this->vtkSpeedImporter = vtkImageImport::New();
-#if VTK_MAJOR_VERSION > 5 || (VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 2)
-    this->vtkSpeedImporter->SetScalarArrayName("Scalars_");
-#endif
-    ConnectPipelines(this->itkSpeedExporter, this->vtkSpeedImporter);
-    ConnectPipelines(this->vtkFeatureExporter, this->itkFeatureImporter);
-    (dynamic_cast<ImageFilterType*>(m_Filter.GetPointer()))->SetFeatureImage(this->itkFeatureImporter->GetOutput());
-    this->itkSpeedExporter->SetInput((dynamic_cast<ImageFilterType*>(m_Filter.GetPointer()))->GetSpeedImage());
-  };
-  ~vtkvmtkCurvesLevelSetImageFilter() 
-  {
-    this->vtkSpeedImporter->Delete();
-    this->vtkFeatureExporter->Delete();
-  };
-  ImageFilterType* GetImageFilterPointer() { return dynamic_cast<ImageFilterType*> ( m_Filter.GetPointer() ); }
-  
-  FeatureImageImportType::Pointer itkFeatureImporter;
-  SpeedImageExportType::Pointer itkSpeedExporter;
-  //ETX
 
-  vtkImageExport *vtkFeatureExporter;
-  vtkImageImport *vtkSpeedImporter;
+  vtkvmtkCurvesLevelSetImageFilter();
+  ~vtkvmtkCurvesLevelSetImageFilter();
+
+  void SimpleExecute(vtkImageData *input, vtkImageData *output);
+
+  double IsoSurfaceValue;
+  int NumberOfIterations;
+  double PropagationScaling;
+  double CurvatureScaling;
+  double AdvectionScaling;
+  double MaximumRMSError;
+  int UseNegativeFeatures;
+  int UseImageSpacing;
+  int AutoGenerateSpeedAdvection;
+  int InterpolateSurfaceLocation;
+  double DerivativeSigma;
+  vtkImageData* FeatureImage;
+  vtkImageData* SpeedImage;
+  double FeatureScaling;
+  double RMSChange;
+  int ElapsedIterations;
 
 private:
   vtkvmtkCurvesLevelSetImageFilter(const vtkvmtkCurvesLevelSetImageFilter&);  // Not implemented.
   void operator=(const vtkvmtkCurvesLevelSetImageFilter&);  //
                                                                           // Not implemented
-  
 };
 
 #endif

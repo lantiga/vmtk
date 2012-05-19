@@ -24,9 +24,38 @@ Version:   $Revision: 1.1 $
 =========================================================================*/
 
 #include "vtkvmtkDanielssonDistanceMapImageFilter.h"
+#include "vtkImageData.h"
 #include "vtkObjectFactory.h"
+
+#include "vtkvmtkITKFilterUtilities.h"
+
+#include "itkDanielssonDistanceMapImageFilter.h"
 
 vtkCxxRevisionMacro(vtkvmtkDanielssonDistanceMapImageFilter, "$Revision: 1.3 $");
 vtkStandardNewMacro(vtkvmtkDanielssonDistanceMapImageFilter);
 
+vtkvmtkDanielssonDistanceMapImageFilter::vtkvmtkDanielssonDistanceMapImageFilter() 
+{
+  this->SquaredDistance = 0;
+  this->InputIsBinary = 0;
+}
+
+void vtkvmtkDanielssonDistanceMapImageFilter::SimpleExecute(vtkImageData *input, vtkImageData *output)
+{
+  typedef itk::Image<float,3> ImageType;
+
+  ImageType::Pointer inImage = ImageType::New();
+
+  vtkvmtkITKFilterUtilities::VTKToITKImage<ImageType>(input,inImage);
+
+  typedef itk::DanielssonDistanceMapImageFilter<ImageType,ImageType> ImageFilterType;
+
+  ImageFilterType::Pointer imageFilter = ImageFilterType::New();
+  imageFilter->SetInput(inImage);
+  imageFilter->SetSquaredDistance(this->SquaredDistance);
+  imageFilter->SetInputIsBinary(this->InputIsBinary);
+  imageFilter->Update();
+
+  vtkvmtkITKFilterUtilities::ITKToVTKImage<ImageType>(imageFilter->GetOutput(),output);
+}
 

@@ -32,47 +32,36 @@ Version:   $Revision: 1.2 $
 #define __vtkvmtkRecursiveGaussian2DImageFilter_h
 
 
-#include "vtkvmtkITKImageToImageFilter2DFF.h"
-#include "itkRecursiveGaussianImageFilter.h"
+#include "vtkSimpleImageToImageFilter.h"
 #include "vtkvmtkWin32Header.h"
 
-class VTK_VMTK_SEGMENTATION_EXPORT vtkvmtkRecursiveGaussian2DImageFilter : public vtkvmtkITKImageToImageFilter2DFF
+class VTK_VMTK_SEGMENTATION_EXPORT vtkvmtkRecursiveGaussian2DImageFilter : public vtkSimpleImageToImageFilter
 {
  public:
   static vtkvmtkRecursiveGaussian2DImageFilter *New();
-  vtkTypeRevisionMacro(vtkvmtkRecursiveGaussian2DImageFilter, vtkvmtkITKImageToImageFilter2DFF);
+  vtkTypeRevisionMacro(vtkvmtkRecursiveGaussian2DImageFilter,vtkSimpleImageToImageFilter);
 
-  void SetSigma ( float value )
-  {
-    DelegateITKInputMacro ( SetSigma, value );
-  };
+  vtkSetMacro(Sigma,double);
+  vtkGetMacro(Sigma,double);
 
-  void SetNormalizeAcrossScale ( int value )
-  {
-    DelegateITKInputMacro ( SetNormalizeAcrossScale, value );
-  };
-
-  int GetNormalizeAcrossScale()
-  {
-    DelegateITKOutputMacro( GetNormalizeAcrossScale );
-  };
+  vtkSetMacro(NormalizeAcrossScale,int);
+  vtkGetMacro(NormalizeAcrossScale,int);
+  vtkBooleanMacro(NormalizeAcrossScale,int);
 
 protected:
-  //BTX
-  typedef itk::RecursiveGaussianImageFilter<Superclass::InputImageType,Superclass::OutputImageType> ImageFilterType;
-  vtkvmtkRecursiveGaussian2DImageFilter() : Superclass ( ImageFilterType::New() ){};
+  vtkvmtkRecursiveGaussian2DImageFilter();
   ~vtkvmtkRecursiveGaussian2DImageFilter() {};
-  ImageFilterType* GetImageFilterPointer() { return dynamic_cast<ImageFilterType*> ( m_Filter.GetPointer() ); }
-
-  //ETX
   
+  void SimpleExecute(vtkImageData *input, vtkImageData *output);
+
 private:
   vtkvmtkRecursiveGaussian2DImageFilter(const vtkvmtkRecursiveGaussian2DImageFilter&);  // Not implemented.
   void operator=(const vtkvmtkRecursiveGaussian2DImageFilter&);  // Not implemented.
+
+  double Sigma;
+  int NormalizeAcrossScale;
 };
 
 #endif
-
-
 
 

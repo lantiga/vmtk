@@ -31,16 +31,14 @@ Version:   $Revision: 1.2 $
 #ifndef __vtkvmtkVesselEnhancingDiffusion3DImageFilter_h
 #define __vtkvmtkVesselEnhancingDiffusion3DImageFilter_h
 
-
-#include "vtkvmtkITKImageToImageFilterFF.h"
-#include "itkVesselEnhancingDiffusion3DImageFilter.h"
+#include "vtkSimpleImageToImageFilter.h"
 #include "vtkvmtkWin32Header.h"
 
-class VTK_VMTK_SEGMENTATION_EXPORT vtkvmtkVesselEnhancingDiffusion3DImageFilter : public vtkvmtkITKImageToImageFilterFF
+class VTK_VMTK_SEGMENTATION_EXPORT vtkvmtkVesselEnhancingDiffusion3DImageFilter : public vtkSimpleImageToImageFilter
 {
  public:
   static vtkvmtkVesselEnhancingDiffusion3DImageFilter *New();
-  vtkTypeRevisionMacro(vtkvmtkVesselEnhancingDiffusion3DImageFilter, vtkvmtkITKImageToImageFilterFF);
+  vtkTypeRevisionMacro(vtkvmtkVesselEnhancingDiffusion3DImageFilter, vtkSimpleImageToImageFilter);
 
   vtkSetMacro(SigmaMin,double);
   vtkGetMacro(SigmaMin,double);
@@ -51,150 +49,75 @@ class VTK_VMTK_SEGMENTATION_EXPORT vtkvmtkVesselEnhancingDiffusion3DImageFilter 
   vtkSetMacro(NumberOfSigmaSteps,int);
   vtkGetMacro(NumberOfSigmaSteps,int);
 
+  vtkGetMacro(SigmaStepMethod,int);
+  vtkSetMacro(SigmaStepMethod,int);
   void SetSigmaStepMethodToEquispaced()
   {
-    this->SigmaStepMethod = EQUISPACED_STEPS;
+    this->SetSigmaStepMethod(EQUISPACED);
   }
   
   void SetSigmaStepMethodToLogarithmic()
   {
-    this->SigmaStepMethod = LOGARITHMIC_STEPS;
+    this->SetSigmaStepMethod(LOGARITHMIC);
   }
 
-  void SetTimeStep(double value)
-  {
-    DelegateITKInputMacro(SetTimeStep,value);
-  }
+  vtkSetMacro(TimeStep,double);
+  vtkGetMacro(TimeStep,double);
 
-  void SetEpsilon(double value)
-  {
-    DelegateITKInputMacro(SetEpsilon,value);
-  }
+  vtkSetMacro(Epsilon,double);
+  vtkGetMacro(Epsilon,double);
 
-  void SetOmega(double value)
-  {
-    DelegateITKInputMacro(SetOmega,value);
-  }
+  vtkSetMacro(Omega,double);
+  vtkGetMacro(Omega,double);
 
-  void SetSensitivity(double value)
-  {
-    DelegateITKInputMacro(SetSensitivity,value);
-  }
+  vtkSetMacro(Sensitivity,double);
+  vtkGetMacro(Sensitivity,double);
 
-  void SetNumberOfIterations(int value)
-  {
-    DelegateITKInputMacro(SetIterations,value);
-  }
+  vtkSetMacro(NumberOfIterations,int);
+  vtkGetMacro(NumberOfIterations,int);
 
-  void SetAlpha(double value)
-  {
-    DelegateITKInputMacro(SetAlpha,value);
-  }
+  vtkSetMacro(Alpha,double);
+  vtkGetMacro(Alpha,double);
 
-  void SetBeta(double value)
-  {
-    DelegateITKInputMacro(SetBeta,value);
-  }
+  vtkSetMacro(Beta,double);
+  vtkGetMacro(Beta,double);
 
-  void SetGamma(double value)
-  {
-    DelegateITKInputMacro(SetGamma,value);
-  }
+  vtkSetMacro(Gamma,double);
+  vtkGetMacro(Gamma,double);
 
-  void SetRecalculateVesselness(int value)
-  {
-    DelegateITKInputMacro(SetRecalculateVesselness,value);
-  }
+  vtkSetMacro(RecalculateVesselness,int);
+  vtkGetMacro(RecalculateVesselness,int);
 
-  double ComputeSigmaValue(int scaleLevel)
-  {
-    double sigmaValue;
-
-    if (this->NumberOfSigmaSteps < 2)
-    {
-      return this->SigmaMin;
-    }
-
-    switch (this->SigmaStepMethod)
-      {
-      case EQUISPACED_STEPS:
-        {
-        double stepSize = ( SigmaMax - SigmaMin ) / (NumberOfSigmaSteps-1);
-        if (stepSize < 1e-10)
-          {
-          stepSize = 1e-10;
-          }
-        sigmaValue = SigmaMin + stepSize * scaleLevel;
-        break;
-        }
-      case LOGARITHMIC_STEPS:
-        {
-        double stepSize = ( vcl_log(SigmaMax) - vcl_log(SigmaMin) ) / (NumberOfSigmaSteps-1);
-        if (stepSize < 1e-10)
-          {
-          stepSize = 1e-10;
-          }
-        sigmaValue = vcl_exp( vcl_log (SigmaMin) + stepSize * scaleLevel);
-        break;
-        }
-      default:
-        vtkErrorMacro("Error: undefined sigma step method.");
-        sigmaValue = 0.0;
-        break;
-      }
-
-    return sigmaValue;
-  }
-
-  void Update()
-  {
-    std::vector<float> scales;
-    for (int i=0; i<this->NumberOfSigmaSteps; i++)
-      {
-      scales.push_back(this->ComputeSigmaValue(i));
-      }
-    this->GetImageFilterPointer()->SetScales(scales);
-
-    if (this->GetOutput(0))
-      {
-        this->GetOutput(0)->Update();
-        if ( this->GetOutput(0)->GetSource() )
-          {
-            //          this->SetErrorCode( this->GetOutput(0)->GetSource()->GetErrorCode() );
-          }
-      }
-  }
+  double ComputeSigmaValue(int scaleLevel);
 
 //BTX
   enum
   {
-    EQUISPACED_STEPS,
-    LOGARITHMIC_STEPS
+    EQUISPACED,
+    LOGARITHMIC
   };
 //ETX
 
 protected:
-  //BTX
-  typedef itk::VesselEnhancingDiffusion3DImageFilter<Superclass::InputImageType::PixelType> ImageFilterType;
+  vtkvmtkVesselEnhancingDiffusion3DImageFilter(); 
+  ~vtkvmtkVesselEnhancingDiffusion3DImageFilter(); 
 
-  vtkvmtkVesselEnhancingDiffusion3DImageFilter() : Superclass(ImageFilterType::New()) 
-  {
-    this->SigmaMin = 0.0;
-    this->SigmaMax = 0.0;
-    this->NumberOfSigmaSteps = 0;
-    this->SigmaStepMethod = EQUISPACED_STEPS;
-
-    this->GetImageFilterPointer()->SetDefaultPars();
-  }
-
-  ~vtkvmtkVesselEnhancingDiffusion3DImageFilter() {};
-  ImageFilterType* GetImageFilterPointer() { return dynamic_cast<ImageFilterType*>(m_Filter.GetPointer()); }
-  //ETX
+  void SimpleExecute(vtkImageData *input, vtkImageData *output);
 
   double SigmaMin;
   double SigmaMax;
   int NumberOfSigmaSteps;
   int SigmaStepMethod;
+
+  double TimeStep;
+  double Epsilon;
+  double Omega;
+  double Sensitivity;
+  int NumberOfIterations;
+  double Alpha;
+  double Beta;
+  double Gamma;
+  int RecalculateVesselness;
 
 private:
   vtkvmtkVesselEnhancingDiffusion3DImageFilter(const vtkvmtkVesselEnhancingDiffusion3DImageFilter&);  // Not implemented.

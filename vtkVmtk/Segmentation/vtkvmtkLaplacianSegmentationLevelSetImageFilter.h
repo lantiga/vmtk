@@ -32,163 +32,83 @@ Version:   $Revision: 1.4 $
 #define __vtkvmtkLaplacianSegmentationLevelSetImageFilter_h
 
 
-#include "vtkvmtkITKImageToImageFilterFF.h"
-#include "itkLaplacianSegmentationLevelSetImageFilter.h"
+#include "vtkSimpleImageToImageFilter.h"
+#include "vtkImageData.h"
 #include "vtkvmtkWin32Header.h"
 
-class VTK_VMTK_SEGMENTATION_EXPORT vtkvmtkLaplacianSegmentationLevelSetImageFilter : public vtkvmtkITKImageToImageFilterFF
+class VTK_VMTK_SEGMENTATION_EXPORT vtkvmtkLaplacianSegmentationLevelSetImageFilter : public vtkSimpleImageToImageFilter
 {
  public:
   static vtkvmtkLaplacianSegmentationLevelSetImageFilter *New();
-  vtkTypeRevisionMacro(vtkvmtkLaplacianSegmentationLevelSetImageFilter, vtkvmtkITKImageToImageFilterFF);
+  vtkTypeRevisionMacro(vtkvmtkLaplacianSegmentationLevelSetImageFilter, vtkSimpleImageToImageFilter);
 
-  float GetIsoSurfaceValue ()
-  {
-    DelegateITKOutputMacro(GetIsoSurfaceValue) ;
-  };
-
-  void SetIsoSurfaceValue ( float value )
-  {
-     DelegateITKInputMacro ( SetIsoSurfaceValue, value );
-  };
-  
-  void SetNumberOfIterations ( int value )
-  {
-    DelegateITKInputMacro ( SetNumberOfIterations, value );
-  };
-
-  void SetPropagationScaling ( float value )
-  {
-    DelegateITKInputMacro ( SetPropagationScaling, value );
-  };
-
-  void SetCurvatureScaling ( float value )
-  {
-    DelegateITKInputMacro ( SetCurvatureScaling, value );
-  };
-
-  void SetMaximumRMSError ( float value )
-  {
-    DelegateITKInputMacro ( SetMaximumRMSError, value );
-  };
-
-  void SetUseNegativeFeatures (int value )
-  {
-    DelegateITKInputMacro( SetUseNegativeFeatures, value);
-  }
-
-  void SetUseImageSpacing (int value )
-  {
-    DelegateITKInputMacro( SetUseImageSpacing, value);
-  }
-
-  void SetInterpolateSurfaceLocation (int value )
-  {
-    DelegateITKInputMacro( SetInterpolateSurfaceLocation, value);
-  }
-  
-  void SetFeatureImage ( vtkImageData *value)
-  {
-    this->vtkFeatureExporter->SetInput(value);
-  }
-
-  vtkImageData *GetSpeedImage()
-  {
-    this->vtkSpeedImporter->Update();
-    return this->vtkSpeedImporter->GetOutput();
-  }
-
-  void SetFeatureScaling ( float value )
-  {
-    DelegateITKInputMacro ( SetFeatureScaling, value );
-  };
-
-   float GetRMSChange ()
-  {
-    DelegateITKOutputMacro(GetRMSChange);
-  };
-
-  int GetElapsedIterations()
-  {
-    DelegateITKOutputMacro(GetElapsedIterations);
-  };
-
-  float GetPropagationScaling ( )
-  {
-    DelegateITKOutputMacro ( GetPropagationScaling );
-  };
-
-  float GetCurvatureScaling ( )
-  {
-    DelegateITKOutputMacro ( GetCurvatureScaling );
-  };
-
-  int GetInterpolateSurfaceLocation ( )
-  {
-    DelegateITKOutputMacro( GetInterpolateSurfaceLocation );
-  }
+  vtkSetMacro(IsoSurfaceValue,double);
+  vtkGetMacro(IsoSurfaceValue,double);
  
-  // Description: Override vtkSource's Update so that we can access this class's GetOutput(). vtkSource's GetOutput is not virtual.
-  void Update()
-  {
-    if (this->vtkFeatureExporter->GetInput())
-      {
-        this->itkFeatureImporter->Update();
-        
-        if (this->GetOutput(0))
-          {
-            this->GetOutput(0)->Update();
-            if ( this->GetOutput(0)->GetSource() )
-              {
-                //          this->SetErrorCode( this->GetOutput(0)->GetSource()->GetErrorCode() );
-              }
-          }
-      }
-  }
-    
-protected:
-  //BTX
-  typedef itk::LaplacianSegmentationLevelSetImageFilter<Superclass::InputImageType,Superclass::OutputImageType> ImageFilterType;
-  typedef itk::VTKImageImport<InputImageType> FeatureImageImportType;
-  typedef itk::VTKImageExport<InputImageType> SpeedImageExportType;
+  vtkSetMacro(NumberOfIterations,int);
+  vtkGetMacro(NumberOfIterations,int);
   
-  vtkvmtkLaplacianSegmentationLevelSetImageFilter() : Superclass ( ImageFilterType::New() )
-  {
-    this->vtkFeatureExporter = vtkImageExport::New();
-    this->itkFeatureImporter = FeatureImageImportType::New();
-    this->itkSpeedExporter = SpeedImageExportType::New();
-    this->vtkSpeedImporter = vtkImageImport::New();
-#if VTK_MAJOR_VERSION > 5 || (VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 2)
-    this->vtkSpeedImporter->SetScalarArrayName("Scalars_");
-#endif
-    ConnectPipelines(this->itkSpeedExporter, this->vtkSpeedImporter);
-    ConnectPipelines(this->vtkFeatureExporter, this->itkFeatureImporter);
-    (dynamic_cast<ImageFilterType*>(m_Filter.GetPointer()))->SetFeatureImage(this->itkFeatureImporter->GetOutput());
-    this->itkSpeedExporter->SetInput((dynamic_cast<ImageFilterType*>(m_Filter.GetPointer()))->GetSpeedImage());
-  };
-  ~vtkvmtkLaplacianSegmentationLevelSetImageFilter() 
-  {
-    this->vtkSpeedImporter->Delete();
-    this->vtkFeatureExporter->Delete();
-  };
-  ImageFilterType* GetImageFilterPointer() { return dynamic_cast<ImageFilterType*> ( m_Filter.GetPointer() ); }
-  
-  FeatureImageImportType::Pointer itkFeatureImporter;
-  SpeedImageExportType::Pointer itkSpeedExporter;
-  //ETX
+  vtkSetMacro(PropagationScaling,double);
+  vtkGetMacro(PropagationScaling,double);
 
-  vtkImageExport *vtkFeatureExporter;
-  vtkImageImport *vtkSpeedImporter;
+  vtkSetMacro(CurvatureScaling,double);
+  vtkGetMacro(CurvatureScaling,double);
+
+  vtkSetMacro(MaximumRMSError,double);
+  vtkGetMacro(MaximumRMSError,double);
+ 
+  vtkSetMacro(UseNegativeFeatures,int);
+  vtkGetMacro(UseNegativeFeatures,int);
+  vtkBooleanMacro(UseNegativeFeatures,int);
+ 
+  vtkSetMacro(UseImageSpacing,int);
+  vtkGetMacro(UseImageSpacing,int);
+  vtkBooleanMacro(UseImageSpacing,int);
+
+  vtkSetMacro(InterpolateSurfaceLocation,int);
+  vtkGetMacro(InterpolateSurfaceLocation,int);
+  vtkBooleanMacro(InterpolateSurfaceLocation,int);
+
+  vtkSetObjectMacro(FeatureImage,vtkImageData);
+  vtkGetObjectMacro(FeatureImage,vtkImageData);
+ 
+  vtkSetObjectMacro(SpeedImage,vtkImageData);
+  vtkGetObjectMacro(SpeedImage,vtkImageData);
+ 
+  vtkSetMacro(FeatureScaling,double);
+  vtkGetMacro(FeatureScaling,double);
+ 
+  vtkGetMacro(RMSChange,double);
+ 
+  vtkGetMacro(ElapsedIterations,int);
   
+protected:
+
+  vtkvmtkLaplacianSegmentationLevelSetImageFilter();
+  ~vtkvmtkLaplacianSegmentationLevelSetImageFilter();
+
+  void SimpleExecute(vtkImageData *input, vtkImageData *output);
+
+  double IsoSurfaceValue;
+  int NumberOfIterations;
+  double PropagationScaling;
+  double CurvatureScaling;
+  double MaximumRMSError;
+  int UseNegativeFeatures;
+  int UseImageSpacing;
+  int InterpolateSurfaceLocation;
+  vtkImageData* FeatureImage;
+  vtkImageData* SpeedImage;
+  double FeatureScaling;
+  double RMSChange;
+  int ElapsedIterations;
+
 private:
   vtkvmtkLaplacianSegmentationLevelSetImageFilter(const vtkvmtkLaplacianSegmentationLevelSetImageFilter&);  // Not implemented.
   void operator=(const vtkvmtkLaplacianSegmentationLevelSetImageFilter&);  //
                                                                           // Not implemented
-  
 };
 
 #endif
-
-
 
 

@@ -24,9 +24,36 @@ Version:   $Revision: 1.1 $
 =========================================================================*/
 
 #include "vtkvmtkUpwindGradientMagnitudeImageFilter.h"
+#include "vtkImageData.h"
 #include "vtkObjectFactory.h"
+
+#include "vtkvmtkITKFilterUtilities.h"
+
+#include "itkUpwindGradientMagnitudeImageFilter.h"
 
 vtkCxxRevisionMacro(vtkvmtkUpwindGradientMagnitudeImageFilter, "$Revision: 1.3 $");
 vtkStandardNewMacro(vtkvmtkUpwindGradientMagnitudeImageFilter);
 
+vtkvmtkUpwindGradientMagnitudeImageFilter::vtkvmtkUpwindGradientMagnitudeImageFilter() 
+{
+  this->UpwindFactor = 1.0;
+}
+
+void vtkvmtkUpwindGradientMagnitudeImageFilter::SimpleExecute(vtkImageData *input, vtkImageData *output)
+{
+  typedef itk::Image<float,3> ImageType;
+
+  ImageType::Pointer inImage = ImageType::New();
+
+  vtkvmtkITKFilterUtilities::VTKToITKImage<ImageType>(input,inImage);
+
+  typedef itk::UpwindGradientMagnitudeImageFilter<ImageType,ImageType> ImageFilterType;
+
+  ImageFilterType::Pointer imageFilter = ImageFilterType::New();
+  imageFilter->SetInput(inImage);
+  imageFilter->SetUpwindFactor(this->UpwindFactor);
+  imageFilter->Update();
+
+  vtkvmtkITKFilterUtilities::ITKToVTKImage<ImageType>(imageFilter->GetOutput(),output);
+}
 

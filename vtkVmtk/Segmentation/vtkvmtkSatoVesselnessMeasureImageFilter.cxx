@@ -43,10 +43,17 @@ vtkvmtkSatoVesselnessMeasureImageFilter::vtkvmtkSatoVesselnessMeasureImageFilter
   this->SetSigmaStepMethodToEquispaced();
   this->Alpha1 = 0.5;
   this->Alpha2 = 2.0;
+
+  this->ScalesOutput = vtkImageData::New();
 }
 
 vtkvmtkSatoVesselnessMeasureImageFilter::~vtkvmtkSatoVesselnessMeasureImageFilter()
 {
+  if (this->ScalesOutput)
+    {
+    this->ScalesOutput->Delete();
+    this->ScalesOutput = NULL;
+    }
 }
 
 void vtkvmtkSatoVesselnessMeasureImageFilter::SimpleExecute(vtkImageData *input, vtkImageData *output)
@@ -85,5 +92,6 @@ void vtkvmtkSatoVesselnessMeasureImageFilter::SimpleExecute(vtkImageData *input,
   imageFilter->Update();
 
   vtkvmtkITKFilterUtilities::ITKToVTKImage<ImageType>(imageFilter->GetOutput(),output);
+  vtkvmtkITKFilterUtilities::ITKToVTKImage<ImageType>(imageFilter->GetScalesOutput(),this->ScalesOutput);
 }
 

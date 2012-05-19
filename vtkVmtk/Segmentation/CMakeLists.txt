@@ -50,15 +50,16 @@ SET (VTK_VMTK_SEGMENTATION_SRCS
   ${VTK_VMTK_SEGMENTATION_SRCS}
   )
 
-INCLUDE_DIRECTORIES (${vtkvmtkITK_SOURCE_DIR})
-INCLUDE_DIRECTORIES (${vtkvmtkITK_BINARY_DIR})
+#INCLUDE_DIRECTORIES (${vtkvmtkITK_SOURCE_DIR})
+#INCLUDE_DIRECTORIES (${vtkvmtkITK_BINARY_DIR})
 
 ADD_LIBRARY (vtkvmtkSegmentation ${VTK_VMTK_SEGMENTATION_SRCS})
 IF(VMTK_LIBRARY_PROPERTIES)
   SET_TARGET_PROPERTIES(vtkvmtkSegmentation PROPERTIES ${VMTK_LIBRARY_PROPERTIES})
 ENDIF(VMTK_LIBRARY_PROPERTIES)
 SET_TARGET_PROPERTIES(vtkvmtkSegmentation PROPERTIES LINKER_LANGUAGE CXX)
-TARGET_LINK_LIBRARIES(vtkvmtkSegmentation vtkvmtkDifferentialGeometry vtkCommon vtkFiltering vtkGraphics vtkImaging vtkvmtkITK ITKCommon ITKBasicFilters)
+#TARGET_LINK_LIBRARIES(vtkvmtkSegmentation vtkvmtkDifferentialGeometry vtkCommon vtkFiltering vtkGraphics vtkImaging vtkvmtkITK ITKCommon ITKBasicFilters)
+TARGET_LINK_LIBRARIES(vtkvmtkSegmentation vtkvmtkDifferentialGeometry vtkCommon vtkFiltering vtkGraphics vtkImaging ITKCommon ITKBasicFilters)
 
 
 INSTALL(TARGETS vtkvmtkSegmentation
@@ -97,7 +98,8 @@ IF (VTK_WRAP_PYTHON AND VTK_VMTK_WRAP_PYTHON)
     SET_TARGET_PROPERTIES(vtkvmtkSegmentationPythonD PROPERTIES ${VMTK_LIBRARY_PROPERTIES})
   ENDIF(VMTK_LIBRARY_PROPERTIES)
   ADD_LIBRARY(vtkvmtkSegmentationPython MODULE vtkvmtkSegmentationPythonInit.cxx)
-  TARGET_LINK_LIBRARIES(vtkvmtkSegmentationPythonD vtkvmtkSegmentation vtkvmtkDifferentialGeometryPythonD vtkvmtkDifferentialGeometry vtkCommon vtkCommonPythonD vtkFiltering vtkFilteringPythonD vtkGraphics vtkGraphicsPythonD vtkImaging vtkImagingPythonD vtkvmtkITKPythonD vtkvmtkITK)
+  #TARGET_LINK_LIBRARIES(vtkvmtkSegmentationPythonD vtkvmtkSegmentation vtkvmtkDifferentialGeometryPythonD vtkvmtkDifferentialGeometry vtkCommon vtkCommonPythonD vtkFiltering vtkFilteringPythonD vtkGraphics vtkGraphicsPythonD vtkImaging vtkImagingPythonD vtkvmtkITKPythonD vtkvmtkITK)
+  TARGET_LINK_LIBRARIES(vtkvmtkSegmentationPythonD vtkvmtkSegmentation vtkvmtkDifferentialGeometryPythonD vtkvmtkDifferentialGeometry vtkCommon vtkCommonPythonD vtkFiltering vtkFilteringPythonD vtkGraphics vtkGraphicsPythonD vtkImaging vtkImagingPythonD)
   TARGET_LINK_LIBRARIES (vtkvmtkSegmentationPython vtkvmtkSegmentationPythonD)
   IF(WIN32 AND NOT CYGWIN)
      SET_TARGET_PROPERTIES(vtkvmtkSegmentationPython PROPERTIES SUFFIX ".pyd")
@@ -119,7 +121,8 @@ IF (VTK_WRAP_TCL AND VTK_VMTK_WRAP_TCL)
   IF(VMTK_LIBRARY_PROPERTIES)
     SET_TARGET_PROPERTIES(vtkvmtkSegmentationTCL PROPERTIES ${VMTK_LIBRARY_PROPERTIES})
   ENDIF(VMTK_LIBRARY_PROPERTIES)
-  TARGET_LINK_LIBRARIES(vtkvmtkSegmentationTCL vtkvmtkSegmentation vtkvmtkDifferentialGeometryTCL vtkvmtkDifferentialGeometry vtkCommon vtkCommonTCL vtkFiltering vtkFilteringTCL vtkGraphics vtkGraphicsTCL vtkImaging vtkImagingTCL vtkvmtkITK vtkvmtkITKTCL)
+  #TARGET_LINK_LIBRARIES(vtkvmtkSegmentationTCL vtkvmtkSegmentation vtkvmtkDifferentialGeometryTCL vtkvmtkDifferentialGeometry vtkCommon vtkCommonTCL vtkFiltering vtkFilteringTCL vtkGraphics vtkGraphicsTCL vtkImaging vtkImagingTCL vtkvmtkITK vtkvmtkITKTCL)
+  TARGET_LINK_LIBRARIES(vtkvmtkSegmentationTCL vtkvmtkSegmentation vtkvmtkDifferentialGeometryTCL vtkvmtkDifferentialGeometry vtkCommon vtkCommonTCL vtkFiltering vtkFilteringTCL vtkGraphics vtkGraphicsTCL vtkImaging vtkImagingTCL)
 
   INSTALL(TARGETS vtkvmtkSegmentationTCL
     LIBRARY DESTINATION ${VTK_VMTK_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries

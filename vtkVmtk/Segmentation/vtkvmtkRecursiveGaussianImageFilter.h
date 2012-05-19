@@ -32,47 +32,36 @@ Version:   $Revision: 1.2 $
 #define __vtkvmtkRecursiveGaussianImageFilter_h
 
 
-#include "vtkvmtkITKImageToImageFilterFF.h"
-#include "itkRecursiveGaussianImageFilter.h"
+#include "vtkSimpleImageToImageFilter.h"
 #include "vtkvmtkWin32Header.h"
 
-class VTK_VMTK_SEGMENTATION_EXPORT vtkvmtkRecursiveGaussianImageFilter : public vtkvmtkITKImageToImageFilterFF
+class VTK_VMTK_SEGMENTATION_EXPORT vtkvmtkRecursiveGaussianImageFilter : public vtkSimpleImageToImageFilter
 {
  public:
   static vtkvmtkRecursiveGaussianImageFilter *New();
-  vtkTypeRevisionMacro(vtkvmtkRecursiveGaussianImageFilter, vtkvmtkITKImageToImageFilterFF);
+  vtkTypeRevisionMacro(vtkvmtkRecursiveGaussianImageFilter,vtkSimpleImageToImageFilter);
 
-  void SetSigma ( float value )
-  {
-    DelegateITKInputMacro ( SetSigma, value );
-  };
+  vtkSetMacro(Sigma,double);
+  vtkGetMacro(Sigma,double);
 
-  void SetNormalizeAcrossScale ( int value )
-  {
-    DelegateITKInputMacro ( SetNormalizeAcrossScale, value );
-  };
-
-  int GetNormalizeAcrossScale()
-  {
-    DelegateITKOutputMacro( GetNormalizeAcrossScale );
-  };
+  vtkSetMacro(NormalizeAcrossScale,int);
+  vtkGetMacro(NormalizeAcrossScale,int);
+  vtkBooleanMacro(NormalizeAcrossScale,int);
 
 protected:
-  //BTX
-  typedef itk::RecursiveGaussianImageFilter<Superclass::InputImageType,Superclass::OutputImageType> ImageFilterType;
-  vtkvmtkRecursiveGaussianImageFilter() : Superclass ( ImageFilterType::New() ){};
+  vtkvmtkRecursiveGaussianImageFilter();
   ~vtkvmtkRecursiveGaussianImageFilter() {};
-  ImageFilterType* GetImageFilterPointer() { return dynamic_cast<ImageFilterType*> ( m_Filter.GetPointer() ); }
-
-  //ETX
   
+  void SimpleExecute(vtkImageData *input, vtkImageData *output);
+
 private:
   vtkvmtkRecursiveGaussianImageFilter(const vtkvmtkRecursiveGaussianImageFilter&);  // Not implemented.
   void operator=(const vtkvmtkRecursiveGaussianImageFilter&);  // Not implemented.
+
+  double Sigma;
+  int NormalizeAcrossScale;
 };
 
 #endif
-
-
 
 

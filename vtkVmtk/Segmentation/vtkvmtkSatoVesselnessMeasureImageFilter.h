@@ -66,6 +66,9 @@ class VTK_VMTK_SEGMENTATION_EXPORT vtkvmtkSatoVesselnessMeasureImageFilter : pub
 
   vtkGetMacro(Alpha2,double);
   vtkSetMacro(Alpha2,double);
+
+  vtkGetObjectMacro(ScalesOutput,vtkImageData);
+
 //BTX
   enum 
   {
@@ -79,16 +82,18 @@ protected:
 
   virtual void SimpleExecute(vtkImageData* input, vtkImageData* output);
 
-private:
-  vtkvmtkSatoVesselnessMeasureImageFilter(const vtkvmtkSatoVesselnessMeasureImageFilter&);  // Not implemented.
-  void operator=(const vtkvmtkSatoVesselnessMeasureImageFilter&);  // Not implemented.
-
   double SigmaMin;
   double SigmaMax;
   int NumberOfSigmaSteps;
   int SigmaStepMethod;
   double Alpha1;
   double Alpha2;
+
+  vtkImageData* ScalesOutput;
+
+private:
+  vtkvmtkSatoVesselnessMeasureImageFilter(const vtkvmtkSatoVesselnessMeasureImageFilter&);  // Not implemented.
+  void operator=(const vtkvmtkSatoVesselnessMeasureImageFilter&);  // Not implemented.
 };
 
 #endif
