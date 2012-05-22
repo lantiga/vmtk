@@ -57,7 +57,7 @@ protected:
   void SimpleExecute(vtkImageData *input, vtkImageData *output);
 
   int UseImageSpacing;
-  int* Radius;
+  int Radius[3];
   float BackgroundValue;
 
 private:

@@ -38,16 +38,11 @@ vtkvmtkFWHMFeatureImageFilter::vtkvmtkFWHMFeatureImageFilter()
 {
   this->UseImageSpacing = 1;
   this->BackgroundValue = 0.0;
-  this->Radius = NULL;
+  this->Radius[0] = this->Radius[1] = this->Radius[2] = 1;
 }
 
 vtkvmtkFWHMFeatureImageFilter::~vtkvmtkFWHMFeatureImageFilter()
 {
-  if (this->Radius)
-    {
-    delete[] this->Radius;
-    this->Radius = NULL;
-    }
 }
 
 void vtkvmtkFWHMFeatureImageFilter::SimpleExecute(vtkImageData *input, vtkImageData *output)
@@ -64,13 +59,11 @@ void vtkvmtkFWHMFeatureImageFilter::SimpleExecute(vtkImageData *input, vtkImageD
   imageFilter->SetInput(inImage);
 
   typedef ImageFilterType::StructuringElementRadiusType RadiusType;
-  long unsigned int radiusValue[3];
-  radiusValue[0] = static_cast<long unsigned int>(this->Radius[0]);
-  radiusValue[1] = static_cast<long unsigned int>(this->Radius[1]);
-  radiusValue[2] = static_cast<long unsigned int>(this->Radius[2]);
-
   RadiusType radius;
-  radius.SetSize(radiusValue);
+  radius[0] = static_cast<long unsigned int>(this->Radius[0]);
+  radius[1] = static_cast<long unsigned int>(this->Radius[1]);
+  radius[2] = static_cast<long unsigned int>(this->Radius[2]);
+
   imageFilter->SetRadius(radius);
   imageFilter->SetUseImageSpacing(this->UseImageSpacing);
   imageFilter->SetBackgroundValue(this->BackgroundValue);

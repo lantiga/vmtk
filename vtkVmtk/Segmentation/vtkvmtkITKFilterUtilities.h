@@ -36,6 +36,7 @@ Version:   $Revision: 1.2 $
 
 #include "vtkImageData.h"
 #include "itkImage.h"
+#include "itkImportImageContainer.h"
 
 class VTK_VMTK_SEGMENTATION_EXPORT vtkvmtkITKFilterUtilities
 {
@@ -53,8 +54,15 @@ public:
     input->GetDimensions(dims);
     double spacing[3];
     input->GetSpacing(spacing);
+    double origin[3];
+    input->GetOrigin(origin);
 
-    output->GetPixelContainer()->SetImportPointer(static_cast<PixelType*>(input->GetScalarPointer()),dims[0]*dims[1]*dims[2],false);
+//    output->GetPixelContainer()->SetImportPointer(static_cast<PixelType*>(input->GetScalarPointer()),dims[0]*dims[1]*dims[2],false);
+
+    typename ImageType::PointType point;
+    point[0] = origin[0];
+    point[1] = origin[1];
+    point[2] = origin[2];
     typename ImageType::RegionType region;
     typename ImageType::IndexType index;
     typename ImageType::SizeType size;
@@ -67,6 +75,17 @@ public:
     output->SetLargestPossibleRegion(region);
     output->SetBufferedRegion(region);
     output->SetSpacing(spacing);
+    output->SetOrigin(origin);
+
+    output->Allocate();
+    int i = 0;
+    vtkIdType numberOfPoints = input->GetNumberOfPoints();
+    typename ImageType::PixelContainerPointer pixelContainer = output->GetPixelContainer();
+    void* scalarPointer = input->GetScalarPointer();
+    for (i=0; i<numberOfPoints; i++)
+      {
+      (*pixelContainer)[i] = *(static_cast<PixelType*>(scalarPointer)+i);
+      }
   }
 
   template<typename TImage>
@@ -81,12 +100,18 @@ public:
     input->GetDimensions(dims);
     double spacing[3];
     input->GetSpacing(spacing);
+    double origin[3];
+    input->GetOrigin(origin);
 
     double outputSpacing[2];
     outputSpacing[0] = spacing[0];
     outputSpacing[1] = spacing[1];
 
-    output->GetPixelContainer()->SetImportPointer(static_cast<PixelType*>(input->GetScalarPointer()),dims[0]*dims[1],false);
+    typename ImageType::PointType point;
+    point[0] = origin[0];
+    point[1] = origin[1];
+
+    //output->GetPixelContainer()->SetImportPointer(static_cast<PixelType*>(input->GetScalarPointer()),dims[0]*dims[1],false);
     typename ImageType::RegionType region;
     typename ImageType::IndexType index;
     typename ImageType::SizeType size;
@@ -98,20 +123,64 @@ public:
     output->SetLargestPossibleRegion(region);
     output->SetBufferedRegion(region);
     output->SetSpacing(outputSpacing);
+
+    output->Allocate();
+    int i = 0;
+    vtkIdType numberOfPoints = input->GetNumberOfPoints();
+    typename ImageType::PixelContainerPointer pixelContainer = output->GetPixelContainer();
+    void* scalarPointer = input->GetScalarPointer();
+    for (i=0; i<numberOfPoints; i++)
+      {
+      (*pixelContainer)[i] = *(static_cast<PixelType*>(scalarPointer)+i);
+      }
   }
 
   template<typename TImage>
   static void
-  ITKToVTKImage(const TImage* input, vtkImageData* output) {
+  ITKToVTKImage(const TImage* input, vtkImageData* output, int scalarType = VTK_FLOAT) {
 
     typedef TImage ImageType;
     typedef typename ImageType::PixelType PixelType;
+    typedef typename ImageType::SpacingType SpacingType;
+    typedef typename ImageType::PointType PointType;
+    typedef typename ImageType::RegionType RegionType;
 
-    //TODO: make sure output has the right number of pixels
+    typename ImageType::RegionType region;
+
+    unsigned int dim = input->GetImageDimension();
+
+    int dims[3];
+    double spacing[3];
+    double origin[3];
+ 
+    const RegionType& inputRegion = input->GetBufferedRegion();
+    dims[0] = inputRegion.GetSize()[0];
+    dims[1] = inputRegion.GetSize()[1];
+
+    const PointType& inputOrigin = input->GetOrigin();
+    origin[0] = inputOrigin[0];
+    origin[1] = inputOrigin[1];
+
+    const SpacingType& inputSpacing = input->GetSpacing();
+    spacing[0] = inputSpacing[0];
+    spacing[1] = inputSpacing[1];
+
+    if (dim == 3)
+      {
+      spacing[2] = inputSpacing[2];
+      origin[2] = inputOrigin[2];
+      dims[2] = inputRegion.GetSize()[2];
+      }
+
+    output->SetOrigin(origin);
+    output->SetSpacing(spacing);
+    output->SetExtent(0,dims[0]-1,0,dims[1]-1,0,dims[2]-1);
+    output->SetScalarType(scalarType);
+    output->AllocateScalars();
 
     memcpy(static_cast<PixelType*>(output->GetScalarPointer()),input->GetBufferPointer(),input->GetBufferedRegion().GetNumberOfPixels()*sizeof(PixelType));
   }
-
+/*
   template<typename TImage>
   static void
   ITKToVTKImage(const typename TImage::Pointer input, vtkImageData* output) {
@@ -124,7 +193,7 @@ public:
 
     memcpy(static_cast<PixelType*>(output->GetScalarPointer()),input->GetBufferPointer(),input->GetBufferedRegion().GetNumberOfPixels()*sizeof(PixelType));
   }
-
+*/
 protected:
   vtkvmtkITKFilterUtilities() {};
   ~vtkvmtkITKFilterUtilities() {};

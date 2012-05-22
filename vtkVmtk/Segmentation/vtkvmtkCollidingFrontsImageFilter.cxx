@@ -59,17 +59,21 @@ vtkvmtkCollidingFrontsImageFilter::~vtkvmtkCollidingFrontsImageFilter()
 
 void vtkvmtkCollidingFrontsImageFilter::SimpleExecute(vtkImageData *input, vtkImageData *output)
 {
+  cout<<"a1"<<endl;
   typedef itk::Image<float,3> ImageType;
 
   ImageType::Pointer inImage = ImageType::New();
 
+  cout<<"a2"<<endl;
   vtkvmtkITKFilterUtilities::VTKToITKImage<ImageType>(input,inImage);
+  cout<<"a3"<<endl;
 
   typedef itk::CollidingFrontsImageFilter<ImageType,ImageType> ImageFilterType;
 
   ImageFilterType::Pointer imageFilter = ImageFilterType::New();
 
   ImageFilterType::NodeContainerPointer seeds1 = ImageFilterType::NodeContainer::New();
+  cout<<"a4"<<endl;
 
   int i;
   for (i=0; i<this->Seeds1->GetNumberOfIds(); i++)                                                                                   
@@ -86,6 +90,7 @@ void vtkvmtkCollidingFrontsImageFilter::SimpleExecute(vtkImageData *input, vtkIm
     }                                                                                                                                
   imageFilter->SetSeedPoints1(seeds1);                                                                             
   
+  cout<<"a5"<<endl;
   ImageFilterType::NodeContainerPointer seeds2 = ImageFilterType::NodeContainer::New();                                              
 
   for (i=0; i<this->Seeds2->GetNumberOfIds(); i++)                                                                                   
@@ -101,10 +106,13 @@ void vtkvmtkCollidingFrontsImageFilter::SimpleExecute(vtkImageData *input, vtkIm
     seeds2->InsertElement(i,seed);                                                                                                   
     }                                                                                                                                
   imageFilter->SetSeedPoints2(seeds2);                                                                             
+  cout<<"a6"<<endl;
 
   imageFilter->SetInput(inImage);
   imageFilter->Update();
 
+  cout<<"a7"<<endl;
   vtkvmtkITKFilterUtilities::ITKToVTKImage<ImageType>(imageFilter->GetOutput(),output);
+  cout<<"a8"<<endl;
 }
 
