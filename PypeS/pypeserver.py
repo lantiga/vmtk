@@ -34,24 +34,34 @@ def RunPypeProcess(arguments, inputStream=None, outputStream=None, logOn=True):
         pipe.OutputStream = outputStream
     pipe.LogOn = logOn
     pipe.LogOn = True
-    pipe.SetArgumentsString(arguments)
+    if type(arguments) in [str,unicode]:
+        pipe.SetArgumentsString(arguments)
+    else:
+        pipe.Arguments = arguments
     pipe.ParseArguments()
     try: 
         pipe.Execute() 
     except BaseException, e:
-        print e
-        return
+        print "Error from pype:", e
+    del pipe
 
 def PypeServer(queue, output, returnIfEmptyQueue=False):
     outputStream = None
     if output != None:
         outputStream = OutputStream(output)
     while True:
-        if queue:
-            arguments = queue.pop(0)
-            RunPypeProcess(arguments,outputStream=outputStream)
-        elif returnIfEmptyQueue:
-            return
-        else:
-            time.sleep(0.5)
+        try:
+            if queue:
+                arguments = queue.pop(0)
+                RunPypeProcess(arguments,outputStream=outputStream)
+            elif returnIfEmptyQueue:
+                return
+            else:
+                time.sleep(0.5)
+        except IOError, e:
+            print "Connection closed"
+            break
+        except KeyboardInterrupt, e:
+            print "Connection closed"
+            break
 
