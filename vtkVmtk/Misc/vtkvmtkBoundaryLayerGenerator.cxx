@@ -237,32 +237,8 @@ int vtkvmtkBoundaryLayerGenerator::RequestData(
   vtkIdList* edgeNeighborCellIds = vtkIdList::New();
   
   this-> SetWarpVectors(input);
-
-  vtkPoints* basePoints = vtkPoints::New();
-  basePoints->DeepCopy(inputPoints);
-
-  for (int l=0; l<this->NumberOfSubsteps; l++)
-    {
-    this->IncrementalWarpPoints(input,basePoints,warpedPoints,l);
-    basePoints->DeepCopy(warpedPoints);
-    }
-
-  double warpVector[3], basePoint[3], warpedPoint[3];
-  for (vtkIdType j=0; j<numberOfInputPoints; j++)
-    {
-    inputPoints->GetPoint(j,basePoint);
-    warpedPoints->GetPoint(j,warpedPoint);
-    this->WarpVectorsArray->GetTuple(j,warpVector);
-    double layerThickness=vtkMath::Norm(warpVector);
-    warpVector[0] = warpedPoint[0] - basePoint[0];
-    warpVector[1] = warpedPoint[1] - basePoint[1];
-    warpVector[2] = warpedPoint[2] - basePoint[2];
-    vtkMath::Normalize(warpVector); 
-    warpVector[0] = warpVector[0] * layerThickness; 
-    warpVector[1] = warpVector[1] * layerThickness; 
-    warpVector[2] = warpVector[2] * layerThickness;  
-    this->WarpVectorsArray->SetTuple(j,warpVector);
-    }
+  
+  this->IncrementalWarpVectors(input);
 
   int k;
   for (k=0; k<this->NumberOfSubLayers; k++)
@@ -555,7 +531,40 @@ void vtkvmtkBoundaryLayerGenerator::SetWarpVectors (vtkUnstructuredGrid* input)
   }       
 }
 
+void vtkvmtkBoundaryLayerGenerator::IncrementalWarpVectors(vtkUnstructuredGrid* input)
+{   
+   
+  vtkPoints* inputPoints = input->GetPoints();
+  vtkPoints* outputPoints = vtkPoints::New();
+  vtkPoints* warpedPoints = vtkPoints::New();    
+  vtkIdType numberOfInputPoints = inputPoints->GetNumberOfPoints();    
 
+  vtkPoints* basePoints = vtkPoints::New();
+  basePoints->DeepCopy(inputPoints);
+
+  for (int l=0; l<this->NumberOfSubsteps; l++)
+    {
+    this->IncrementalWarpPoints(input,basePoints,warpedPoints,l);
+    basePoints->DeepCopy(warpedPoints);
+    }
+
+  double warpVector[3], basePoint[3], warpedPoint[3];
+  for (vtkIdType j=0; j<numberOfInputPoints; j++)
+    {
+    inputPoints->GetPoint(j,basePoint);
+    warpedPoints->GetPoint(j,warpedPoint);
+    this->WarpVectorsArray->GetTuple(j,warpVector);
+    double layerThickness=vtkMath::Norm(warpVector);
+    warpVector[0] = warpedPoint[0] - basePoint[0];
+    warpVector[1] = warpedPoint[1] - basePoint[1];
+    warpVector[2] = warpedPoint[2] - basePoint[2];
+    vtkMath::Normalize(warpVector); 
+    warpVector[0] = warpVector[0] * layerThickness; 
+    warpVector[1] = warpVector[1] * layerThickness; 
+    warpVector[2] = warpVector[2] * layerThickness;  
+    this->WarpVectorsArray->SetTuple(j,warpVector);
+    }
+}
 
 void vtkvmtkBoundaryLayerGenerator::WarpPoints(vtkPoints* inputPoints, vtkPoints* warpedPoints, int subLayerId, bool quadratic)
 {
