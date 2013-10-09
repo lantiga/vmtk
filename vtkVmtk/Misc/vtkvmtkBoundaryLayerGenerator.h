@@ -109,18 +109,24 @@ class VTK_VMTK_MISC_EXPORT vtkvmtkBoundaryLayerGenerator : public vtkUnstructure
 
   virtual int RequestData(vtkInformation *, vtkInformationVector **, vtkInformationVector *);
 
+  void SetWarpVectors (vtkUnstructuredGrid* input);
   void IncrementalWarpPoints(vtkUnstructuredGrid* input, vtkPoints* basePoints, vtkPoints* warpedPoints, int substep);
+  void IncrementalWarpVectors(vtkUnstructuredGrid* input);
+  int CheckTangle(vtkUnstructuredGrid* input);
+  void LocalUntangle(vtkUnstructuredGrid* input, double Alpha); 
   void WarpPoints(vtkPoints* inputPoints, vtkPoints* warpedPoints, int subLayerId, bool quadratic);
   void UnwrapSublayers(vtkUnstructuredGrid* input, vtkPoints* outputPoints);
 
   vtkDataArray* WarpVectorsArray;
   vtkDataArray* LayerThicknessArray;
+  vtkDataArray* CheckArray;
 
   int UseWarpVectorMagnitudeAsThickness;
   int ConstantThickness;
 
   char* WarpVectorsArrayName;
   char* LayerThicknessArrayName;
+  char* CheckArrayName;
 
   double LayerThickness;
   double LayerThicknessRatio;
@@ -143,6 +149,7 @@ class VTK_VMTK_MISC_EXPORT vtkvmtkBoundaryLayerGenerator : public vtkUnstructure
   int VolumeCellEntityId;
 
   double Relaxation;
+  double Alpha;
 
   private:
   vtkvmtkBoundaryLayerGenerator(const vtkvmtkBoundaryLayerGenerator&);  // Not implemented.
