@@ -435,7 +435,7 @@ int vtkvmtkBoundaryLayerGenerator::RequestData(
       }
     }
 
-  basePoints->Delete();
+  //basePoints->Delete();
   output->SetPoints(outputPoints);
 
   int* boundaryLayerCellTypesInt = new int[boundaryLayerCellTypes->GetNumberOfIds()];
