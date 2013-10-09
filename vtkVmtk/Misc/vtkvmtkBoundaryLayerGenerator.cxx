@@ -235,6 +235,8 @@ int vtkvmtkBoundaryLayerGenerator::RequestData(
 
   vtkIdList* edgePointIds = vtkIdList::New();
   vtkIdList* edgeNeighborCellIds = vtkIdList::New();
+  
+  this-> SetWarpVectors(input);
 
   vtkPoints* basePoints = vtkPoints::New();
   basePoints->DeepCopy(inputPoints);
@@ -253,12 +255,7 @@ int vtkvmtkBoundaryLayerGenerator::RequestData(
     warpVector[0] = warpedPoint[0] - basePoint[0];
     warpVector[1] = warpedPoint[1] - basePoint[1];
     warpVector[2] = warpedPoint[2] - basePoint[2];
-    if (this->NegateWarpVectors)
-      {
-      warpVector[0] *= -1.0;
-      warpVector[1] *= -1.0;
-      warpVector[2] *= -1.0;
-      }
+
     this->WarpVectorsArray->SetTuple(j,warpVector);
     }
 
@@ -509,6 +506,52 @@ int vtkvmtkBoundaryLayerGenerator::RequestData(
   return 1;
 }
 
+void vtkvmtkBoundaryLayerGenerator::SetWarpVectors (vtkUnstructuredGrid* input)
+{
+  double warpVector[3];
+  double layerThickness;
+  
+  vtkIdType numberOfInputPoints = input->GetNumberOfPoints();
+
+  for (vtkIdType i=0; i<numberOfInputPoints; i++)
+  {
+    this->WarpVectorsArray->GetTuple(i,warpVector);
+    if (this->NegateWarpVectors)
+    {
+      warpVector[0] *= -1.0;
+      warpVector[1] *= -1.0;
+      warpVector[2] *= -1.0;
+    }
+    layerThickness = 0.0;
+    if (this->ConstantThickness)
+    {
+      layerThickness = this->LayerThickness;
+    }
+    else if (this->UseWarpVectorMagnitudeAsThickness)
+    {
+      layerThickness = vtkMath::Norm(warpVector);
+    }
+    else
+    {
+      layerThickness = this->LayerThicknessArray->GetComponent(i,0);
+      layerThickness *= this->LayerThicknessRatio;
+    }
+    if (layerThickness > this->MaximumLayerThickness)
+    {
+      layerThickness = this->MaximumLayerThickness;
+    } 
+    vtkMath::Normalize(warpVector);
+    warpVector[0] = warpVector[0] * layerThickness;
+    warpVector[1] = warpVector[1] * layerThickness;
+    warpVector[2] = warpVector[2] * layerThickness;
+    
+    this->WarpVectorsArray->SetTuple(i,warpVector); 
+  //ora sto sovrascrivendo i warpVectors iniziali. potrei invece fare un secondo array.  
+  }       
+}
+
+
+
 void vtkvmtkBoundaryLayerGenerator::WarpPoints(vtkPoints* inputPoints, vtkPoints* warpedPoints, int subLayerId, bool quadratic)
 {
   double point[3], warpedPoint[3], warpVector[3];
@@ -594,35 +637,10 @@ void vtkvmtkBoundaryLayerGenerator::IncrementalWarpPoints(vtkUnstructuredGrid* i
     {
     basePoints->GetPoint(i,point);
     this->WarpVectorsArray->GetTuple(i,warpVector);
-    if (this->NegateWarpVectors)
-      {
-      warpVector[0] *= -1.0;
-      warpVector[1] *= -1.0;
-      warpVector[2] *= -1.0;
-      }
-
-    layerThickness = 0.0;
-    if (this->ConstantThickness)
-      {
-      layerThickness = this->LayerThickness;
-      }
-    else if (this->UseWarpVectorMagnitudeAsThickness)
-      {
-      layerThickness = vtkMath::Norm(warpVector);
-      }
-    else
-      {
-      layerThickness = this->LayerThicknessArray->GetComponent(i,0);
-      layerThickness *= this->LayerThicknessRatio;
-      }
-
-    if (layerThickness > this->MaximumLayerThickness)
-      {
-      layerThickness = this->MaximumLayerThickness;
-      }
-
+    
+    layerThickness = vtkMath::Norm(warpVector); 
     vtkMath::Normalize(warpVector);
-
+    
     layerThickness /= this->NumberOfSubsteps;
 
     warpedPoint[0] = point[0] + warpVector[0] * layerThickness;
