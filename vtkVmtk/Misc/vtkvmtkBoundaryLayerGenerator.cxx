@@ -252,10 +252,15 @@ int vtkvmtkBoundaryLayerGenerator::RequestData(
     {
     inputPoints->GetPoint(j,basePoint);
     warpedPoints->GetPoint(j,warpedPoint);
+    this->WarpVectorsArray->GetTuple(j,warpVector);
+    double layerThickness=vtkMath::Norm(warpVector);
     warpVector[0] = warpedPoint[0] - basePoint[0];
     warpVector[1] = warpedPoint[1] - basePoint[1];
     warpVector[2] = warpedPoint[2] - basePoint[2];
-
+    vtkMath::Normalize(warpVector); 
+    warpVector[0] = warpVector[0] * layerThickness; 
+    warpVector[1] = warpVector[1] * layerThickness; 
+    warpVector[2] = warpVector[2] * layerThickness;  
     this->WarpVectorsArray->SetTuple(j,warpVector);
     }
 
