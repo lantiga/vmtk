@@ -37,7 +37,7 @@ Version:   $Revision: 1.7 $
 
 vtkCxxRevisionMacro(vtkvmtkBoundaryLayerGenerator, "$Revision: 1.7 $");
 vtkStandardNewMacro(vtkvmtkBoundaryLayerGenerator);
-
+//aggiungo un commento inutile ma lui dovrebbe ricompilarmi
 vtkvmtkBoundaryLayerGenerator::vtkvmtkBoundaryLayerGenerator()
 {
   this->WarpVectorsArrayName = NULL;
