@@ -533,40 +533,39 @@ void vtkvmtkBoundaryLayerGenerator::SetWarpVectors (vtkUnstructuredGrid* input)
   vtkIdType numberOfInputPoints = input->GetNumberOfPoints();
 
   for (vtkIdType i=0; i<numberOfInputPoints; i++)
-  {
+    {
     this->WarpVectorsArray->GetTuple(i,warpVector);
     if (this->NegateWarpVectors)
-    {
+      {
       warpVector[0] *= -1.0;
       warpVector[1] *= -1.0;
       warpVector[2] *= -1.0;
-    }
+      }
     layerThickness = 0.0;
     if (this->ConstantThickness)
-    {
+      {
       layerThickness = this->LayerThickness;
-    }
+      }
     else if (this->UseWarpVectorMagnitudeAsThickness)
-    {
+      {
       layerThickness = vtkMath::Norm(warpVector);
-    }
+      }
     else
-    {
+      {
       layerThickness = this->LayerThicknessArray->GetComponent(i,0);
       layerThickness *= this->LayerThicknessRatio;
-    }
+      }
     if (layerThickness > this->MaximumLayerThickness)
-    {
+      {
       layerThickness = this->MaximumLayerThickness;
-    } 
+      } 
     vtkMath::Normalize(warpVector);
     warpVector[0] = warpVector[0] * layerThickness;
     warpVector[1] = warpVector[1] * layerThickness;
     warpVector[2] = warpVector[2] * layerThickness;
     
     this->WarpVectorsArray->SetTuple(i,warpVector); 
-  //ora sto sovrascrivendo i warpVectors iniziali. potrei invece fare un secondo array.  
-  }       
+    }       
 }
 
 void vtkvmtkBoundaryLayerGenerator::IncrementalWarpVectors(vtkUnstructuredGrid* input, int numberOfSubsteps, double relaxation)
@@ -601,6 +600,9 @@ void vtkvmtkBoundaryLayerGenerator::IncrementalWarpVectors(vtkUnstructuredGrid* 
     warpVector[2] = warpVector[2] * layerThickness;  
     this->WarpVectorsArray->SetTuple(j,warpVector);
     }
+    
+  warpedPoints->Delete();
+  basePoints->Delete();
 }
 
 int vtkvmtkBoundaryLayerGenerator::CheckTangle(vtkUnstructuredGrid* input)
@@ -612,7 +614,6 @@ int vtkvmtkBoundaryLayerGenerator::CheckTangle(vtkUnstructuredGrid* input)
   double warpedPoint1[3], warpedPoint2[3], warpedPoint3[3];
   double baseNormal[3],warpedNormal[3];
   
-  //this->checkArray=input->GetCellData()->GetArray("check");
   vtkDataArray* checkArray=input->GetCellData()->GetArray("check");
   
   int found=0;
@@ -656,6 +657,8 @@ int vtkvmtkBoundaryLayerGenerator::CheckTangle(vtkUnstructuredGrid* input)
       }
     }
   std::cout << found <<" tangle triangles found"<<std::endl;
+  
+  pointList->Delete();
   return check;
 }
 
@@ -783,7 +786,9 @@ void vtkvmtkBoundaryLayerGenerator::LocalUntangle(vtkUnstructuredGrid* input, do
     }
   
   correctionArray->Delete();
-  
+  pointList->Delete();
+  pointList2->Delete();
+  cellList->Delete();  
 }
 
 void vtkvmtkBoundaryLayerGenerator::WarpPoints(vtkPoints* inputPoints, vtkPoints* warpedPoints, int subLayerId, bool quadratic)
