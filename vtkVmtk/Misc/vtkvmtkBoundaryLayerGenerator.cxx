@@ -160,6 +160,7 @@ int vtkvmtkBoundaryLayerGenerator::RequestData(
 
   vtkIntArray* innerSurfaceCellEntityIdsArray = vtkIntArray::New();
   innerSurfaceCellEntityIdsArray->SetName(this->CellEntityIdsArrayName);
+  
   //Definition of the new array check
   vtkIntArray* checkArray = vtkIntArray::New();
   checkArray->SetName("check");
@@ -241,11 +242,42 @@ int vtkvmtkBoundaryLayerGenerator::RequestData(
 
   vtkIdList* edgePointIds = vtkIdList::New();
   vtkIdList* edgeNeighborCellIds = vtkIdList::New();
-  
-  this-> SetWarpVectors(input);
-  
-  this->IncrementalWarpVectors(input);
 
+  //alcuni di questi potrebbero diventare input parameters..
+  double relaxation = this->Relaxation;
+  int initialNumberOfSubsteps = 10;
+  int inermediateNumberOfSubsteps = 100;
+  int finalNumberOfSubsteps = 1000;
+  //new procedure for bl generation
+  this-> SetWarpVectors(input);
+  this->IncrementalWarpVectors(input,initialNumberOfSubsteps,relaxation);
+  
+  int check = 0;
+  int num = 1;
+  check = CheckTangle(input);  
+  if (check==1)
+    {
+    std::cout <<"untangle procedure.. "<<std::endl; 
+    }
+  //deve diventare input parameter!!
+  int maximumNumberOfIterations = 50;  
+  while (check==1 and num < maximumNumberOfIterations)
+    {
+    LocalUntangle(input, 0.45);
+    IncrementalWarpVectors(input, inermediateNumberOfSubsteps, relaxation);   
+    std::cout <<"iteration  "<< num << ": " ;
+    check = 0;
+    check = CheckTangle(input);
+    num = num +1;
+    if (check==0)
+      {
+      std::cout <<"try last : " ;
+      IncrementalWarpVectors(input,finalNumberOfSubsteps, relaxation); //questo se alto tira un po la piega che altrimenti si forma  
+      check =0;
+      check = CheckTangle(input);                       
+      }
+    }  
+  
   int k;
   for (k=0; k<this->NumberOfSubLayers; k++)
     {
@@ -441,7 +473,6 @@ int vtkvmtkBoundaryLayerGenerator::RequestData(
       }
     }
 
-  //basePoints->Delete();
   output->SetPoints(outputPoints);
 
   int* boundaryLayerCellTypesInt = new int[boundaryLayerCellTypes->GetNumberOfIds()];
@@ -489,6 +520,7 @@ int vtkvmtkBoundaryLayerGenerator::RequestData(
 
   cellEntityIdsArray->Delete();
   innerSurfaceCellEntityIdsArray->Delete();
+  checkArray->Delete();
  
   return 1;
 }
@@ -537,7 +569,7 @@ void vtkvmtkBoundaryLayerGenerator::SetWarpVectors (vtkUnstructuredGrid* input)
   }       
 }
 
-void vtkvmtkBoundaryLayerGenerator::IncrementalWarpVectors(vtkUnstructuredGrid* input)
+void vtkvmtkBoundaryLayerGenerator::IncrementalWarpVectors(vtkUnstructuredGrid* input, int numberOfSubsteps, double relaxation)
 {   
    
   vtkPoints* inputPoints = input->GetPoints();
@@ -547,9 +579,9 @@ void vtkvmtkBoundaryLayerGenerator::IncrementalWarpVectors(vtkUnstructuredGrid* 
   vtkPoints* basePoints = vtkPoints::New();
   basePoints->DeepCopy(inputPoints);
 
-  for (int l=0; l<this->NumberOfSubsteps; l++)
+  for (int l=0; l<numberOfSubsteps; l++)
     {
-    this->IncrementalWarpPoints(input,basePoints,warpedPoints,l);
+    this->IncrementalWarpPoints(input, basePoints, warpedPoints, l, numberOfSubsteps, relaxation);
     basePoints->DeepCopy(warpedPoints);
     }
 
@@ -627,7 +659,132 @@ int vtkvmtkBoundaryLayerGenerator::CheckTangle(vtkUnstructuredGrid* input)
   return check;
 }
 
+void vtkvmtkBoundaryLayerGenerator::LocalUntangle(vtkUnstructuredGrid* input, double Alpha)
+{
+  vtkIdList* pointList=vtkIdList::New();
+  vtkIdList* pointList2=vtkIdList::New();
+  vtkIdList* cellList=vtkIdList::New();
+  
+  double warpVector1[3], warpVector2[3], warpVector3[3];
+  double w1s[3], w2s[3], w3s[3], n[3]; 
+  double point1[3], point2[3], point3[3];
+  double c1[3], c2[3],  c3[3];
 
+  vtkDataArray* checkArray=input->GetCellData()->GetArray("check");
+  
+  vtkDoubleArray* correctionArray = vtkDoubleArray::New();
+  correctionArray->SetName("correctionVectors");
+  correctionArray->SetNumberOfComponents(3);
+  correctionArray->SetNumberOfTuples(input->GetNumberOfPoints());
+  correctionArray->FillComponent(0,0.0);
+  correctionArray->FillComponent(1,0.0);
+  correctionArray->FillComponent(2,0.0);
+  input->GetPointData()->AddArray(correctionArray);   
+  
+  for (vtkIdType j=0; j<input->GetNumberOfCells(); j++)
+    {
+    if (checkArray->GetComponent(j,0)==1)
+      {
+      input->GetCellPoints(j,pointList);
+      this->WarpVectorsArray->GetTuple(pointList->GetId(0),warpVector1);
+      this->WarpVectorsArray->GetTuple(pointList->GetId(1),warpVector2);
+      this->WarpVectorsArray->GetTuple(pointList->GetId(2),warpVector3);
+      //eventually we can do it iteratively (relaxation >1)
+      double relaxation=1;
+      double alpha=Alpha;
+      for (int r=0; r<relaxation; r++)
+        {
+        w1s[0] = w1s[1] = w1s[2] = 0.0;
+        w2s[0] = w2s[1] = w2s[2] = 0.0;
+        w3s[0] = w3s[1] = w3s[2] = 0.0;
+        n[0] = n[1] = n[2] = 0.0;
+        input->GetPointCells(pointList->GetId(0),cellList);
+        for (int i=0; i<cellList->GetNumberOfIds();i++)
+          {
+          input->GetCellPoints(i,pointList2);
+          input->GetPoint(pointList2->GetId(0),point1);
+          input->GetPoint(pointList2->GetId(1),point2);
+          input->GetPoint(pointList2->GetId(2),point3);
+          vtkTriangle::ComputeNormal(point1,point2,point3,n);         
+          w1s[0] += (warpVector1[0]-vtkMath::Dot(warpVector1,n)*n[0]);
+          w1s[1] += (warpVector1[1]-vtkMath::Dot(warpVector1,n)*n[1]);
+          w1s[2] += (warpVector1[2]-vtkMath::Dot(warpVector1,n)*n[2]);
+          }
+        w1s[0]/= cellList->GetNumberOfIds();
+        w1s[1]/= cellList->GetNumberOfIds();
+        w1s[2]/= cellList->GetNumberOfIds();
+        input->GetPointCells(pointList->GetId(1),cellList);
+        for (int i=0; i<cellList->GetNumberOfIds();i++)
+          {                       
+          input->GetCellPoints(i,pointList2);
+          input->GetPoint(pointList2->GetId(0),point1);
+          input->GetPoint(pointList2->GetId(1),point2);
+          input->GetPoint(pointList2->GetId(2),point3);
+          vtkTriangle::ComputeNormal(point1,point2,point3,n); 
+          w2s[0] += (warpVector2[0]-vtkMath::Dot(warpVector2,n)*n[0]);
+          w2s[1] += (warpVector2[1]-vtkMath::Dot(warpVector2,n)*n[1]);
+          w2s[2] += (warpVector2[2]-vtkMath::Dot(warpVector2,n)*n[2]);
+          }
+        w2s[0]/= cellList->GetNumberOfIds();
+        w2s[1]/= cellList->GetNumberOfIds();
+        w2s[2]/= cellList->GetNumberOfIds();                                        
+        input->GetPointCells(pointList->GetId(2),cellList);
+        for (int i=0; i<cellList->GetNumberOfIds();i++)
+          {                       
+          input->GetCellPoints(i,pointList2);
+          input->GetPoint(pointList2->GetId(0),point1);
+          input->GetPoint(pointList2->GetId(1),point2);
+          input->GetPoint(pointList2->GetId(2),point3);
+          vtkTriangle::ComputeNormal(point1,point2,point3,n);
+          w3s[0] += (warpVector3[0]-vtkMath::Dot(warpVector3,n)*n[0]);
+          w3s[1] += (warpVector3[1]-vtkMath::Dot(warpVector3,n)*n[1]);
+          w3s[2] += (warpVector3[2]-vtkMath::Dot(warpVector3,n)*n[2]); 
+          }
+        w3s[0]/= cellList->GetNumberOfIds();
+        w3s[1]/= cellList->GetNumberOfIds();
+        w3s[2]/= cellList->GetNumberOfIds();
+        //ha davvero senso normalizzare?
+        vtkMath::Normalize(w1s);
+        vtkMath::Normalize(w2s);
+        vtkMath::Normalize(w3s);
+        correctionArray->GetTuple(pointList->GetId(0),c1);
+        correctionArray->GetTuple(pointList->GetId(1),c2);
+        correctionArray->GetTuple(pointList->GetId(2),c3);
+        c1[0]=c1[0]+alpha*(w2s[0])+alpha*(w3s[0]);
+        c1[1]=c1[1]+alpha*(w2s[1])+alpha*(w3s[1]);
+        c1[2]=c1[2]+alpha*(w2s[2])+alpha*(w3s[2]);
+        c2[0]=c2[0]+alpha*(w1s[0])+alpha*(w3s[0]);
+        c2[1]=c2[1]+alpha*(w1s[1])+alpha*(w3s[1]);
+        c2[2]=c2[2]+alpha*(w1s[2])+alpha*(w3s[2]);
+        c3[0]=c3[0]+alpha*(w2s[0])+alpha*(w1s[0]);
+        c3[1]=c3[1]+alpha*(w2s[1])+alpha*(w1s[1]);
+        c3[2]=c3[2]+alpha*(w2s[2])+alpha*(w1s[2]);
+        correctionArray->SetTuple3(pointList->GetId(0),c1[0],c1[1],c1[2]);
+        correctionArray->SetTuple3(pointList->GetId(1),c2[0],c2[1],c2[2]);
+        correctionArray->SetTuple3(pointList->GetId(2),c3[0],c3[1],c3[2]);                
+        }
+      }         
+    }
+
+  double warp[3], correction[3];  
+  for (vtkIdType i=0; i<input->GetNumberOfPoints();i++)
+    {
+    this->WarpVectorsArray->GetTuple(i,warp);
+    double layerThickness=vtkMath::Norm(warp); //
+    correctionArray->GetTuple(i,correction);
+    warp[0]=warp[0]+correction[0];
+    warp[1]=warp[1]+correction[1];
+    warp[2]=warp[2]+correction[2];       
+    vtkMath::Normalize(warp); //
+    warp[0] = warp[0] * layerThickness; //
+    warp[1] = warp[1] * layerThickness; //
+    warp[2] = warp[2] * layerThickness;  //      
+    this->WarpVectorsArray->SetTuple(i,warp);              
+    }
+  
+  correctionArray->Delete();
+  
+}
 
 void vtkvmtkBoundaryLayerGenerator::WarpPoints(vtkPoints* inputPoints, vtkPoints* warpedPoints, int subLayerId, bool quadratic)
 {
@@ -666,12 +823,6 @@ void vtkvmtkBoundaryLayerGenerator::WarpPoints(vtkPoints* inputPoints, vtkPoints
     {
     inputPoints->GetPoint(i,point);
     this->WarpVectorsArray->GetTuple(i,warpVector);
-    if (this->NegateWarpVectors)
-      {
-      warpVector[0] *= -1.0;
-      warpVector[1] *= -1.0;
-      warpVector[2] *= -1.0;
-      }
 
     layerThickness = vtkMath::Norm(warpVector);
 
@@ -701,7 +852,7 @@ void vtkvmtkBoundaryLayerGenerator::WarpPoints(vtkPoints* inputPoints, vtkPoints
     }
 }
 
-void vtkvmtkBoundaryLayerGenerator::IncrementalWarpPoints(vtkUnstructuredGrid* input, vtkPoints* basePoints, vtkPoints* warpedPoints, int substep)
+void vtkvmtkBoundaryLayerGenerator::IncrementalWarpPoints(vtkUnstructuredGrid* input, vtkPoints* basePoints, vtkPoints* warpedPoints, int substep, int numberOfSubsteps, double relaxation)
 {
   double point[3], warpedPoint[3], warpVector[3];
   double layerThickness;
@@ -718,7 +869,7 @@ void vtkvmtkBoundaryLayerGenerator::IncrementalWarpPoints(vtkUnstructuredGrid* i
     layerThickness = vtkMath::Norm(warpVector); 
     vtkMath::Normalize(warpVector);
     
-    layerThickness /= this->NumberOfSubsteps;
+    layerThickness /= numberOfSubsteps;
 
     warpedPoint[0] = point[0] + warpVector[0] * layerThickness;
     warpedPoint[1] = point[1] + warpVector[1] * layerThickness;
@@ -794,9 +945,9 @@ void vtkvmtkBoundaryLayerGenerator::IncrementalWarpPoints(vtkUnstructuredGrid* i
     // input surface (not the input surface at this iteration) and in that 
     // case (before it gets too close) stop the warp
 
-    warpedPoint[0] += this->Relaxation * (barycenter[0] - warpedPoint[0]);
-    warpedPoint[1] += this->Relaxation * (barycenter[1] - warpedPoint[1]);
-    warpedPoint[2] += this->Relaxation * (barycenter[2] - warpedPoint[2]);
+    warpedPoint[0] += relaxation * (barycenter[0] - warpedPoint[0]);
+    warpedPoint[1] += relaxation * (barycenter[1] - warpedPoint[1]);
+    warpedPoint[2] += relaxation * (barycenter[2] - warpedPoint[2]);
 
     warpedPoints->SetPoint(j,warpedPoint);
     }
