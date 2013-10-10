@@ -160,6 +160,12 @@ int vtkvmtkBoundaryLayerGenerator::RequestData(
 
   vtkIntArray* innerSurfaceCellEntityIdsArray = vtkIntArray::New();
   innerSurfaceCellEntityIdsArray->SetName(this->CellEntityIdsArrayName);
+  //Definition of the new array check
+  vtkIntArray* checkArray = vtkIntArray::New();
+  checkArray->SetName("check");
+  checkArray->SetNumberOfTuples(input->GetNumberOfCells());
+  checkArray->FillComponent(0,1);
+  input->GetCellData()->AddArray(checkArray);  
 
   vtkIdType numberOfInputPoints = inputPoints->GetNumberOfPoints();
   vtkIdType numberOfInputCells = input->GetNumberOfCells();
@@ -535,7 +541,6 @@ void vtkvmtkBoundaryLayerGenerator::IncrementalWarpVectors(vtkUnstructuredGrid* 
 {   
    
   vtkPoints* inputPoints = input->GetPoints();
-  vtkPoints* outputPoints = vtkPoints::New();
   vtkPoints* warpedPoints = vtkPoints::New();    
   vtkIdType numberOfInputPoints = inputPoints->GetNumberOfPoints();    
 
@@ -565,6 +570,64 @@ void vtkvmtkBoundaryLayerGenerator::IncrementalWarpVectors(vtkUnstructuredGrid* 
     this->WarpVectorsArray->SetTuple(j,warpVector);
     }
 }
+
+int vtkvmtkBoundaryLayerGenerator::CheckTangle(vtkUnstructuredGrid* input)
+{
+  vtkIdList* pointList=vtkIdList::New();
+  
+  double warpVector1[3], warpVector2[3],  warpVector3[3];
+  double basePoint1[3], basePoint2[3], basePoint3[3];
+  double warpedPoint1[3], warpedPoint2[3], warpedPoint3[3];
+  double baseNormal[3],warpedNormal[3];
+  
+  //this->checkArray=input->GetCellData()->GetArray("check");
+  //vtkIntArray* checkArray=input->GetCellData()->GetArray("check");
+  
+  int found=0;
+  int check=0;
+  for (vtkIdType j=0; j<input->GetNumberOfCells(); j++)
+    {
+    input->GetCellPoints(j,pointList);
+    //points on base triangle
+    input->GetPoint(pointList->GetId(0),basePoint1);
+    input->GetPoint(pointList->GetId(1),basePoint2);
+    input->GetPoint(pointList->GetId(2),basePoint3);
+    
+    this->WarpVectorsArray->GetTuple(pointList->GetId(0),warpVector1);
+    this->WarpVectorsArray->GetTuple(pointList->GetId(1),warpVector2);
+    this->WarpVectorsArray->GetTuple(pointList->GetId(2),warpVector3);
+                                  
+    //points on extruded triangle
+    warpedPoint1[0] = basePoint1[0] + warpVector1[0];
+    warpedPoint1[1] = basePoint1[1] + warpVector1[1];
+    warpedPoint1[2] = basePoint1[2] + warpVector1[2];
+    warpedPoint2[0] = basePoint2[0] + warpVector2[0];
+    warpedPoint2[1] = basePoint2[1] + warpVector2[1];
+    warpedPoint2[2] = basePoint2[2] + warpVector2[2];           
+    warpedPoint3[0] = basePoint3[0] + warpVector3[0];
+    warpedPoint3[1] = basePoint3[1] + warpVector3[1];
+    warpedPoint3[2] = basePoint3[2] + warpVector3[2];          
+    
+    //normals on base triangle (baseNormal) and normals on extruded triangle (warpedNormal)
+    vtkTriangle::ComputeNormal(basePoint1,basePoint2,basePoint3,baseNormal);
+    vtkTriangle::ComputeNormal(warpedPoint1,warpedPoint2,warpedPoint3,warpedNormal);
+    double prod = vtkMath::Dot(baseNormal,warpedNormal);
+    if (prod<0)
+      {
+      check=1;
+      found = found +1;
+      this->checkArray->SetTuple1(j,1); 
+      }
+    else
+      {
+      this->checkArray->SetTuple1(j,0);  
+      }
+    }
+  std::cout << found <<" tangle triangles found"<<std::endl;
+  return check;
+}
+
+
 
 void vtkvmtkBoundaryLayerGenerator::WarpPoints(vtkPoints* inputPoints, vtkPoints* warpedPoints, int subLayerId, bool quadratic)
 {
