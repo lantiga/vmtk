@@ -581,7 +581,7 @@ int vtkvmtkBoundaryLayerGenerator::CheckTangle(vtkUnstructuredGrid* input)
   double baseNormal[3],warpedNormal[3];
   
   //this->checkArray=input->GetCellData()->GetArray("check");
-  //vtkIntArray* checkArray=input->GetCellData()->GetArray("check");
+  vtkIntArray* checkArray=input->GetCellData()->GetArray("check");
   
   int found=0;
   int check=0;
@@ -616,11 +616,11 @@ int vtkvmtkBoundaryLayerGenerator::CheckTangle(vtkUnstructuredGrid* input)
       {
       check=1;
       found = found +1;
-      this->checkArray->SetTuple1(j,1); 
+      checkArray->SetTuple1(j,1); 
       }
     else
       {
-      this->checkArray->SetTuple1(j,0);  
+      checkArray->SetTuple1(j,0);  
       }
     }
   std::cout << found <<" tangle triangles found"<<std::endl;
