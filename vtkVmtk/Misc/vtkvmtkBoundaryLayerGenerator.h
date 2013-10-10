@@ -119,14 +119,12 @@ class VTK_VMTK_MISC_EXPORT vtkvmtkBoundaryLayerGenerator : public vtkUnstructure
 
   vtkDataArray* WarpVectorsArray;
   vtkDataArray* LayerThicknessArray;
-  vtkDataArray* CheckArray;
 
   int UseWarpVectorMagnitudeAsThickness;
   int ConstantThickness;
 
   char* WarpVectorsArrayName;
   char* LayerThicknessArrayName;
-  char* CheckArrayName;
 
   double LayerThickness;
   double LayerThicknessRatio;
