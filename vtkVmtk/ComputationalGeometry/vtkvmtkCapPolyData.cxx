@@ -121,7 +121,7 @@ int vtkvmtkCapPolyData::RequestData(
     }
 
   // Execute
-  boundaryExtractor->SetInput(input);
+  boundaryExtractor->SetInputData(input);
   boundaryExtractor->Update();
 
   boundaries = boundaryExtractor->GetOutput();

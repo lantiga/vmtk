@@ -317,7 +317,7 @@ int vtkvmtkBoundaryReferenceSystems::RequestData(
   point2Array->SetNumberOfComponents(3);
 
   vtkvmtkPolyDataBoundaryExtractor* boundaryExtractor = vtkvmtkPolyDataBoundaryExtractor::New();
-  boundaryExtractor->SetInput(input);
+  boundaryExtractor->SetInputData(input);
   boundaryExtractor->Update();
 
   vtkPolyData* boundaries = boundaryExtractor->GetOutput();

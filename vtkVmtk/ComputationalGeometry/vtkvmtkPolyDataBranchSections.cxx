@@ -508,14 +508,14 @@ void vtkvmtkPolyDataBranchSections::ExtractCylinderSection(vtkPolyData* cylinder
   plane->SetNormal(normal);
 
   vtkCutter* cutter = vtkCutter::New();
-  cutter->SetInput(cylinder);
+  cutter->SetInputData(cylinder);
   cutter->SetCutFunction(plane);
   cutter->GenerateCutScalarsOn();
   cutter->SetValue(0,0.0);
   cutter->Update();
 
   vtkCleanPolyData* cleaner = vtkCleanPolyData::New();
-  cleaner->SetInput(cutter->GetOutput());
+  cleaner->SetInputData(cutter->GetOutput());
   cleaner->Update();
 
   if (cleaner->GetOutput()->GetNumberOfPoints() == 0)
@@ -524,13 +524,12 @@ void vtkvmtkPolyDataBranchSections::ExtractCylinderSection(vtkPolyData* cylinder
     }
 
   vtkPolyDataConnectivityFilter* connectivityFilter = vtkPolyDataConnectivityFilter::New();
-  connectivityFilter->SetInput(cleaner->GetOutput());
+  connectivityFilter->SetInputData(cleaner->GetOutput());
   connectivityFilter->SetExtractionModeToClosestPointRegion();
   connectivityFilter->SetClosestPoint(origin);
   connectivityFilter->Update();
 
   section->DeepCopy(connectivityFilter->GetOutput());
-  section->Update();
 
   // TODO: manually reconstruct single cell line from connectivity output
 
@@ -629,7 +628,6 @@ void vtkvmtkPolyDataBranchSections::ExtractCylinderSection(vtkPolyData* cylinder
   section->GetPolys()->Reset();
 
   section->GetPolys()->InsertNextCell(polygonPointIds);
-  section->Update();
 
   cutter->Delete();
   connectivityFilter->Delete();

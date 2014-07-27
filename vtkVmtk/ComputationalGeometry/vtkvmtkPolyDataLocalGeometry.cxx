@@ -483,11 +483,11 @@ void vtkvmtkPolyDataLocalGeometry::AdjustBoundaryQuantities(vtkPolyData* output)
   vtkDataArray* centerlineVectorsArray = NULL;
 
   vtkTriangleFilter* triangleFilter = vtkTriangleFilter::New();
-  triangleFilter->SetInput(output);
+  triangleFilter->SetInputData(output);
   triangleFilter->Update();
 
   vtkvmtkPolyDataBoundaryExtractor* boundaryExtractor = vtkvmtkPolyDataBoundaryExtractor::New();
-  boundaryExtractor->SetInput(triangleFilter->GetOutput());
+  boundaryExtractor->SetInputData(triangleFilter->GetOutput());
   boundaryExtractor->Update();
 
   vtkPolyData* boundaries = boundaryExtractor->GetOutput();

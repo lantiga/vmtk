@@ -30,7 +30,7 @@ SET (VTK_VMTK_MISC_SRCS
   vtkvmtkUnstructuredGridTetraFilter.cxx
   )
 
-SET (VTK_VMTK_MISC_TARGET_LINK_LIBRARIES vtkvmtkMisc vtkvmtkComputationalGeometry vtkvmtkDifferentialGeometry vtkCommon vtkFiltering vtkGraphics vtkHybrid)
+SET (VTK_VMTK_MISC_TARGET_LINK_LIBRARIES vtkvmtkMisc vtkvmtkComputationalGeometry vtkvmtkDifferentialGeometry ${VTK_LIBRARIES})
 
 IF (VTK_VMTK_BUILD_TETGEN)
   SET (VTK_VMTK_MISC_SRCS ${VTK_VMTK_MISC_SRCS} vtkvmtkTetGenWrapper.cxx)
@@ -86,7 +86,7 @@ IF (VTK_WRAP_PYTHON AND VTK_VMTK_WRAP_PYTHON)
     SET_TARGET_PROPERTIES(vtkvmtkMiscPythonD PROPERTIES ${VMTK_LIBRARY_PROPERTIES})
   ENDIF(VMTK_LIBRARY_PROPERTIES)
   ADD_LIBRARY(vtkvmtkMiscPython MODULE vtkvmtkMiscPythonInit.cxx)
-  TARGET_LINK_LIBRARIES(vtkvmtkMiscPythonD vtkvmtkMisc vtkvmtkComputationalGeometry vtkvmtkComputationalGeometryPythonD vtkvmtkDifferentialGeometry vtkvmtkDifferentialGeometryPythonD vtkCommon vtkCommonPythonD vtkFiltering vtkFilteringPythonD vtkGraphics vtkGraphicsPythonD)
+  TARGET_LINK_LIBRARIES(vtkvmtkMiscPythonD vtkvmtkMisc vtkvmtkComputationalGeometry vtkvmtkComputationalGeometryPythonD vtkvmtkDifferentialGeometry vtkvmtkDifferentialGeometryPythonD ${VTK_LIBRARIES})
   TARGET_LINK_LIBRARIES (vtkvmtkMiscPython vtkvmtkMiscPythonD)
   IF(WIN32 AND NOT CYGWIN)
      SET_TARGET_PROPERTIES(vtkvmtkMiscPython PROPERTIES SUFFIX ".pyd")

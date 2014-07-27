@@ -65,7 +65,7 @@ int vtkvmtkLinearToQuadraticSurfaceMeshFilter::RequestData(
   vtkInterpolatingSubdivisionFilter* subdivisionFilter;
 
   geometryFilter = vtkGeometryFilter::New();
-  geometryFilter->SetInput(input);
+  geometryFilter->SetInputData(input);
   geometryFilter->MergingOff();
 
   switch (this->SubdivisionMethod)
@@ -81,7 +81,7 @@ int vtkvmtkLinearToQuadraticSurfaceMeshFilter::RequestData(
       return 1;
     }
 
-  subdivisionFilter->SetInput(geometryFilter->GetOutput());
+  subdivisionFilter->SetInputData(geometryFilter->GetOutput());
   subdivisionFilter->SetNumberOfSubdivisions(1);
   subdivisionFilter->Update();
   

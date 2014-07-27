@@ -37,13 +37,14 @@ Language:  C++
 #ifndef __vtkvmtkStaticTemporalInterpolatedVelocityField_h
 #define __vtkvmtkStaticTemporalInterpolatedVelocityField_h
 
-#include "vtkAbstractInterpolatedVelocityField.h"
+//#include "vtkAbstractInterpolatedVelocityField.h"
+#include "vtkInterpolatedVelocityField.h"
 #include "vtkvmtkWin32Header.h"
 
 class vtkTable;
 
 class VTK_VMTK_MISC_EXPORT vtkvmtkStaticTemporalInterpolatedVelocityField 
-  : public vtkAbstractInterpolatedVelocityField
+  : public vtkInterpolatedVelocityField
 {
 public:
   vtkTypeMacro( vtkvmtkStaticTemporalInterpolatedVelocityField,

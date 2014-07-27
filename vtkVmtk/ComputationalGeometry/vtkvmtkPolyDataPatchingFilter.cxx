@@ -293,27 +293,27 @@ int vtkvmtkPolyDataPatchingFilter::RequestData(
     cylinder->GetPointData()->SetActiveScalars(this->LongitudinalMappingArrayName);
 
     vtkClipPolyData* longitudinalClipper0 = vtkClipPolyData::New();
-    longitudinalClipper0->SetInput(cylinder);
+    longitudinalClipper0->SetInputData(cylinder);
     longitudinalClipper0->GenerateClipScalarsOff();
     longitudinalClipper0->InsideOutOff();
 
     vtkClipPolyData* longitudinalClipper1 = vtkClipPolyData::New();
-    longitudinalClipper1->SetInput(longitudinalClipper0->GetOutput());
+    longitudinalClipper1->SetInputData(longitudinalClipper0->GetOutput());
     longitudinalClipper1->GenerateClipScalarsOff();
     longitudinalClipper1->InsideOutOn();
 
     vtkClipPolyData* circularClipper0 = vtkClipPolyData::New();
-    circularClipper0->SetInput(longitudinalClipper1->GetOutput());
+    circularClipper0->SetInputData(longitudinalClipper1->GetOutput());
     circularClipper0->GenerateClipScalarsOff();
     circularClipper0->InsideOutOff();
 
     vtkClipPolyData* circularClipper1 = vtkClipPolyData::New();
-    circularClipper1->SetInput(circularClipper0->GetOutput());
+    circularClipper1->SetInputData(circularClipper0->GetOutput());
     circularClipper1->GenerateClipScalarsOff();
     circularClipper1->InsideOutOn();
 
     vtkPolyDataConnectivityFilter* patchConnectivityFilter = vtkPolyDataConnectivityFilter::New();
-    patchConnectivityFilter->SetInput(circularClipper1->GetOutput());
+    patchConnectivityFilter->SetInputData(circularClipper1->GetOutput());
     patchConnectivityFilter->SetExtractionModeToLargestRegion();
 
     double longitudinalMappingRange[2];
@@ -428,24 +428,24 @@ int vtkvmtkPolyDataPatchingFilter::RequestData(
           {
           if (this->CircularPatching)
             {
-            patchConnectivityFilter->SetInput(circularClipper1->GetOutput());
+            patchConnectivityFilter->SetInputData(circularClipper1->GetOutput());
             }
           else
             {
-            patchConnectivityFilter->SetInput(longitudinalClipper1->GetOutput());
+            patchConnectivityFilter->SetInputData(longitudinalClipper1->GetOutput());
             }
           patchConnectivityFilter->Update();
-          patchTriangleFilter->SetInput(patchConnectivityFilter->GetOutput());
+          patchTriangleFilter->SetInputData(patchConnectivityFilter->GetOutput());
           }
         else
           {
           if (this->CircularPatching)
             {
-            patchTriangleFilter->SetInput(circularClipper1->GetOutput());
+            patchTriangleFilter->SetInputData(circularClipper1->GetOutput());
             }
           else
             {
-            patchTriangleFilter->SetInput(longitudinalClipper1->GetOutput());
+            patchTriangleFilter->SetInputData(longitudinalClipper1->GetOutput());
             }
           }
 
@@ -601,7 +601,7 @@ int vtkvmtkPolyDataPatchingFilter::RequestData(
         patch->GetCellData()->AddArray(circularPatchNumberArray);
         patch->GetCellData()->AddArray(patchAreaArray);
 
-        patchAppendFilter->AddInput(patch);
+        patchAppendFilter->AddInputData(patch);
 
         patch->Delete();
         patchTriangleFilter->Delete();
@@ -626,7 +626,7 @@ int vtkvmtkPolyDataPatchingFilter::RequestData(
   
   this->PatchedData->SetOrigin(0.0,0.0,0.0);
   this->PatchedData->SetSpacing(circumferentialActualPatchSize,this->PatchSize[0],1.0);
-  this->PatchedData->SetWholeExtent(0,numberOfPreviousPatchDataLines-1,0,circularPatchEndIndex-circularPatchStartIndex,0,0);
+  //this->PatchedData->SetWholeExtent(0,numberOfPreviousPatchDataLines-1,0,circularPatchEndIndex-circularPatchStartIndex,0,0);
   this->PatchedData->SetExtent(0,circularPatchEndIndex-circularPatchStartIndex,0,numberOfPreviousPatchDataLines-1,0,0);
 
   this->PatchedData->GetPointData()->AddArray(patchedDataLongitudinalPatchNumberArray);

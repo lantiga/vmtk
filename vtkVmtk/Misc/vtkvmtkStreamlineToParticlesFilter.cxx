@@ -130,7 +130,7 @@ int vtkvmtkStreamlineToParticlesFilter::RequestData(
     double injectionOffset = this->InjectionStart + i * (this->InjectionEnd - this->InjectionStart) / this->NumberOfInjections;
 
     vtkMaskPolyData* mask = vtkMaskPolyData::New();
-    mask->SetInput(input);
+    mask->SetInputData(input);
     mask->SetOnRatio(numberOfCells/this->NumberOfParticlesPerInjection);
     mask->SetOffset(i);
     mask->Update();

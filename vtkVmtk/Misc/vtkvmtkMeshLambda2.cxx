@@ -88,7 +88,7 @@ int vtkvmtkMeshLambda2::RequestData(
   char gradientArrayName[] = "VelocityGradient";
 
   vtkvmtkUnstructuredGridGradientFilter* gradientFilter = vtkvmtkUnstructuredGridGradientFilter::New();
-  gradientFilter->SetInput(input);
+  gradientFilter->SetInputData(input);
   gradientFilter->SetInputArrayName(this->VelocityArrayName);
   gradientFilter->SetGradientArrayName(gradientArrayName);
   gradientFilter->SetQuadratureOrder(this->QuadratureOrder);

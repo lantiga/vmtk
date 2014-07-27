@@ -62,7 +62,8 @@ ADD_LIBRARY (vtkvmtkComputationalGeometry ${VTK_VMTK_COMPUTATIONALGEOMETRY_SRCS}
 IF(VMTK_LIBRARY_PROPERTIES)
   SET_TARGET_PROPERTIES(vtkvmtkComputationalGeometry PROPERTIES ${VMTK_LIBRARY_PROPERTIES})
 ENDIF(VMTK_LIBRARY_PROPERTIES)
-TARGET_LINK_LIBRARIES(vtkvmtkComputationalGeometry vtkvmtkCommon vtkCommon vtkFiltering vtkGraphics vtkHybrid)
+#TARGET_LINK_LIBRARIES(vtkvmtkComputationalGeometry vtkvmtkCommon vtkCommon vtkFiltering vtkGraphics vtkHybrid)
+TARGET_LINK_LIBRARIES(vtkvmtkComputationalGeometry vtkvmtkCommon ${VTK_LIBRARIES})
 
 INSTALL(TARGETS vtkvmtkComputationalGeometry
   LIBRARY DESTINATION ${VTK_VMTK_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
@@ -97,7 +98,8 @@ IF (VTK_WRAP_PYTHON AND VTK_VMTK_WRAP_PYTHON)
     SET_TARGET_PROPERTIES(vtkvmtkComputationalGeometryPythonD PROPERTIES ${VMTK_LIBRARY_PROPERTIES})
   ENDIF(VMTK_LIBRARY_PROPERTIES)
   ADD_LIBRARY(vtkvmtkComputationalGeometryPython MODULE vtkvmtkComputationalGeometryPythonInit.cxx)
-  TARGET_LINK_LIBRARIES(vtkvmtkComputationalGeometryPythonD vtkvmtkComputationalGeometry vtkvmtkCommon vtkvmtkCommonPythonD vtkCommon vtkCommonPythonD vtkFiltering vtkFilteringPythonD vtkGraphics vtkGraphicsPythonD vtkHybrid vtkHybridPythonD)
+  #TARGET_LINK_LIBRARIES(vtkvmtkComputationalGeometryPythonD vtkvmtkComputationalGeometry vtkvmtkCommon vtkvmtkCommonPythonD vtkCommon vtkCommonPythonD vtkFiltering vtkFilteringPythonD vtkGraphics vtkGraphicsPythonD vtkHybrid vtkHybridPythonD)
+  TARGET_LINK_LIBRARIES(vtkvmtkComputationalGeometryPythonD vtkvmtkComputationalGeometry vtkvmtkCommon vtkvmtkCommonPythonD ${VTK_LIBRARIES})
   TARGET_LINK_LIBRARIES (vtkvmtkComputationalGeometryPython vtkvmtkComputationalGeometryPythonD)
   IF(WIN32 AND NOT CYGWIN)
      SET_TARGET_PROPERTIES(vtkvmtkComputationalGeometryPython PROPERTIES SUFFIX ".pyd")

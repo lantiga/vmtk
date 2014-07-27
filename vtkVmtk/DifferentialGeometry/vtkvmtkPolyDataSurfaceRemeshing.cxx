@@ -191,7 +191,7 @@ int vtkvmtkPolyDataSurfaceRemeshing::RequestData(
     }
 
   vtkPolyDataNormals* normals = vtkPolyDataNormals::New();
-  normals->SetInput(input);
+  normals->SetInputData(input);
   normals->ComputePointNormalsOff();
   normals->ComputeCellNormalsOn();
   normals->AutoOrientNormalsOn();
@@ -264,7 +264,7 @@ int vtkvmtkPolyDataSurfaceRemeshing::RequestData(
     }
 
   vtkvmtkPolyDataBoundaryExtractor* boundaryExtractor = vtkvmtkPolyDataBoundaryExtractor::New();
-  boundaryExtractor->SetInput(input);
+  boundaryExtractor->SetInputData(input);
   boundaryExtractor->Update();
 
   this->InputBoundary = vtkPolyData::New();

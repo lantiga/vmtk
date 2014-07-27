@@ -22,7 +22,7 @@
 
 #include "vtkImageData.h"
 #include "vtkObjectFactory.h"
-
+#include "vtkStreamingDemandDrivenPipeline.h"
 
 vtkStandardNewMacro(vtkvmtkImageBoxPainter);
 
@@ -101,8 +101,7 @@ void vtkvmtkImageBoxPainter::SimpleExecute(vtkImageData* input,
     this->BoxExtent[5] = (vtkIdType) floor(this->BoxBounds[5] / spacing[2]);
     }
 
-  int extent[6];
-  input->GetWholeExtent(extent);
+  int* extent = vtkStreamingDemandDrivenPipeline::GetWholeExtent(this->GetInputInformation(0,0));
 
   if ( this->BoxExtent[0] < extent[0] || this->BoxExtent[1] > extent[1] ||
        this->BoxExtent[2] < extent[2] || this->BoxExtent[3] > extent[3] ||

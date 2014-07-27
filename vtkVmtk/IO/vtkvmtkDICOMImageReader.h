@@ -31,6 +31,9 @@
 //#include "DICOMParser/DICOMParser.h"
 //#include "DICOMParser/DICOMAppHelper.h"
 
+class DICOMParser;
+class DICOMAppHelper;
+
 class VTK_VMTK_IO_EXPORT vtkvmtkDICOMImageReader : public vtkDICOMImageReader
 {
   public:

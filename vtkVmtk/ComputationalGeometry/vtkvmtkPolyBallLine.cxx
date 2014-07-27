@@ -115,7 +115,6 @@ double vtkvmtkPolyBallLine::EvaluateFunction(double x[3])
     }
 
   this->Input->BuildCells();
-  this->Input->Update();
 
   minPolyBallFunctionValue = VTK_VMTK_LARGE_DOUBLE;
 

@@ -191,7 +191,7 @@ int vtkvmtkPolyDataCenterlines::RequestData(
     }
 
   vtkPolyDataNormals* surfaceNormals = vtkPolyDataNormals::New();
-  surfaceNormals->SetInput(input);
+  surfaceNormals->SetInputData(input);
   surfaceNormals->SplittingOff();
   surfaceNormals->AutoOrientNormalsOn();
   surfaceNormals->SetFlipNormals(this->FlipNormals);
@@ -203,7 +203,7 @@ int vtkvmtkPolyDataCenterlines::RequestData(
     {
     vtkDelaunay3D* delaunayTessellator = vtkDelaunay3D::New();
     delaunayTessellator->CreateDefaultLocator();
-    delaunayTessellator->SetInput(surfaceNormals->GetOutput());
+    delaunayTessellator->SetInputData(surfaceNormals->GetOutput());
     delaunayTessellator->SetTolerance(this->DelaunayTolerance);
     delaunayTessellator->Update();
 
@@ -211,7 +211,7 @@ int vtkvmtkPolyDataCenterlines::RequestData(
     delaunay->GetPointData()->AddArray(surfaceNormals->GetOutput()->GetPointData()->GetNormals());
 
     vtkvmtkInternalTetrahedraExtractor* internalTetrahedraExtractor = vtkvmtkInternalTetrahedraExtractor::New();
-    internalTetrahedraExtractor->SetInput(delaunayTessellator->GetOutput());
+    internalTetrahedraExtractor->SetInputData(delaunayTessellator->GetOutput());
     internalTetrahedraExtractor->SetOutwardNormalsArrayName(surfaceNormals->GetOutput()->GetPointData()->GetNormals()->GetName());
     if (this->CapCenterIds)
       {
@@ -228,7 +228,7 @@ int vtkvmtkPolyDataCenterlines::RequestData(
     }
 
   vtkvmtkVoronoiDiagram3D* voronoiDiagramFilter = vtkvmtkVoronoiDiagram3D::New();
-  voronoiDiagramFilter->SetInput(this->DelaunayTessellation);
+  voronoiDiagramFilter->SetInputData(this->DelaunayTessellation);
   voronoiDiagramFilter->SetRadiusArrayName(this->RadiusArrayName);
   voronoiDiagramFilter->Update();
 
@@ -239,7 +239,7 @@ int vtkvmtkPolyDataCenterlines::RequestData(
   if (this->SimplifyVoronoi)
     {
     vtkvmtkSimplifyVoronoiDiagram* voronoiDiagramSimplifier = vtkvmtkSimplifyVoronoiDiagram::New();
-    voronoiDiagramSimplifier->SetInput(voronoiDiagramFilter->GetOutput());
+    voronoiDiagramSimplifier->SetInputData(voronoiDiagramFilter->GetOutput());
     voronoiDiagramSimplifier->SetUnremovablePointIds(voronoiDiagramFilter->GetPoleIds());
     voronoiDiagramSimplifier->Update();
     voronoiDiagram = voronoiDiagramSimplifier->GetOutput();
@@ -248,7 +248,7 @@ int vtkvmtkPolyDataCenterlines::RequestData(
     }
 
   vtkArrayCalculator* voronoiCostFunctionCalculator = vtkArrayCalculator::New();
-  voronoiCostFunctionCalculator->SetInput(voronoiDiagram);
+  voronoiCostFunctionCalculator->SetInputData(voronoiDiagram);
   voronoiCostFunctionCalculator->SetAttributeModeToUsePointData();
   voronoiCostFunctionCalculator->AddScalarVariable("R",this->RadiusArrayName,0);
   voronoiCostFunctionCalculator->SetFunction(this->CostFunction);
@@ -286,7 +286,7 @@ int vtkvmtkPolyDataCenterlines::RequestData(
     }
 
   vtkvmtkNonManifoldFastMarching* voronoiFastMarching = vtkvmtkNonManifoldFastMarching::New();
-  voronoiFastMarching->SetInput(vtkPolyData::SafeDownCast(voronoiCostFunctionCalculator->GetOutput()));
+  voronoiFastMarching->SetInputData(vtkPolyData::SafeDownCast(voronoiCostFunctionCalculator->GetOutput()));
   voronoiFastMarching->SetCostFunctionArrayName(this->CostFunctionArrayName);
   voronoiFastMarching->SetSolutionArrayName(this->EikonalSolutionArrayName);
   voronoiFastMarching->SeedsBoundaryConditionsOn();
@@ -294,10 +294,9 @@ int vtkvmtkPolyDataCenterlines::RequestData(
   voronoiFastMarching->Update();
 
   this->VoronoiDiagram->ShallowCopy(voronoiFastMarching->GetOutput());
-  this->VoronoiDiagram->Update();
 
   vtkvmtkSteepestDescentLineTracer* centerlineBacktracing = vtkvmtkSteepestDescentLineTracer::New();
-  centerlineBacktracing->SetInput(voronoiFastMarching->GetOutput());
+  centerlineBacktracing->SetInputData(voronoiFastMarching->GetOutput());
   centerlineBacktracing->SetDataArrayName(this->RadiusArrayName);
   centerlineBacktracing->SetDescentArrayName(this->EikonalSolutionArrayName);
   centerlineBacktracing->SetEdgeArrayName(this->EdgeArrayName);
@@ -504,7 +503,6 @@ void vtkvmtkPolyDataCenterlines::AppendEndPoints(vtkPoints* endPointPairs)
   completeCenterlines->SetPoints(completeCenterlinesPoints);
   completeCenterlines->SetLines(completeCenterlinesCellArray);
   completeCenterlines->GetPointData()->AddArray(completeCenterlinesRadiusArray);
-  completeCenterlines->Update();
   
   output->ShallowCopy(completeCenterlines);
 
@@ -593,7 +591,6 @@ void vtkvmtkPolyDataCenterlines::ResampleCenterlines()
   resampledCenterlines->SetPoints(resampledCenterlinesPoints);
   resampledCenterlines->SetLines(resampledCenterlinesCellArray);
   resampledCenterlines->GetPointData()->AddArray(resampledCenterlinesRadiusArray);
-  resampledCenterlines->Update();
 
   output->ShallowCopy(resampledCenterlines);
 

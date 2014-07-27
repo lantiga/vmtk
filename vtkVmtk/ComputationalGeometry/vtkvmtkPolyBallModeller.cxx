@@ -185,7 +185,7 @@ int vtkvmtkPolyBallModeller::RequestData(
     }
 
   output->SetExtent(outInfo->Get(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT()));
-  output->AllocateScalars();
+  output->AllocateScalars(VTK_DOUBLE,1);
 
   vtkDoubleArray *functionArray = vtkDoubleArray::SafeDownCast(output->GetPointData()->GetScalars());
   functionArray->SetName(this->RadiusArrayName);

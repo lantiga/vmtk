@@ -94,9 +94,9 @@ int vtkvmtkCurvedMPRImageFilter::RequestInformation (
     if (outputImage)
       {
       outputImage->SetExtent(0,-1,0,-1,0,-1);
-      outputImage->SetWholeExtent(0,-1,0,-1,0,-1);
-      outputImage->SetUpdateExtent(0,-1,0,-1,0,-1);
-      outputImage->AllocateScalars();
+      //outputImage->SetWholeExtent(0,-1,0,-1,0,-1);
+      //outputImage->SetUpdateExtent(0,-1,0,-1,0,-1);
+      outputImage->AllocateScalars(inputImage->GetScalarType(),0);
       }
     if ( inputImage == NULL)
       {
@@ -140,7 +140,7 @@ int vtkvmtkCurvedMPRImageFilter::RequestInformation (
   int inDataExtent[6];
   double inDataOrigin[3];
 
-  inputImage->GetWholeExtent(inDataExtent);
+  inputImage->GetExtent(inDataExtent);
   inputImage->GetSpacing(this->OutputSpacing);
   inputImage->GetOrigin(inDataOrigin);
   
@@ -213,9 +213,9 @@ int vtkvmtkCurvedMPRImageFilter::RequestData(
     if (outputImage)
       {
       outputImage->SetExtent(0,-1,0,-1,0,-1);
-      outputImage->SetWholeExtent(0,-1,0,-1,0,-1);
-      outputImage->SetUpdateExtent(0,-1,0,-1,0,-1);
-      outputImage->AllocateScalars();
+      //outputImage->SetWholeExtent(0,-1,0,-1,0,-1);
+      //outputImage->SetUpdateExtent(0,-1,0,-1,0,-1);
+      outputImage->AllocateScalars(inputImage->GetScalarType(),0);
       }
    
     }
@@ -275,19 +275,18 @@ int vtkvmtkCurvedMPRImageFilter::RequestData(
 
   vtkPoints* linePoints = line->GetPoints(); 
 
-  int outExtent[6];
-  outputImage->GetUpdateExtent(outExtent);
+  int* outExtent = vtkStreamingDemandDrivenPipeline::GetWholeExtent(outInfo);
+  //outputImage->GetUpdateExtent(outExtent);
   outputImage->SetExtent(outExtent);
-  outputImage->SetWholeExtent(outExtent);
-  outputImage->SetUpdateExtent(outExtent);
-  outputImage->AllocateScalars();
+  //outputImage->SetWholeExtent(outExtent);
+  //outputImage->SetUpdateExtent(outExtent);
+  outputImage->AllocateScalars(inputImage->GetScalarType(),0);
 
   vtkDataArray* frenetTangentArray = this->Centerline->GetPointData()->GetArray(this->FrenetTangentArrayName); 
   vtkDataArray* parallelTransportNormalsArray = this->Centerline->GetPointData()->GetArray(this->ParallelTransportNormalsArrayName); 
  
   //start computing
-  int inExtent[6];
-  inputImage->GetWholeExtent(inExtent);
+  int* inExtent = vtkStreamingDemandDrivenPipeline::GetWholeExtent(inInfoImage);
   // if the input extent is empty then exit
   if (inExtent[1] < inExtent[0] ||
       inExtent[3] < inExtent[2] ||
@@ -298,7 +297,7 @@ int vtkvmtkCurvedMPRImageFilter::RequestData(
 
   vtkImageReslice* reslice = vtkImageReslice::New();
   reslice->SetOutputDimensionality(2);
-  reslice->SetInput(inputImage);
+  reslice->SetInputData(inputImage);
   reslice->SetInterpolationModeToCubic();
   //turn off transformation of the input spacin, origin and extent, so we can define what we want
   reslice->TransformInputSamplingOff();

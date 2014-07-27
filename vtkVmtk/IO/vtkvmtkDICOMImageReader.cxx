@@ -267,7 +267,7 @@ void vtkvmtkDICOMImageReader::OrientImageData()
   if (flipX)
     {
     flipFilterX = vtkImageFlip::New();
-    flipFilterX->SetInput(temp);
+    flipFilterX->SetInputData(temp);
     flipFilterX->SetFilteredAxis(0);
     flipFilterX->Update();
     temp0 = flipFilterX->GetOutput();
@@ -282,7 +282,7 @@ void vtkvmtkDICOMImageReader::OrientImageData()
   if (flipY)
     {
     flipFilterY = vtkImageFlip::New();
-    flipFilterY->SetInput(temp0);
+    flipFilterY->SetInputData(temp0);
     flipFilterY->SetFilteredAxis(1);
     flipFilterY->Update();
     temp1 = flipFilterY->GetOutput();
@@ -297,7 +297,7 @@ void vtkvmtkDICOMImageReader::OrientImageData()
   if (flipZ)
     {
     flipFilterZ = vtkImageFlip::New();
-    flipFilterZ->SetInput(temp1);
+    flipFilterZ->SetInputData(temp1);
     flipFilterZ->SetFilteredAxis(2);
     flipFilterZ->Update();
     temp2 = flipFilterZ->GetOutput();

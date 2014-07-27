@@ -299,7 +299,7 @@ int vtkvmtkPolyDataCenterlineGroupsClipper::RequestData(
       }
 
     vtkClipPolyData* clipper = vtkClipPolyData::New();
-    clipper->SetInput(clippingInput);
+    clipper->SetInputData(clippingInput);
     clipper->SetValue(this->ClipValue);
     clipper->GenerateClipScalarsOff();
     clipper->SetGenerateClippedOutput(this->GenerateClippedOutput);
@@ -318,7 +318,7 @@ int vtkvmtkPolyDataCenterlineGroupsClipper::RequestData(
       {
       vtkPolyData* clippedOutputBranch = vtkPolyData::New();
       clippedOutputBranch->DeepCopy(clipper->GetClippedOutput());
-      appendClippedOutput->AddInput(clippedOutputBranch);
+      appendClippedOutput->AddInputData(clippedOutputBranch);
       clippedOutputBranch->Delete();
       }
     
@@ -328,7 +328,7 @@ int vtkvmtkPolyDataCenterlineGroupsClipper::RequestData(
     groupIdsArray->FillComponent(0,groupId);
 
     clippedBranch->GetPointData()->AddArray(groupIdsArray);
-    appendBranches->AddInput(clippedBranch);
+    appendBranches->AddInputData(clippedBranch);
     groupIdsArray->Delete();
     clippedBranch->Delete();
     clipper->Delete();

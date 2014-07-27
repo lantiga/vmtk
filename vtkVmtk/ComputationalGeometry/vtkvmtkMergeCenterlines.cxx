@@ -160,7 +160,7 @@ int vtkvmtkMergeCenterlines::RequestData(vtkInformation *vtkNotUsed(request), vt
     }
 
   vtkCleanPolyData* cleaner = vtkCleanPolyData::New();
-  cleaner->SetInput(input);
+  cleaner->SetInputData(input);
   cleaner->Update();
   
   if (this->ResamplingStepLength < 1E-12)
@@ -169,7 +169,7 @@ int vtkvmtkMergeCenterlines::RequestData(vtkInformation *vtkNotUsed(request), vt
     }
 
   vtkSplineFilter* resampler = vtkSplineFilter::New();
-  resampler->SetInput(cleaner->GetOutput());
+  resampler->SetInputData(cleaner->GetOutput());
   resampler->SetSubdivideToLength();
   resampler->SetLength(this->ResamplingStepLength);
   resampler->Update();
@@ -280,7 +280,7 @@ int vtkvmtkMergeCenterlines::RequestData(vtkInformation *vtkNotUsed(request), vt
     }
 
   vtkvmtkCenterlineBifurcationReferenceSystems* referenceSystemsFilter = vtkvmtkCenterlineBifurcationReferenceSystems::New();
-  referenceSystemsFilter->SetInput(resampledCenterlines);
+  referenceSystemsFilter->SetInputData(resampledCenterlines);
   referenceSystemsFilter->SetRadiusArrayName(this->RadiusArrayName);
   referenceSystemsFilter->SetGroupIdsArrayName(this->GroupIdsArrayName);
   referenceSystemsFilter->SetBlankingArrayName(this->BlankingArrayName);

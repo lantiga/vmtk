@@ -212,14 +212,14 @@ int vtkvmtkPolyDataDiscreteElasticaFilter::RequestData(
   surface->DeepCopy(input);
 
   vtkPolyDataNormals* normalsFilter = vtkPolyDataNormals::New();
-  normalsFilter->SetInput(surface);
+  normalsFilter->SetInputData(surface);
   normalsFilter->FlipNormalsOff();
   normalsFilter->ConsistencyOn();
   normalsFilter->ComputePointNormalsOn();
   normalsFilter->ComputeCellNormalsOn();
 
   vtkCurvatures* curvaturesFilter = vtkCurvatures::New();
-  curvaturesFilter->SetInput(surface);
+  curvaturesFilter->SetInputData(surface);
 //  curvaturesFilter->InvertMeanCurvatureOn();
 
   vtkvmtkPolyDataManifoldNeighborhood* neighborhood = vtkvmtkPolyDataManifoldNeighborhood::New();
@@ -361,7 +361,7 @@ int vtkvmtkPolyDataDiscreteElasticaFilter::RequestData(
   surface->DeepCopy(input);
 
   vtkPolyDataNormals* normalsFilter = vtkPolyDataNormals::New();
-  normalsFilter->SetInput(surface);
+  normalsFilter->SetInputData(surface);
   normalsFilter->FlipNormalsOff();
   normalsFilter->ConsistencyOn();
   normalsFilter->ComputePointNormalsOn();

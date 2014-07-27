@@ -204,7 +204,7 @@ int vtkvmtkPolyDataStretchMappingFilter::RequestData(
 
     // extract boundaries and look at values there.
     vtkvmtkPolyDataBoundaryExtractor* boundaryExtractor = vtkvmtkPolyDataBoundaryExtractor::New();    
-    boundaryExtractor->SetInput(cylinder);
+    boundaryExtractor->SetInputData(cylinder);
     boundaryExtractor->Update();
     
     int numberOfBoundaries = boundaryExtractor->GetOutput()->GetNumberOfCells();
@@ -283,7 +283,7 @@ int vtkvmtkPolyDataStretchMappingFilter::RequestData(
     boundaryExtractor->Delete();
 
     vtkContourFilter* contourFilter = vtkContourFilter::New();
-    contourFilter->SetInput(cylinder);
+    contourFilter->SetInputData(cylinder);
     contourFilter->SetValue(0,0.5);
     contourFilter->Update();
 
@@ -297,7 +297,7 @@ int vtkvmtkPolyDataStretchMappingFilter::RequestData(
     contourFilter->Update();
 
     vtkStripper* contourStripper = vtkStripper::New();
-    contourStripper->SetInput(contourFilter->GetOutput());  
+    contourStripper->SetInputData(contourFilter->GetOutput());  
     contourStripper->Update();
 
     vtkPolyData* contours = contourStripper->GetOutput();

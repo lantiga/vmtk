@@ -101,7 +101,7 @@ int vtkvmtkPolyDataFlowExtensionsFilter::RequestData(
   outputPolys->DeepCopy(input->GetPolys());
 
   vtkvmtkPolyDataBoundaryExtractor* boundaryExtractor = vtkvmtkPolyDataBoundaryExtractor::New();
-  boundaryExtractor->SetInput(input);
+  boundaryExtractor->SetInputData(input);
   boundaryExtractor->Update();
 
   vtkPolyData* boundaries = boundaryExtractor->GetOutput();

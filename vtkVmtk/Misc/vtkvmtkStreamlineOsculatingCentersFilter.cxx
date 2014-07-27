@@ -93,7 +93,7 @@ int vtkvmtkStreamlineOsculatingCentersFilter::RequestData(
   double resampleLength = 0.1;
 
   vtkSplineFilter* splineFilter = vtkSplineFilter::New();
-  splineFilter->SetInput(input);
+  splineFilter->SetInputData(input);
   splineFilter->SetSubdivideToLength();
   splineFilter->SetLength(resampleLength);
   splineFilter->Update();

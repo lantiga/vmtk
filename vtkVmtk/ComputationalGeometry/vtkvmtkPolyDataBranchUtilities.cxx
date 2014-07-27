@@ -111,7 +111,7 @@ void vtkvmtkPolyDataBranchUtilities::ExtractGroup(vtkPolyData* surface, const ch
   if (cleanGroupSurface)
     {
     vtkCleanPolyData* cleaner = vtkCleanPolyData::New();
-    cleaner->SetInput(groupSurface);
+    cleaner->SetInputData(groupSurface);
     cleaner->Update();
 
     groupSurface->DeepCopy(cleaner->GetOutput());

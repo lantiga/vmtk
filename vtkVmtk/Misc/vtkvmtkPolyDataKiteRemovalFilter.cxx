@@ -58,7 +58,7 @@ int vtkvmtkPolyDataKiteRemovalFilter::RequestData(
     outInfo->Get(vtkDataObject::DATA_OBJECT()));
 
   vtkTriangleFilter* triangleFilter = vtkTriangleFilter::New();
-  triangleFilter->SetInput(input);
+  triangleFilter->SetInputData(input);
   triangleFilter->PassLinesOff();
   triangleFilter->PassVertsOff();
   triangleFilter->Update();
@@ -142,10 +142,10 @@ int vtkvmtkPolyDataKiteRemovalFilter::RequestData(
     }
 
   vtkCleanPolyData* cleaner = vtkCleanPolyData::New();
-  cleaner->SetInput(surface);
+  cleaner->SetInputData(surface);
 
   vtkTriangleFilter* triangleFilter2 = vtkTriangleFilter::New();
-  triangleFilter2->SetInput(cleaner->GetOutput());
+  triangleFilter2->SetInputData(cleaner->GetOutput());
   triangleFilter2->PassLinesOff();
   triangleFilter2->PassVertsOff();
   triangleFilter2->Update();

@@ -377,14 +377,14 @@ int vtkvmtkUnstructuredGridCenterlineSections::RequestData(
         plane->SetNormal(tangent);
     
         vtkCutter* cutter = vtkCutter::New();
-        cutter->SetInput(input);
+        cutter->SetInputData(input);
         cutter->SetCutFunction(plane);
         cutter->GenerateCutScalarsOff();
         cutter->SetValue(0,0.0);
         cutter->Update();
     
         vtkCleanPolyData* cleaner = vtkCleanPolyData::New();
-        cleaner->SetInput(cutter->GetOutput());
+        cleaner->SetInputData(cutter->GetOutput());
         cleaner->Update();
     
         if (cleaner->GetOutput()->GetNumberOfPoints() == 0)
@@ -396,7 +396,7 @@ int vtkvmtkUnstructuredGridCenterlineSections::RequestData(
           }
     
         vtkPolyDataConnectivityFilter* connectivityFilter = vtkPolyDataConnectivityFilter::New();
-        connectivityFilter->SetInput(cleaner->GetOutput());
+        connectivityFilter->SetInputData(cleaner->GetOutput());
         connectivityFilter->SetExtractionModeToClosestPointRegion();
         connectivityFilter->SetClosestPoint(point);
         connectivityFilter->Update();
@@ -445,13 +445,13 @@ int vtkvmtkUnstructuredGridCenterlineSections::RequestData(
         this->CreateTransform(transform,currentOrigin,currentNormal,currentUpNormal,targetOrigin,targetNormal,targetUpNormal);
 
         vtkTransformPolyDataFilter* transformFilter = vtkTransformPolyDataFilter::New();
-        transformFilter->SetInput(this->SectionSource);
+        transformFilter->SetInputData(this->SectionSource);
         transformFilter->SetTransform(transform);
         transformFilter->Update();
 
         vtkProbeFilter* probeFilter = vtkProbeFilter::New();
-        probeFilter->SetInput(transformFilter->GetOutput());
-        probeFilter->SetSource(input);
+        probeFilter->SetInputData(transformFilter->GetOutput());
+        probeFilter->SetSourceData(input);
         probeFilter->Update();
 
         section->DeepCopy(probeFilter->GetOutput());
@@ -476,7 +476,7 @@ int vtkvmtkUnstructuredGridCenterlineSections::RequestData(
 
       if (!this->TransformSections)
         {
-        appendFilter->AddInput(section);
+        appendFilter->AddInputData(section);
 
         vtkIdType pointId = sectionPointsPoints->InsertNextPoint(point);
         sectionPointsVerts->InsertNextCell(1);
@@ -534,11 +534,11 @@ int vtkvmtkUnstructuredGridCenterlineSections::RequestData(
         this->CreateTransform(transform,currentOrigin,currentNormal,currentUpNormal,targetOrigin,targetNormal,targetUpNormal);
 
         vtkTransformPolyDataFilter* transformFilter = vtkTransformPolyDataFilter::New();
-        transformFilter->SetInput(section);
+        transformFilter->SetInputData(section);
         transformFilter->SetTransform(transform);
         transformFilter->Update();
 
-        appendFilter->AddInput(transformFilter->GetOutput());
+        appendFilter->AddInputData(transformFilter->GetOutput());
 
         vtkIdType pointId = sectionPointsPoints->InsertNextPoint(targetOrigin);
         sectionPointsVerts->InsertNextCell(1);

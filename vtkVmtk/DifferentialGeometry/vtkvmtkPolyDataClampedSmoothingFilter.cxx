@@ -151,7 +151,7 @@ void vtkvmtkPolyDataClampedSmoothingFilter::CurvatureDiffusionIteration(vtkPolyD
   vtkDataArray* clampArray = surface->GetPointData()->GetArray(this->ClampArrayName);
 
   vtkPolyDataNormals* normalsFilter = vtkPolyDataNormals::New();
-  normalsFilter->SetInput(surface);
+  normalsFilter->SetInputData(surface);
   normalsFilter->FlipNormalsOff();
   normalsFilter->ConsistencyOn();
   normalsFilter->ComputePointNormalsOn();
@@ -160,7 +160,7 @@ void vtkvmtkPolyDataClampedSmoothingFilter::CurvatureDiffusionIteration(vtkPolyD
   vtkDataArray* normals = normalsFilter->GetOutput()->GetPointData()->GetNormals();
 
   vtkCurvatures* curvaturesFilter = vtkCurvatures::New();
-  curvaturesFilter->SetInput(surface);
+  curvaturesFilter->SetInputData(surface);
 //  curvaturesFilter->InvertMeanCurvatureOn();
   curvaturesFilter->SetCurvatureTypeToMean();
   curvaturesFilter->Update();

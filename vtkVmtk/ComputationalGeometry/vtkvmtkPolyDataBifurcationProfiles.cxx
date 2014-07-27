@@ -374,7 +374,7 @@ void vtkvmtkPolyDataBifurcationProfiles::ComputeBifurcationProfiles(vtkPolyData*
     vtkvmtkPolyDataBranchUtilities::ExtractGroup(input,this->GroupIdsArrayName,bifurcationProfileGroupId,false,cylinder);
 
     vtkvmtkPolyDataBoundaryExtractor* boundaryExtractor = vtkvmtkPolyDataBoundaryExtractor::New();
-    boundaryExtractor->SetInput(cylinder);
+    boundaryExtractor->SetInputData(cylinder);
     boundaryExtractor->Update();
 
     vtkPolyData* profile = boundaryExtractor->GetOutput();

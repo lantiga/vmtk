@@ -301,7 +301,7 @@ int vtkvmtkUnstructuredGridCenterlineGroupsClipper::RequestData(
       }
 
     vtkClipDataSet* clipper = vtkClipDataSet::New();
-    clipper->SetInput(clippingInput);
+    clipper->SetInputData(clippingInput);
     clipper->SetValue(this->ClipValue);
     clipper->GenerateClipScalarsOff();
     clipper->SetGenerateClippedOutput(this->GenerateClippedOutput);
@@ -320,7 +320,7 @@ int vtkvmtkUnstructuredGridCenterlineGroupsClipper::RequestData(
       {
       vtkUnstructuredGrid* clippedOutputBranch = vtkUnstructuredGrid::New();
       clippedOutputBranch->DeepCopy(clipper->GetClippedOutput());
-      appendClippedOutput->AddInput(clippedOutputBranch);
+      appendClippedOutput->AddInputData(clippedOutputBranch);
       clippedOutputBranch->Delete();
       }
     
@@ -330,7 +330,7 @@ int vtkvmtkUnstructuredGridCenterlineGroupsClipper::RequestData(
     groupIdsArray->FillComponent(0,groupId);
 
     clippedBranch->GetPointData()->AddArray(groupIdsArray);
-    appendBranches->AddInput(clippedBranch);
+    appendBranches->AddInputData(clippedBranch);
     groupIdsArray->Delete();
     clippedBranch->Delete();
     clipper->Delete();
