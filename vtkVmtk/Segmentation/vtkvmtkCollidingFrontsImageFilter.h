@@ -124,15 +124,16 @@ class VTK_VMTK_SEGMENTATION_EXPORT vtkvmtkCollidingFrontsImageFilter : public vt
     this->GetImageFilterPointer()->SetSeedPoints2(seeds2);
     } 
      
-    // Force the internal pipeline to update.
-    if (this->GetOutput(0))
-      {
-      this->GetOutput(0)->Update();
-      if ( this->GetOutput(0)->GetSource() )
-        {
-        //          this->SetErrorCode( this->GetOutput(0)->GetSource()->GetErrorCode() );
-        }
-      }
+    //// Force the internal pipeline to update.
+    //if (this->GetOutput(0))
+    //  {
+    //  this->GetOutput(0)->Update();
+    //  if ( this->GetOutput(0)->GetSource() )
+    //    {
+    //    //          this->SetErrorCode( this->GetOutput(0)->GetSource()->GetErrorCode() );
+    //    }
+    //  }
+
   //ETX
   }
 

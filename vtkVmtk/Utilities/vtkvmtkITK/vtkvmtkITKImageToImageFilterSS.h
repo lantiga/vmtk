@@ -2,31 +2,25 @@
 
   Copyright Brigham and Women's Hospital (BWH) All Rights Reserved.
 
-  See Doc/copyright/copyright.txt
+  See COPYRIGHT.txt
   or http://www.slicer.org/copyright/copyright.txt for details.
 
   Program:   vtkvmtkITK
-  Module:    $HeadURL: http://www.na-mic.org/svn/Slicer3/trunk/Libs/vtkvmtkITK/vtkvmtkITKImageToImageFilterSS.h $
-  Date:      $Date: 2006-12-21 13:21:52 +0100 (Thu, 21 Dec 2006) $
-  Version:   $Revision: 1900 $
+  Module:    $HeadURL$
+  Date:      $Date$
+  Version:   $Revision$
 
 ==========================================================================*/
-
-// .NAME vtkvmtkITKImageToImageFilter - Abstract base class for connecting ITK and VTK
-// .SECTION Description
-// vtkvmtkITKImageToImageFilter provides a 
 
 #ifndef __vtkvmtkITKImageToImageFilterSS_h
 #define __vtkvmtkITKImageToImageFilterSS_h
 
-
 #include "vtkvmtkITKImageToImageFilter.h"
-#include "vtkImageToImageFilter.h"
+#include "vtkImageAlgorithm.h"
 #include "itkImageToImageFilter.h"
 #include "itkVTKImageExport.h"
 #include "itkVTKImageImport.h"
 #include "vtkvmtkITKUtility.h"
-
 
 class VTK_VMTK_ITK_EXPORT vtkvmtkITKImageToImageFilterSS : public vtkvmtkITKImageToImageFilter
 {
@@ -39,9 +33,9 @@ public:
     os << m_Filter;
   };
 
-  // Description:
-  // Portion of the SetReleaseDataFlag implementation can be
-  // implemented at this level of the hierachy.
+  ///
+  /// Portion of the SetReleaseDataFlag implementation can be
+  /// implemented at this level of the hierachy.
   virtual void SetReleaseDataFlag(int f)
     {
       Superclass::SetReleaseDataFlag(f);
@@ -49,9 +43,8 @@ public:
     }
 
 protected:
-  //BTX
-  
-  // To/from ITK
+
+  /// To/from ITK
   typedef short InputImagePixelType;
   typedef short OutputImagePixelType;
   typedef itk::Image<InputImagePixelType, 3> InputImageType;
@@ -67,15 +60,15 @@ protected:
 
   vtkvmtkITKImageToImageFilterSS ( GenericFilterType* filter )
   {
-    // Need an import, export, and a ITK pipeline
+    /// Need an import, export, and a ITK pipeline
     m_Filter = filter;
     this->itkImporter = ImageImportType::New();
     this->itkExporter = ImageExportType::New();
     ConnectPipelines(this->vtkExporter, this->itkImporter);
     ConnectPipelines(this->itkExporter, this->vtkImporter);
     this->LinkITKProgressToVTKProgress ( m_Filter );
-    
-    // Set up the filter pipeline
+
+    /// Set up the filter pipeline
     m_Filter->SetInput ( this->itkImporter->GetOutput() );
     this->itkExporter->SetInput ( m_Filter->GetOutput() );
     this->vtkCast->SetOutputScalarTypeToShort();
@@ -84,11 +77,10 @@ protected:
   ~vtkvmtkITKImageToImageFilterSS()
   {
   };
-  //ETX
-  
+
 private:
-  vtkvmtkITKImageToImageFilterSS(const vtkvmtkITKImageToImageFilterSS&);  // Not implemented.
-  void operator=(const vtkvmtkITKImageToImageFilterSS&);  // Not implemented.
+  vtkvmtkITKImageToImageFilterSS(const vtkvmtkITKImageToImageFilterSS&);  /// Not implemented.
+  void operator=(const vtkvmtkITKImageToImageFilterSS&);  /// Not implemented.
 };
 
 #endif

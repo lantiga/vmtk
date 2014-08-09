@@ -3,7 +3,7 @@ SET (VTK_VMTK_RENDERING_SRCS
   vtkvmtkInteractorStyleTrackballCamera.cxx
   )
 
-SET (VTK_VMTK_RENDERING_TARGET_LINK_LIBRARIES vtkvmtkRendering vtkCommon vtkFiltering vtkGraphics vtkHybrid vtkRendering vtkWidgets)
+SET (VTK_VMTK_RENDERING_TARGET_LINK_LIBRARIES vtkvmtkRendering ${VTK_LIBRARIES})
 
 ADD_LIBRARY (vtkvmtkRendering ${VTK_VMTK_RENDERING_SRCS})
 IF(VMTK_LIBRARY_PROPERTIES)
@@ -44,7 +44,7 @@ IF (VTK_WRAP_PYTHON AND VTK_VMTK_WRAP_PYTHON)
     SET_TARGET_PROPERTIES(vtkvmtkRenderingPythonD PROPERTIES ${VMTK_LIBRARY_PROPERTIES})
   ENDIF(VMTK_LIBRARY_PROPERTIES)
   ADD_LIBRARY(vtkvmtkRenderingPython MODULE vtkvmtkRenderingPythonInit.cxx)
-  TARGET_LINK_LIBRARIES(vtkvmtkRenderingPythonD vtkvmtkRendering vtkCommon vtkCommonPythonD vtkFiltering vtkFilteringPythonD vtkGraphics vtkGraphicsPythonD vtkRendering vtkRenderingPythonD vtkWidgets vtkWidgetsPythonD)
+  TARGET_LINK_LIBRARIES(vtkvmtkRenderingPythonD vtkvmtkRendering ${VTK_LIBRARIES})
   TARGET_LINK_LIBRARIES (vtkvmtkRenderingPython vtkvmtkRenderingPythonD)
   IF(WIN32 AND NOT CYGWIN)
      SET_TARGET_PROPERTIES(vtkvmtkRenderingPython PROPERTIES SUFFIX ".pyd")

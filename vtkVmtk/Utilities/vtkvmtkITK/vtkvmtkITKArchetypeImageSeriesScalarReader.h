@@ -5,7 +5,7 @@
   See COPYRIGHT.txt
   or http://www.slicer.org/copyright/copyright.txt for details.
 
-  Program:   vtkITK
+  Program:   vtkvmtkITK
   Module:    $HeadURL$
   Date:      $Date$
   Version:   $Revision$
@@ -30,7 +30,7 @@ class VTK_VMTK_ITK_EXPORT vtkvmtkITKArchetypeImageSeriesScalarReader : public vt
   vtkvmtkITKArchetypeImageSeriesScalarReader();
   ~vtkvmtkITKArchetypeImageSeriesScalarReader();
 
-  void ExecuteData(vtkDataObject *data);
+  int RequestData(vtkInformation* request, vtkInformationVector** inputVector, vtkInformationVector* outputVector);
   static void ReadProgressCallback(itk::ProcessObject* obj,const itk::ProgressEvent&, void* data);
   /// private:
 };

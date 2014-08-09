@@ -45,15 +45,15 @@ class vmtkImageNormalize(pypes.pypeScript):
             self.PrintError('Error: No input image.')
 
         cast = vtk.vtkImageCast()
-        cast.SetInput(self.Image)
+        cast.SetInputData(self.Image)
         cast.SetOutputScalarTypeToFloat()
         cast.Update()
 
         normalizeFilter = vtkvmtk.vtkvmtkNormalizeImageFilter()
-        normalizeFilter.SetInput(cast.GetOutput())
+        normalizeFilter.SetInputConnection(cast.GetOutputPort())
         normalizeFilter.Update()
 
-        self.Image = normalizeFilter.GetOutput()
+        self.Image = normalizeFilter.GetOutputData()
 
 
 if __name__=='__main__':

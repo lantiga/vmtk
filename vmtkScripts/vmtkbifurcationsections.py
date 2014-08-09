@@ -110,7 +110,7 @@ class vmtkBifurcationSections(pypes.pypeScript):
             self.PrintError('Error: No input centerlines.')
 
         bifurcationSections = vtkvmtk.vtkvmtkPolyDataBifurcationSections()
-        bifurcationSections.SetInput(self.Surface)
+        bifurcationSections.SetInputData(self.Surface)
         bifurcationSections.SetGroupIdsArrayName(self.GroupIdsArrayName)
         bifurcationSections.SetCenterlines(self.Centerlines)
         bifurcationSections.SetNumberOfDistanceSpheres(self.NumberOfDistanceSpheres)
@@ -132,7 +132,7 @@ class vmtkBifurcationSections(pypes.pypeScript):
         bifurcationSections.SetBifurcationSectionDistanceSpheresArrayName(self.BifurcationSectionDistanceSpheresArrayName)
         bifurcationSections.Update()
 
-        self.BifurcationSections = bifurcationSections.GetOutput()
+        self.BifurcationSections = bifurcationSections.GetOutputData()
 
         if self.OutputSectionPointGroupId != None and self.OutputSectionPointBifurcationGroupId != None:
             groupIds = self.BifurcationSections.GetCellData().GetArray(self.BifurcationSectionGroupIdsArrayName)

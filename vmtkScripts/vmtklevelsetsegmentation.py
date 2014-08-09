@@ -181,7 +181,7 @@ class vmtkLevelSetSegmentation(pypes.pypeScript):
         else:
             self.PrintError('Unsupported LevelSetsType')
 
-        levelSets.SetInput(self.LevelSetsInput)
+        levelSets.SetInputData(self.LevelSetsInput)
         levelSets.SetNumberOfIterations(self.NumberOfIterations)
         levelSets.SetIsoSurfaceValue(self.IsoSurfaceValue)
         levelSets.SetMaximumRMSError(self.MaximumRMSError)
@@ -193,7 +193,7 @@ class vmtkLevelSetSegmentation(pypes.pypeScript):
         self.EndProgress()
   
         self.LevelSetsOutput = vtk.vtkImageData()
-        self.LevelSetsOutput.DeepCopy(levelSets.GetOutput())
+        self.LevelSetsOutput.DeepCopy(levelSets.GetOutputData())
         self.LevelSetsOutput.Update()
 
         if self.LevelSetsOutput.GetSource():
@@ -206,10 +206,10 @@ class vmtkLevelSetSegmentation(pypes.pypeScript):
         else:
             minFilter = vtk.vtkImageMathematics()
             minFilter.SetOperationToMin()
-            minFilter.SetInput1(self.LevelSets)
-            minFilter.SetInput2(self.LevelSetsOutput)
+            minFilter.SetInput1Data(self.LevelSets)
+            minFilter.SetInput2Data(self.LevelSetsOutput)
             minFilter.Update()
-            self.LevelSets = minFilter.GetOutput()
+            self.LevelSets = minFilter.GetOutputData()
 
         if self.LevelSets.GetSource():
             self.LevelSets.GetSource().UnRegisterAllOutputs()
@@ -217,13 +217,13 @@ class vmtkLevelSetSegmentation(pypes.pypeScript):
     def DisplayLevelSetSurface(self,levelSets,value=0.0):
       
         marchingCubes = vtk.vtkMarchingCubes()
-        marchingCubes.SetInput(levelSets)
+        marchingCubes.SetInputData(levelSets)
         marchingCubes.SetValue(0,value)
         marchingCubes.Update()
 
         self.OutputText('Displaying.\n')
 
-        self.SurfaceViewer.Surface = marchingCubes.GetOutput()
+        self.SurfaceViewer.Surface = marchingCubes.GetOutputData()
         if self.SurfaceViewer.Surface.GetSource():
             self.SurfaceViewer.Surface.GetSource().UnRegisterAllOutputs()
         self.SurfaceViewer.Display = 0
@@ -258,10 +258,10 @@ class vmtkLevelSetSegmentation(pypes.pypeScript):
             self.PrintError('Error: no Image.')
 
         cast = vtk.vtkImageCast()
-        cast.SetInput(self.Image)
+        cast.SetInputData(self.Image)
         cast.SetOutputScalarTypeToFloat()
         cast.Update()
-        self.Image = cast.GetOutput()
+        self.Image = cast.GetOutputData()
 
         if not self.InitializationImage:
             self.InitializationImage = self.Image

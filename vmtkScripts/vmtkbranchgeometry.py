@@ -73,7 +73,7 @@ class vmtkBranchGeometry(pypes.pypeScript):
             self.PrintError('Error: No input centerlines.')
 
         centerlineBranchGeometry = vtkvmtk.vtkvmtkCenterlineBranchGeometry()
-        centerlineBranchGeometry.SetInput(self.Centerlines)
+        centerlineBranchGeometry.SetInputData(self.Centerlines)
         centerlineBranchGeometry.SetRadiusArrayName(self.RadiusArrayName)
         centerlineBranchGeometry.SetGroupIdsArrayName(self.GroupIdsArrayName)
         centerlineBranchGeometry.SetBlankingArrayName(self.BlankingArrayName)
@@ -87,7 +87,7 @@ class vmtkBranchGeometry(pypes.pypeScript):
 
         centerlineBranchGeometry.Update()
 
-        self.GeometryData = centerlineBranchGeometry.GetOutput()
+        self.GeometryData = centerlineBranchGeometry.GetOutputData()
 
         if self.GeometryData.GetSource():
             self.GeometryData.GetSource().UnRegisterAllOutputs()

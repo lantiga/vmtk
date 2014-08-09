@@ -65,7 +65,7 @@ class vmtkEndpointExtractor(pypes.pypeScript):
             self.PrintError('Error: No input centerlines.')
 
         endpointExtractor = vtkvmtk.vtkvmtkCenterlineEndpointExtractor()
-        endpointExtractor.SetInput(self.Centerlines)
+        endpointExtractor.SetInputData(self.Centerlines)
         endpointExtractor.SetRadiusArrayName(self.RadiusArrayName)
         endpointExtractor.SetGroupIdsArrayName(self.GroupIdsArrayName)
         endpointExtractor.SetTractIdsArrayName(self.TractIdsArrayName)
@@ -75,7 +75,7 @@ class vmtkEndpointExtractor(pypes.pypeScript):
       	endpointExtractor.SetNumberOfGapSpheres(self.NumberOfGapSpheres)
         endpointExtractor.Update()
 
-        self.Centerlines = endpointExtractor.GetOutput()
+        self.Centerlines = endpointExtractor.GetOutputData()
 
         if self.Centerlines.GetSource():
             self.Centerlines.GetSource().UnRegisterAllOutputs()

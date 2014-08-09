@@ -63,7 +63,7 @@ class vmtkImageWriter(pypes.pypeScript):
             self.PrintError('Error: no OutputFileName.')
         self.PrintLog('Writing VTK image file.')
         writer = vtk.vtkStructuredPointsWriter()
-        writer.SetInput(self.Image)
+        writer.SetInputData(self.Image)
         writer.SetFileName(self.OutputFileName)
         writer.Write()
 
@@ -72,7 +72,7 @@ class vmtkImageWriter(pypes.pypeScript):
             self.PrintError('Error: no OutputFileName.')
         self.PrintLog('Writing VTK XML image file.')
         writer = vtk.vtkXMLImageDataWriter()
-        writer.SetInput(self.Image)
+        writer.SetInputData(self.Image)
         writer.SetFileName(self.OutputFileName)
         writer.Write()
 
@@ -81,7 +81,7 @@ class vmtkImageWriter(pypes.pypeScript):
             self.PrintError('Error: no OutputFileName.')
         self.PrintLog('Writing meta image file.')
         writer = vtk.vtkMetaImageWriter()
-        writer.SetInput(self.Image)
+        writer.SetInputData(self.Image)
         writer.SetFileName(self.OutputFileName)
         if (self.OutputRawFileName != ''):
             writer.SetRAWFileName(self.OutputRawFileName)
@@ -94,7 +94,7 @@ class vmtkImageWriter(pypes.pypeScript):
         outputImage = self.Image
         if self.Image.GetScalarTypeAsString() != 'unsigned char':
             shiftScale = vtk.vtkImageShiftScale()
-            shiftScale.SetInput(self.Image)
+            shiftScale.SetInputData(self.Image)
             if self.WindowLevel[0] == 0.0:
                 scalarRange = self.Image.GetScalarRange()
                 shiftScale.SetShift(-scalarRange[0])
@@ -105,9 +105,9 @@ class vmtkImageWriter(pypes.pypeScript):
             shiftScale.SetOutputScalarTypeToUnsignedChar()
             shiftScale.ClampOverflowOn()
             shiftScale.Update()
-            outputImage = shiftScale.GetOutput()
+            outputImage = shiftScale.GetOutputData()
         writer = vtk.vtkPNGWriter()
-        writer.SetInput(outputImage)
+        writer.SetInputData(outputImage)
         if self.Image.GetDimensions()[2] == 1:
             writer.SetFileName(self.OutputFileName)
         else:
@@ -122,7 +122,7 @@ class vmtkImageWriter(pypes.pypeScript):
         outputImage = self.Image
         if self.Image.GetScalarTypeAsString() != 'unsigned char':
             shiftScale = vtk.vtkImageShiftScale()
-            shiftScale.SetInput(self.Image)
+            shiftScale.SetInputData(self.Image)
             if self.WindowLevel[0] == 0.0:
                 scalarRange = self.Image.GetScalarRange()
                 shiftScale.SetShift(-scalarRange[0])
@@ -133,9 +133,9 @@ class vmtkImageWriter(pypes.pypeScript):
             shiftScale.SetOutputScalarTypeToUnsignedChar()
             shiftScale.ClampOverflowOn()
             shiftScale.Update()
-            outputImage = shiftScale.GetOutput()
+            outputImage = shiftScale.GetOutputData()
         writer = vtk.vtkTIFFWriter()
-        writer.SetInput(outputImage)
+        writer.SetInputData(outputImage)
         if self.Image.GetDimensions()[2] == 1:
             writer.SetFileName(self.OutputFileName)
         else:
@@ -181,7 +181,7 @@ class vmtkImageWriter(pypes.pypeScript):
         if self.OutputFileName == '':
             self.PrintError('Error: no OutputFileName.')
         writer = vtkvmtk.vtkvmtkITKImageWriter()
-        writer.SetInput(self.Image)
+        writer.SetInputData(self.Image)
         writer.SetFileName(self.OutputFileName)
         writer.SetUseCompression(1)
         if self.ApplyTransform and self.RasToIjkMatrixCoefficients:
@@ -233,7 +233,7 @@ class vmtkImageWriter(pypes.pypeScript):
 
       	if self.PixelRepresentation != '':
             cast = vtk.vtkImageCast()
-            cast.SetInput(self.Image)
+            cast.SetInputData(self.Image)
             if self.PixelRepresentation == 'double':
                 cast.SetOutputScalarTypeToDouble()
             elif self.PixelRepresentation == 'float':
@@ -243,7 +243,7 @@ class vmtkImageWriter(pypes.pypeScript):
       	    else:
                 self.PrintError('Error: unsupported pixel representation '+ self.PixelRepresentation + '.')
             cast.Update()
-            self.Image = cast.GetOutput()
+            self.Image = cast.GetOutputData()
 
         if self.UseITKIO and self.Format not in ['vtkxml','vtk','tiff','png','dat']:
             self.WriteITKIO()

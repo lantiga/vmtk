@@ -115,7 +115,7 @@ class vmtkBranchClipper(pypes.pypeScript):
             self.GroupIds = [int(groupId) for groupId in groupIdsString.split()]
 
         clipper = vtkvmtk.vtkvmtkPolyDataCenterlineGroupsClipper()
-        clipper.SetInput(self.Surface)
+        clipper.SetInputData(self.Surface)
         clipper.SetCenterlines(self.Centerlines)
         clipper.SetCenterlineGroupIdsArrayName(self.GroupIdsArrayName)
         clipper.SetGroupIdsArrayName(self.GroupIdsArrayName)
@@ -139,9 +139,9 @@ class vmtkBranchClipper(pypes.pypeScript):
         clipper.Update()
 
         if not self.InsideOut:
-            self.Surface = clipper.GetOutput()
+            self.Surface = clipper.GetOutputData()
         else:
-            self.Surface = clipper.GetClippedOutput()
+            self.Surface = clipper.GetClippedOutputData()
 
         if self.Surface:
             if self.Surface.GetSource():

@@ -52,12 +52,12 @@ class vmtkCenterlineAttributes(pypes.pypeScript):
             self.PrintError('Error: No input centerlines.')
 
         centerlineAttributes = vtkvmtk.vtkvmtkCenterlineAttributesFilter()
-        centerlineAttributes.SetInput(self.Centerlines)
+        centerlineAttributes.SetInputData(self.Centerlines)
       	centerlineAttributes.SetAbscissasArrayName(self.AbscissasArrayName)
       	centerlineAttributes.SetParallelTransportNormalsArrayName(self.NormalsArrayName)
         centerlineAttributes.Update()
 
-        self.Centerlines = centerlineAttributes.GetOutput()
+        self.Centerlines = centerlineAttributes.GetOutputData()
 
         if self.Centerlines.GetSource():
             self.Centerlines.GetSource().UnRegisterAllOutputs()

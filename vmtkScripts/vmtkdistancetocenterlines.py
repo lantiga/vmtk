@@ -66,7 +66,7 @@ class vmtkDistanceToCenterlines(pypes.pypeScript):
             if self.RadiusArrayName == '':
                 self.PrintError('Error: CenterlineRadiusArrayName not set.')
             distanceToCenterlinesFilter = vtkvmtk.vtkvmtkPolyDataDistanceToCenterlines()
-            distanceToCenterlinesFilter.SetInput(self.Surface)
+            distanceToCenterlinesFilter.SetInputData(self.Surface)
             distanceToCenterlinesFilter.SetCenterlines(self.Centerlines)
             distanceToCenterlinesFilter.SetUseRadiusInformation(1)
             distanceToCenterlinesFilter.SetEvaluateCenterlineRadius(1)
@@ -75,7 +75,7 @@ class vmtkDistanceToCenterlines(pypes.pypeScript):
             distanceToCenterlinesFilter.SetCenterlineRadiusArrayName(self.RadiusArrayName)
             distanceToCenterlinesFilter.Update()    
             
-            surface = distanceToCenterlinesFilter.GetOutput()
+            surface = distanceToCenterlinesFilter.GetOutputData()
             centerlineArray = surface.GetPointData().GetArray(self.DistanceToCenterlinesArrayName)
             radiusArray = surface.GetPointData().GetArray(self.RadiusArrayName)
 
@@ -91,7 +91,7 @@ class vmtkDistanceToCenterlines(pypes.pypeScript):
             
         else:    
             distanceToCenterlinesFilter = vtkvmtk.vtkvmtkPolyDataDistanceToCenterlines()
-            distanceToCenterlinesFilter.SetInput(self.Surface)
+            distanceToCenterlinesFilter.SetInputData(self.Surface)
             distanceToCenterlinesFilter.SetCenterlines(self.Centerlines)
             distanceToCenterlinesFilter.SetUseRadiusInformation(self.UseRadiusInformation)
             distanceToCenterlinesFilter.SetEvaluateTubeFunction(self.EvaluateTubeFunction)
@@ -101,7 +101,7 @@ class vmtkDistanceToCenterlines(pypes.pypeScript):
             distanceToCenterlinesFilter.SetCenterlineRadiusArrayName(self.RadiusArrayName)
             distanceToCenterlinesFilter.Update()
     
-            self.Surface = distanceToCenterlinesFilter.GetOutput()
+            self.Surface = distanceToCenterlinesFilter.GetOutputData()
 
 
         if self.Surface.GetSource():

@@ -2,31 +2,25 @@
 
   Copyright Brigham and Women's Hospital (BWH) All Rights Reserved.
 
-  See Doc/copyright/copyright.txt
+  See COPYRIGHT.txt
   or http://www.slicer.org/copyright/copyright.txt for details.
 
   Program:   vtkvmtkITK
-  Module:    $HeadURL: http://www.na-mic.org/svn/Slicer3/trunk/Libs/vtkvmtkITK/vtkvmtkITKImageToImageFilter2DFF.h $
-  Date:      $Date: 2006-12-21 13:21:52 +0100 (Thu, 21 Dec 2006) $
-  Version:   $Revision: 1900 $
+  Module:    $HeadURL$
+  Date:      $Date$
+  Version:   $Revision$
 
 ==========================================================================*/
 
-// .NAME vtkvmtkITKImageToImageFilter - Abstract base class for connecting ITK and VTK
-// .SECTION Description
-// vtkvmtkITKImageToImageFilter provides a 
-
-#ifndef __vtkvmtkITKImageToImageFilterFF_h
-#define __vtkvmtkITKImageToImageFilterFF_h
-
+#ifndef __vtkvmtkITKImageToImageFilter2DFF_h
+#define __vtkvmtkITKImageToImageFilter2DFF_h
 
 #include "vtkvmtkITKImageToImageFilter.h"
-#include "vtkImageToImageFilter.h"
+#include "vtkImageAlgorithm.h"
 #include "itkImageToImageFilter.h"
 #include "itkVTKImageExport.h"
 #include "itkVTKImageImport.h"
 #include "vtkvmtkITKUtility.h"
-
 
 class VTK_VMTK_ITK_EXPORT vtkvmtkITKImageToImageFilter2DFF : public vtkvmtkITKImageToImageFilter
 {
@@ -40,9 +34,8 @@ public:
   };
 
 protected:
-  //BTX
-  
-  // To/from ITK
+
+  /// To/from ITK
   typedef float InputImagePixelType;
   typedef float OutputImagePixelType;
   typedef itk::Image<InputImagePixelType, 2> InputImageType;
@@ -58,15 +51,15 @@ protected:
 
   vtkvmtkITKImageToImageFilter2DFF ( GenericFilterType* filter )
   {
-    // Need an import, export, and a ITK pipeline
+    /// Need an import, export, and a ITK pipeline
     m_Filter = filter;
     this->itkImporter = ImageImportType::New();
     this->itkExporter = ImageExportType::New();
     ConnectPipelines(this->vtkExporter, this->itkImporter);
     ConnectPipelines(this->itkExporter, this->vtkImporter);
     this->LinkITKProgressToVTKProgress ( m_Filter );
-    
-    // Set up the filter pipeline
+
+    /// Set up the filter pipeline
     m_Filter->SetInput ( this->itkImporter->GetOutput() );
     this->itkExporter->SetInput ( m_Filter->GetOutput() );
     this->vtkCast->SetOutputScalarTypeToFloat ();
@@ -75,11 +68,10 @@ protected:
   ~vtkvmtkITKImageToImageFilter2DFF()
   {
   };
-  //ETX
-  
+
 private:
-  vtkvmtkITKImageToImageFilter2DFF(const vtkvmtkITKImageToImageFilter2DFF&);  // Not implemented.
-  void operator=(const vtkvmtkITKImageToImageFilter2DFF&);  // Not implemented.
+  vtkvmtkITKImageToImageFilter2DFF(const vtkvmtkITKImageToImageFilter2DFF&);  /// Not implemented.
+  void operator=(const vtkvmtkITKImageToImageFilter2DFF&);  /// Not implemented.
 };
 
 #endif

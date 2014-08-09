@@ -83,7 +83,7 @@ class vmtkImageVesselEnhancement(pypes.pypeScript):
     def ApplyFrangiVesselness(self):
 
         vesselness = vtkvmtk.vtkvmtkVesselnessMeasureImageFilter()
-        vesselness.SetInput(self.Image)
+        vesselness.SetInputData(self.Image)
         vesselness.SetSigmaMin(self.SigmaMin)
         vesselness.SetSigmaMax(self.SigmaMax)
         vesselness.SetNumberOfSigmaSteps(self.NumberOfSigmaSteps)
@@ -98,12 +98,12 @@ class vmtkImageVesselEnhancement(pypes.pypeScript):
         vesselness.Update()
 
         self.EnhancedImage = vtk.vtkImageData()
-        self.EnhancedImage.DeepCopy(vesselness.GetOutput())
+        self.EnhancedImage.DeepCopy(vesselness.GetOutputData())
 
     def ApplySatoVesselness(self):
 
         vesselness = vtkvmtk.vtkvmtkSatoVesselnessMeasureImageFilter()
-        vesselness.SetInput(self.Image)
+        vesselness.SetInputData(self.Image)
         vesselness.SetSigmaMin(self.SigmaMin)
         vesselness.SetSigmaMax(self.SigmaMax)
         vesselness.SetNumberOfSigmaSteps(self.NumberOfSigmaSteps)
@@ -116,12 +116,12 @@ class vmtkImageVesselEnhancement(pypes.pypeScript):
         vesselness.Update()
 
         self.EnhancedImage = vtk.vtkImageData()
-        self.EnhancedImage.DeepCopy(vesselness.GetOutput())
+        self.EnhancedImage.DeepCopy(vesselness.GetOutputData())
 
     def ApplyVED(self):
 
         vesselness = vtkvmtk.vtkvmtkVesselEnhancingDiffusionImageFilter()
-        vesselness.SetInput(self.Image)
+        vesselness.SetInputData(self.Image)
         vesselness.SetSigmaMin(self.SigmaMin)
         vesselness.SetSigmaMax(self.SigmaMax)
         vesselness.SetNumberOfSigmaSteps(self.NumberOfSigmaSteps)
@@ -142,12 +142,12 @@ class vmtkImageVesselEnhancement(pypes.pypeScript):
         vesselness.Update()
 
         self.EnhancedImage = vtk.vtkImageData()
-        self.EnhancedImage.DeepCopy(vesselness.GetOutput())
+        self.EnhancedImage.DeepCopy(vesselness.GetOutputData())
 
     def ApplyVEDManniesing(self):
 
         vesselness = vtkvmtk.vtkvmtkVesselEnhancingDiffusion3DImageFilter()
-        vesselness.SetInput(self.Image)
+        vesselness.SetInputData(self.Image)
         vesselness.SetSigmaMin(self.SigmaMin)
         vesselness.SetSigmaMax(self.SigmaMax)
         vesselness.SetNumberOfSigmaSteps(self.NumberOfSigmaSteps)
@@ -167,7 +167,7 @@ class vmtkImageVesselEnhancement(pypes.pypeScript):
         vesselness.Update()
 
         self.EnhancedImage = vtk.vtkImageData()
-        self.EnhancedImage.DeepCopy(vesselness.GetOutput())
+        self.EnhancedImage.DeepCopy(vesselness.GetOutputData())
 
     def Execute(self):
 

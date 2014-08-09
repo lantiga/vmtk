@@ -35,13 +35,11 @@
 #include "vtkFloatArray.h"
 #include "vtkDoubleArray.h"
 
-#include <vtkstd/vector>
+#include <vector>
 
 #include "vtkvmtkConstants.h"
 
-#if (VTK_MAJOR_VERSION >= 5) && (VTK_MINOR_VERSION >= 2)
 #include "vtkDijkstraGraphGeodesicPath.h"
-#endif
 
 
 vtkStandardNewMacro(vtkvmtkPolyDataGeodesicRBFInterpolation);
@@ -109,11 +107,6 @@ int vtkvmtkPolyDataGeodesicRBFInterpolation::RequestData(
   vtkInformationVector **inputVector,
   vtkInformationVector *outputVector)
 {
-#if (VTK_MAJOR_VERSION<5) || ((VTK_MAJOR_VERSION == 5) && (VTK_MINOR_VERSION != 2) && (VTK_MINOR_VERSION<5))
-  vtkErrorMacro(<<"You must have vtk == 5.2 or vt k> =5.5 to use this feature");
-    return 1;
-#else
-
   vtkInformation *inInfo = inputVector[0]->GetInformationObject(0);
   vtkInformation *outInfo = outputVector->GetInformationObject(0);
 
@@ -171,7 +164,7 @@ int vtkvmtkPolyDataGeodesicRBFInterpolation::RequestData(
   
   
   vtkDijkstraGraphGeodesicPath *dijkstraAlgo = vtkDijkstraGraphGeodesicPath::New();
-  dijkstraAlgo->SetInput(input);
+  dijkstraAlgo->SetInputData(input);
   dijkstraAlgo->StopWhenEndReachedOff();
   dijkstraAlgo->UseScalarWeightsOff();
   
@@ -184,11 +177,7 @@ int vtkvmtkPolyDataGeodesicRBFInterpolation::RequestData(
     dijkstraAlgo->SetStartVertex(SeedIds->GetId(i));
     dijkstraAlgo->Update();
     vtkDoubleArray *seedDistances = vtkDoubleArray::New();
-#if (VTK_MINOR_VERSION < 5)
-    seedDistances->DeepCopy(dijkstraAlgo->Getd());
-#else
     dijkstraAlgo->GetCumulativeWeights(seedDistances);
-#endif
     geodesicDistances.push_back(seedDistances);
     }
     
@@ -270,5 +259,4 @@ int vtkvmtkPolyDataGeodesicRBFInterpolation::RequestData(
   if (createArray) interpolatedArray->Delete();
 
   return 1;
-#endif
 }

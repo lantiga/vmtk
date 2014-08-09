@@ -151,18 +151,18 @@ class vmtkDelaunayVoronoi(pypes.pypeScript):
 
         self.PrintLog('Cleaning surface.')
         surfaceCleaner = vtk.vtkCleanPolyData()
-        surfaceCleaner.SetInput(self.Surface)
+        surfaceCleaner.SetInputData(self.Surface)
         surfaceCleaner.Update()
 
         self.PrintLog('Triangulating surface.')
         surfaceTriangulator = vtk.vtkTriangleFilter()
-        surfaceTriangulator.SetInput(surfaceCleaner.GetOutput())
+        surfaceTriangulator.SetInputConnection(surfaceCleaner.GetOutputPort())
         surfaceTriangulator.PassLinesOff()
         surfaceTriangulator.PassVertsOff()
         surfaceTriangulator.Update()
 
         surfaceCapper = vtkvmtk.vtkvmtkCapPolyData()
-        surfaceCapper.SetInput(surfaceTriangulator.GetOutput())
+        surfaceCapper.SetInputConnection(surfaceTriangulator.GetOutputPort())
         surfaceCapper.SetDisplacement(self.CapDisplacement)
         surfaceCapper.SetInPlaneDisplacement(self.CapDisplacement)
         surfaceCapper.Update()
@@ -170,7 +170,7 @@ class vmtkDelaunayVoronoi(pypes.pypeScript):
         capCenterIds = surfaceCapper.GetCapCenterIds()
 
         surfaceNormals = vtk.vtkPolyDataNormals()
-        surfaceNormals.SetInput(surfaceCapper.GetOutput())
+        surfaceNormals.SetInputConnection(surfaceCapper.GetOutputPort())
         surfaceNormals.SplittingOff()
         surfaceNormals.AutoOrientNormalsOn()
         surfaceNormals.SetFlipNormals(self.FlipNormals)
@@ -178,7 +178,7 @@ class vmtkDelaunayVoronoi(pypes.pypeScript):
         surfaceNormals.ConsistencyOn()
         surfaceNormals.Update()
         
-        inputSurface = surfaceNormals.GetOutput()
+        inputSurface = surfaceNormals.GetOutputData()
 
         if self.UseTetGen:
             self.PrintLog('Running TetGen.')
@@ -200,16 +200,16 @@ class vmtkDelaunayVoronoi(pypes.pypeScript):
         else:
             delaunayTessellator = vtk.vtkDelaunay3D()
             delaunayTessellator.CreateDefaultLocator()
-            delaunayTessellator.SetInput(surfaceNormals.GetOutput())
+            delaunayTessellator.SetInputConnection(surfaceNormals.GetOutputPort())
             delaunayTessellator.SetTolerance(self.DelaunayTolerance)
             delaunayTessellator.Update()
-            self.DelaunayTessellation = delaunayTessellator.GetOutput()
+            self.DelaunayTessellation = delaunayTessellator.GetOutputData()
 
-        normalsArray = surfaceNormals.GetOutput().GetPointData().GetNormals()
+        normalsArray = surfaceNormals.GetOutputData().GetPointData().GetNormals()
         self.DelaunayTessellation.GetPointData().AddArray(normalsArray)
 
         internalTetrahedraExtractor = vtkvmtk.vtkvmtkInternalTetrahedraExtractor()
-        internalTetrahedraExtractor.SetInput(self.DelaunayTessellation)
+        internalTetrahedraExtractor.SetInputData(self.DelaunayTessellation)
         internalTetrahedraExtractor.SetOutwardNormalsArrayName(normalsArray.GetName())
         if self.RemoveSubresolutionTetrahedra:
             internalTetrahedraExtractor.RemoveSubresolutionTetrahedraOn()
@@ -220,23 +220,23 @@ class vmtkDelaunayVoronoi(pypes.pypeScript):
           internalTetrahedraExtractor.SetCapCenterIds(capCenterIds)
         internalTetrahedraExtractor.Update()
 
-        self.DelaunayTessellation = internalTetrahedraExtractor.GetOutput()
+        self.DelaunayTessellation = internalTetrahedraExtractor.GetOutputData()
 
         voronoiDiagramFilter = vtkvmtk.vtkvmtkVoronoiDiagram3D()
-        voronoiDiagramFilter.SetInput(self.DelaunayTessellation)
+        voronoiDiagramFilter.SetInputData(self.DelaunayTessellation)
         voronoiDiagramFilter.SetRadiusArrayName(self.RadiusArrayName)
         voronoiDiagramFilter.Update()
 
         self.PoleIds = voronoiDiagramFilter.GetPoleIds()
 
-        self.VoronoiDiagram = voronoiDiagramFilter.GetOutput()
+        self.VoronoiDiagram = voronoiDiagramFilter.GetOutputData()
 
         if self.SimplifyVoronoi:
             voronoiDiagramSimplifier = vtkvmtk.vtkvmtkSimplifyVoronoiDiagram()
-            voronoiDiagramSimplifier.SetInput(voronoiDiagramFilter.GetOutput())
+            voronoiDiagramSimplifier.SetInputConnection(voronoiDiagramFilter.GetOutputPort())
             voronoiDiagramSimplifier.SetUnremovablePointIds(voronoiDiagramFilter.GetPoleIds())
             voronoiDiagramSimplifier.Update()
-            self.VoronoiDiagram = voronoiDiagramSimplifier.GetOutput()
+            self.VoronoiDiagram = voronoiDiagramSimplifier.GetOutputData()
 
         self.Mesh = self.DelaunayTessellation
         self.Surface = self.VoronoiDiagram

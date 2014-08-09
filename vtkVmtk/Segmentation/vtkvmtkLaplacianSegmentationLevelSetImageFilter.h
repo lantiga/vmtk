@@ -89,7 +89,7 @@ class VTK_VMTK_SEGMENTATION_EXPORT vtkvmtkLaplacianSegmentationLevelSetImageFilt
   
   void SetFeatureImage ( vtkImageData *value)
   {
-    this->vtkFeatureExporter->SetInput(value);
+    this->vtkFeatureExporter->SetInputData(value);
   }
 
   vtkImageData *GetSpeedImage()
@@ -135,14 +135,14 @@ class VTK_VMTK_SEGMENTATION_EXPORT vtkvmtkLaplacianSegmentationLevelSetImageFilt
       {
         this->itkFeatureImporter->Update();
         
-        if (this->GetOutput(0))
-          {
-            this->GetOutput(0)->Update();
-            if ( this->GetOutput(0)->GetSource() )
-              {
-                //          this->SetErrorCode( this->GetOutput(0)->GetSource()->GetErrorCode() );
-              }
-          }
+        //if (this->GetOutput(0))
+        //  {
+        //    this->GetOutput(0)->Update();
+        //    if ( this->GetOutput(0)->GetSource() )
+        //      {
+        //        //          this->SetErrorCode( this->GetOutput(0)->GetSource()->GetErrorCode() );
+        //      }
+        //  }
       }
   }
     

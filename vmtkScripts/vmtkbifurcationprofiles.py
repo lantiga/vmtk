@@ -72,7 +72,7 @@ class vmtkBifurcationProfiles(pypes.pypeScript):
             self.PrintError('Error: No input centerlines.')
 
         bifurcationProfiles = vtkvmtk.vtkvmtkPolyDataBifurcationProfiles()
-        bifurcationProfiles.SetInput(self.Surface)
+        bifurcationProfiles.SetInputData(self.Surface)
         bifurcationProfiles.SetGroupIdsArrayName(self.GroupIdsArrayName)
         bifurcationProfiles.SetCenterlines(self.Centerlines)
         bifurcationProfiles.SetCenterlineRadiusArrayName(self.RadiusArrayName)
@@ -85,7 +85,7 @@ class vmtkBifurcationProfiles(pypes.pypeScript):
         bifurcationProfiles.SetBifurcationProfileOrientationArrayName(self.BifurcationProfileOrientationArrayName)
         bifurcationProfiles.Update()
 
-        self.BifurcationProfiles = bifurcationProfiles.GetOutput()
+        self.BifurcationProfiles = bifurcationProfiles.GetOutputData()
 
 if __name__=='__main__':
 

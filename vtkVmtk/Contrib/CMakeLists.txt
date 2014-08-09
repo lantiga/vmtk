@@ -13,7 +13,7 @@ SET (VTK_VMTK_CONTRIB_SRCS
   vtkvmtkSurfaceProjectCellArray.cxx
   )
 
-SET (VTK_VMTK_CONTRIB_TARGET_LINK_LIBRARIES vtkvmtkContrib vtkvmtkMisc vtkCommon vtkFiltering vtkGraphics vtkHybrid)
+SET (VTK_VMTK_CONTRIB_TARGET_LINK_LIBRARIES vtkvmtkContrib vtkvmtkMisc ${VTK_LIBRARIES})
 
 ADD_LIBRARY (vtkvmtkContrib ${VTK_VMTK_CONTRIB_SRCS})
 TARGET_LINK_LIBRARIES(vtkvmtkContrib ${VTK_VMTK_CONTRIB_TARGET_LINK_LIBRARIES})
@@ -54,7 +54,7 @@ IF (VTK_WRAP_PYTHON AND VTK_VMTK_WRAP_PYTHON)
     SET_TARGET_PROPERTIES(vtkvmtkContribPythonD PROPERTIES ${VMTK_LIBRARY_PROPERTIES})
   ENDIF(VMTK_LIBRARY_PROPERTIES)
   ADD_LIBRARY(vtkvmtkContribPython MODULE vtkvmtkContribPythonInit.cxx)
-  TARGET_LINK_LIBRARIES(vtkvmtkContribPythonD vtkvmtkContrib vtkvmtkMisc vtkvmtkMiscPythonD vtkCommon vtkCommonPythonD vtkFiltering vtkFilteringPythonD vtkGraphics vtkGraphicsPythonD)
+  TARGET_LINK_LIBRARIES(vtkvmtkContribPythonD vtkvmtkContrib vtkvmtkMisc vtkvmtkMiscPythonD ${VTK_LIBRARIES})
   TARGET_LINK_LIBRARIES (vtkvmtkContribPython vtkvmtkContribPythonD)
   IF(WIN32 AND NOT CYGWIN)
      SET_TARGET_PROPERTIES(vtkvmtkContribPython PROPERTIES SUFFIX ".pyd")

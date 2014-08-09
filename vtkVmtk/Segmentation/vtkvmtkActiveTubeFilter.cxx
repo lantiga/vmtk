@@ -514,7 +514,7 @@ int vtkvmtkActiveTubeFilter::RequestData(vtkInformation *vtkNotUsed(request), vt
     }
 
   vtkImageGradient* gradientFilter = vtkImageGradient::New();
-  gradientFilter->SetInput(this->PotentialImage);
+  gradientFilter->SetInputData(this->PotentialImage);
   gradientFilter->SetDimensionality(3);
   gradientFilter->Update();
 

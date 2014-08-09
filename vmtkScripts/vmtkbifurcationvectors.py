@@ -91,7 +91,7 @@ class vmtkBifurcationVectors(pypes.pypeScript):
             self.PrintError('Error: No input reference systems.')
 
         centerlineBifurcationVectors = vtkvmtk.vtkvmtkCenterlineBifurcationVectors()
-        centerlineBifurcationVectors.SetInput(self.Centerlines)
+        centerlineBifurcationVectors.SetInputData(self.Centerlines)
         centerlineBifurcationVectors.SetReferenceSystems(self.ReferenceSystems)
         centerlineBifurcationVectors.SetRadiusArrayName(self.RadiusArrayName)
         centerlineBifurcationVectors.SetGroupIdsArrayName(self.GroupIdsArrayName)
@@ -111,7 +111,7 @@ class vmtkBifurcationVectors(pypes.pypeScript):
         centerlineBifurcationVectors.SetNormalizeBifurcationVectors(self.NormalizeBifurcationVectors)
         centerlineBifurcationVectors.Update()
 
-        self.BifurcationVectors = centerlineBifurcationVectors.GetOutput()
+        self.BifurcationVectors = centerlineBifurcationVectors.GetOutputData()
 
 
 if __name__=='__main__':

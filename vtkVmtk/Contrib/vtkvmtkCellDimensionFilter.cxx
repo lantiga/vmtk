@@ -109,7 +109,7 @@ int vtkvmtkCellDimensionFilter::RequestData(
     }
   input->GetCellData()->AddArray(cellDimensionArray);
   
-  Threshold->SetInput(input);
+  Threshold->SetInputData(input);
   Threshold->SetInputArrayToProcess(0,0,0,1,"CellDimensionArray");
   Threshold->Update();
   output->DeepCopy(Threshold->GetOutput());

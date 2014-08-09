@@ -65,7 +65,7 @@ class vmtkImageCurvedMPR(pypes.pypeScript):
             self.PrintError('Error: No input centerlines.')
    
         curvedMPRImageFilter = vtkvmtk.vtkvmtkCurvedMPRImageFilter()
-        curvedMPRImageFilter.SetInput(self.Image)
+        curvedMPRImageFilter.SetInputData(self.Image)
         curvedMPRImageFilter.SetCenterline(self.Centerlines)
         curvedMPRImageFilter.SetParallelTransportNormalsArrayName(self.NormalsArrayName)
         curvedMPRImageFilter.SetFrenetTangentArrayName(self.FrenetTangentArrayName)
@@ -74,7 +74,7 @@ class vmtkImageCurvedMPR(pypes.pypeScript):
         curvedMPRImageFilter.SetReslicingBackgroundLevel(self.ReslicingBackgroundLevel)
         curvedMPRImageFilter.Update()
 
-        self.Image = curvedMPRImageFilter.GetOutput()
+        self.Image = curvedMPRImageFilter.GetOutputData()
 
         
 if __name__=='__main__':

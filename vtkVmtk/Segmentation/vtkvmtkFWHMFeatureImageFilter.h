@@ -99,14 +99,14 @@ class VTK_VMTK_SEGMENTATION_EXPORT vtkvmtkFWHMFeatureImageFilter : public vtkvmt
     } 
      
     // Force the internal pipeline to update.
-    if (this->GetOutput(0))
-      {
-      this->GetOutput(0)->Update();
-      if ( this->GetOutput(0)->GetSource() )
-        {
-        //          this->SetErrorCode( this->GetOutput(0)->GetSource()->GetErrorCode() );
-        }
-      }
+    //if (this->GetOutput(0))
+    //  {
+    //  this->GetOutput(0)->Update();
+    //  if ( this->GetOutput(0)->GetSource() )
+    //    {
+    //    //          this->SetErrorCode( this->GetOutput(0)->GetSource()->GetErrorCode() );
+    //    }
+    //  }
   }
 
 protected:

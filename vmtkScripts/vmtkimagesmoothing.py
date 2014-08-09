@@ -54,13 +54,13 @@ class vmtkImageSmoothing(pypes.pypeScript):
         pixelStandardDeviations = [self.StandardDeviation/spacing[0],self.StandardDeviation/spacing[1],self.StandardDeviation/spacing[2]]
 
         smoothingFilter = vtk.vtkImageGaussianSmooth()
-        smoothingFilter.SetInput(self.Image)
+        smoothingFilter.SetInputData(self.Image)
         smoothingFilter.SetStandardDeviations(pixelStandardDeviations)
         smoothingFilter.SetRadiusFactor(self.RadiusFactor)
         smoothingFilter.SetDimensionality(self.Dimensionality)
         smoothingFilter.Update()
 
-        self.Image = smoothingFilter.GetOutput()
+        self.Image = smoothingFilter.GetOutputData()
 
 
 if __name__=='__main__':

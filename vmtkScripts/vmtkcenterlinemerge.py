@@ -61,7 +61,7 @@ class vmtkCenterlineMerge(pypes.pypeScript):
             self.PrintError('Error: No input centerlines.')
 
         mergeCenterlines = vtkvmtk.vtkvmtkMergeCenterlines()
-        mergeCenterlines.SetInput(self.Centerlines)
+        mergeCenterlines.SetInputData(self.Centerlines)
         mergeCenterlines.SetRadiusArrayName(self.RadiusArrayName)
         mergeCenterlines.SetGroupIdsArrayName(self.GroupIdsArrayName)
         mergeCenterlines.SetCenterlineIdsArrayName(self.CenterlineIdsArrayName)
@@ -71,7 +71,7 @@ class vmtkCenterlineMerge(pypes.pypeScript):
         mergeCenterlines.SetMergeBlanked(self.MergeBlanked)
         mergeCenterlines.Update()
 
-        self.Centerlines = mergeCenterlines.GetOutput()
+        self.Centerlines = mergeCenterlines.GetOutputData()
 
 
 if __name__=='__main__':

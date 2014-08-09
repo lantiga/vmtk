@@ -2,26 +2,22 @@
 
   Copyright Brigham and Women's Hospital (BWH) All Rights Reserved.
 
-  See Doc/copyright/copyright.txt
+  See COPYRIGHT.txt
   or http://www.slicer.org/copyright/copyright.txt for details.
 
   Program:   vtkvmtkITK
-  Module:    $HeadURL: http://www.na-mic.org/svn/Slicer3/trunk/Libs/vtkvmtkITK/vtkvmtkITKImageToImageFilterUSUS.h $
-  Date:      $Date: 2006-12-21 13:21:52 +0100 (Thu, 21 Dec 2006) $
-  Version:   $Revision: 1900 $
+  Module:    $HeadURL$
+  Date:      $Date$
+  Version:   $Revision$
 
 ==========================================================================*/
-
-// .NAME vtkvmtkITKImageToImageFilter - Abstract base class for connecting ITK and VTK
-// .SECTION Description
-// vtkvmtkITKImageToImageFilter provides a 
 
 #ifndef __vtkvmtkITKImageToImageFilterUSUS_h
 #define __vtkvmtkITKImageToImageFilterUSUS_h
 
 
 #include "vtkvmtkITKImageToImageFilter.h"
-#include "vtkImageToImageFilter.h"
+#include "vtkImageAlgorithm.h"
 #include "itkImageToImageFilter.h"
 #include "itkVTKImageExport.h"
 #include "itkVTKImageImport.h"
@@ -40,9 +36,8 @@ public:
   };
 
 protected:
-  //BTX
-  
-  // To/from ITK
+
+  /// To/from ITK
   typedef unsigned short InputImagePixelType;
   typedef unsigned short  OutputImagePixelType;
   typedef itk::Image<InputImagePixelType, 3> InputImageType;
@@ -58,15 +53,15 @@ protected:
 
   vtkvmtkITKImageToImageFilterUSUS ( GenericFilterType* filter )
   {
-    // Need an import, export, and a ITK pipeline
+    /// Need an import, export, and a ITK pipeline
     m_Filter = filter;
     this->itkImporter = ImageImportType::New();
     this->itkExporter = ImageExportType::New();
     ConnectPipelines(this->vtkExporter, this->itkImporter);
     ConnectPipelines(this->itkExporter, this->vtkImporter);
     this->LinkITKProgressToVTKProgress ( m_Filter );
-    
-    // Set up the filter pipeline
+
+    /// Set up the filter pipeline
     m_Filter->SetInput ( this->itkImporter->GetOutput() );
     this->itkExporter->SetInput ( m_Filter->GetOutput() );
     this->vtkCast->SetOutputScalarTypeToUnsignedShort();
@@ -75,15 +70,10 @@ protected:
   ~vtkvmtkITKImageToImageFilterUSUS()
   {
   };
-  //ETX
-  
+
 private:
-  vtkvmtkITKImageToImageFilterUSUS(const vtkvmtkITKImageToImageFilterUSUS&);  // Not implemented.
-  void operator=(const vtkvmtkITKImageToImageFilterUSUS&);  // Not implemented.
+  vtkvmtkITKImageToImageFilterUSUS(const vtkvmtkITKImageToImageFilterUSUS&);  /// Not implemented.
+  void operator=(const vtkvmtkITKImageToImageFilterUSUS&);  /// Not implemented.
 };
 
 #endif
-
-
-
-

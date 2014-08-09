@@ -59,14 +59,14 @@ class vmtkImageFeatureCorrection(pypes.pypeScript):
 
         if self.NegateLevelSets:
             negateFilter = vtk.vtkImageMathematics()
-            negateFilter.SetInput(self.LevelSets)
+            negateFilter.SetInputData(self.LevelSets)
             negateFilter.SetOperationToMultiplyByK()
             negateFilter.SetConstantK(-1.0)
             negateFilter.Update()
-            self.LevelSets = negateFilter.GetOutput()
+            self.LevelSets = negateFilter.GetOutputData()
 
         sigmoid = vtkvmtk.vtkvmtkLevelSetSigmoidFilter()
-        sigmoid.SetInput(self.Image)
+        sigmoid.SetInputData(self.Image)
         sigmoid.SetLevelSetsImage(self.LevelSets)
         sigmoid.SetSigma(self.Sigma)
         sigmoid.SetScaleValue(self.ScaleValue)
@@ -76,7 +76,7 @@ class vmtkImageFeatureCorrection(pypes.pypeScript):
             sigmoid.ComputeScaleValueFromInputOff()
         sigmoid.Update()
  
-        self.Image = sigmoid.GetOutput()
+        self.Image = sigmoid.GetOutputData()
 
 
 if __name__=='__main__':

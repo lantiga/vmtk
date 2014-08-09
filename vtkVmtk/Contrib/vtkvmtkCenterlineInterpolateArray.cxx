@@ -25,8 +25,8 @@
 
 #include "vtkvmtkCenterlineInterpolateArray.h"
 
-#include <vtkstd/algorithm>
-#include <vtkstd/vector>
+#include <algorithm>
+#include <vector>
 
 #include "vtkPointData.h"
 #include "vtkPolyLine.h"
@@ -137,7 +137,7 @@ int vtkvmtkCenterlineInterpolateArray::RequestData(
     
   //Compute abscissas for the centerlines
   vtkvmtkCenterlineAttributesFilter *attribFilter = vtkvmtkCenterlineAttributesFilter::New();
-  attribFilter->SetInput(input);
+  attribFilter->SetInputData(input);
   attribFilter->SetAbscissasArrayName("Abscissa");
   attribFilter->SetParallelTransportNormalsArrayName("ParallelTransportNormals");
   attribFilter->Update();

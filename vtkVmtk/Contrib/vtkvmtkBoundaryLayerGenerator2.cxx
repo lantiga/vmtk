@@ -249,13 +249,13 @@ int vtkvmtkBoundaryLayerGenerator2::RequestData(
       
       //First convert the unstructured grid to poly data
       vtkGeometryFilter *meshToSurface = vtkGeometryFilter::New();
-      meshToSurface->SetInput(input);
+      meshToSurface->SetInputData(input);
       meshToSurface->MergingOff();
       meshToSurface->Update();
       
       //Extract the open profiles
       vtkvmtkPolyDataBoundaryExtractor *openProfilesExtractor = vtkvmtkPolyDataBoundaryExtractor::New();
-      openProfilesExtractor->SetInput(meshToSurface->GetOutput());
+      openProfilesExtractor->SetInputConnection(meshToSurface->GetOutputPort());
       openProfilesExtractor->Update();
               
       //Update the openProfilesIdsArray

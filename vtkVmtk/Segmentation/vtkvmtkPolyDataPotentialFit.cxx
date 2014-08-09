@@ -540,7 +540,7 @@ int vtkvmtkPolyDataPotentialFit::RequestData(
   this->Displacements->SetNumberOfTuples(numberOfPoints);
 
   vtkImageGradient* gradientFilter = vtkImageGradient::New();
-  gradientFilter->SetInput(this->PotentialImage);
+  gradientFilter->SetInputData(this->PotentialImage);
   gradientFilter->SetDimensionality(this->Dimensionality);
   gradientFilter->Update();
 
@@ -577,7 +577,7 @@ int vtkvmtkPolyDataPotentialFit::RequestData(
   this->Neighborhoods->Build();
 
   vtkPolyDataNormals* surfaceNormals = vtkPolyDataNormals::New();
-  surfaceNormals->SetInput(input);
+  surfaceNormals->SetInputData(input);
   surfaceNormals->SplittingOff();
   surfaceNormals->AutoOrientNormalsOn();
   surfaceNormals->SetFlipNormals(this->FlipNormals);
