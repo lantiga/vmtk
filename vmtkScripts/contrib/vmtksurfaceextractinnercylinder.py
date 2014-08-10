@@ -64,29 +64,29 @@ class VmtkSurfaceExtractInnerCylinder(pypes.pypeScript):
         self.PrintLog("Using thresholding to remove endcaps.")
 
         th = vtk.vtkThreshold()
-        th.SetInput(self.Surface)
+        th.SetInputData(self.Surface)
         th.SetInputArrayToProcess(0, 0, 0, 1, self.CellEntityIdsArrayName)
         th.ThresholdBetween(self.EndcapsThresholdLow, self.EndcapsThresholdHigh)
         th.Update()
 
         gf = vtk.vtkGeometryFilter()
-        gf.SetInput(th.GetOutput())
+        gf.SetInputConnection(th.GetOutputPort())
         gf.Update()
 
-        self.DoubleSurface = gf.GetOutput()
+        self.DoubleSurface = gf.GetOutputData()
 
     def colorSurfaceRegions(self):
         self.PrintLog("Coloring surface regions.")
 
         connectivityFilter = vtk.vtkPolyDataConnectivityFilter()
-        connectivityFilter.SetInput(self.DoubleSurface)
+        connectivityFilter.SetInputData(self.DoubleSurface)
         connectivityFilter.ColorRegionsOn()
         connectivityFilter.SetExtractionModeToAllRegions()
         connectivityFilter.Update()
 
         assert connectivityFilter.GetNumberOfExtractedRegions() == 2
 
-        self.ColoredSurface = connectivityFilter.GetOutput()
+        self.ColoredSurface = connectivityFilter.GetOutputData()
 
     def extractInnerSurface(self):
         self.PrintLog("Extracting inner surface.")
@@ -105,13 +105,13 @@ class VmtkSurfaceExtractInnerCylinder(pypes.pypeScript):
         # Extract each surface in turn to find the smallest one
         for k in region_ids:
             connectivityFilter = vtk.vtkPolyDataConnectivityFilter()
-            connectivityFilter.SetInput(self.ColoredSurface)
+            connectivityFilter.SetInputData(self.ColoredSurface)
             connectivityFilter.SetExtractionModeToSpecifiedRegions()
             connectivityFilter.AddSpecifiedRegion(k)
             connectivityFilter.ColorRegionsOff()
             connectivityFilter.SetScalarConnectivity(0)
             connectivityFilter.Update()
-            subsurface = connectivityFilter.GetOutput()
+            subsurface = connectivityFilter.GetOutputData()
 
             # The inner surface has smaller bounds
             if bnorm(subsurface) < bounds_norm - 1e-12:

@@ -59,11 +59,11 @@ class vmtkSurfaceScaling(pypes.pypeScript):
         transform.Scale(s*x, s*y, s*z)
 
         transformFilter = vtk.vtkTransformPolyDataFilter()
-        transformFilter.SetInput(self.Surface)
+        transformFilter.SetInputData(self.Surface)
         transformFilter.SetTransform(transform)
         transformFilter.Update()
 
-        self.Surface = transformFilter.GetOutput()
+        self.Surface = transformFilter.GetOutputData()
 
         if self.Surface.GetSource():
             self.Surface.GetSource().UnRegisterAllOutputs()

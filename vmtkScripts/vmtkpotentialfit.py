@@ -72,7 +72,7 @@ class vmtkPotentialFit(pypes.pypeScript):
             self.PrintError('Error: Image not set.')
         
         polyDataPotentialFit = vtkvmtk.vtkvmtkPolyDataPotentialFit()
-        polyDataPotentialFit.SetInput(self.Surface)
+        polyDataPotentialFit.SetInputData(self.Surface)
         polyDataPotentialFit.SetPotentialImage(self.Image)
         polyDataPotentialFit.SetMaxTimeStep(self.MaxTimeStep)
         polyDataPotentialFit.SetTimeStep(self.TimeStep)
@@ -88,7 +88,7 @@ class vmtkPotentialFit(pypes.pypeScript):
         polyDataPotentialFit.SetDimensionality(self.Dimensionality)
         polyDataPotentialFit.Update()
 
-        self.Surface = polyDataPotentialFit.GetOutput()
+        self.Surface = polyDataPotentialFit.GetOutputData()
 
 if __name__=='__main__':
     

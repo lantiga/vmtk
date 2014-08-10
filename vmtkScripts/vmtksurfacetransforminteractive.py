@@ -66,8 +66,7 @@ class vmtkSurfaceTransformInteractive(pypes.pypeScript):
         self.BoxWidget.GetTransform(self.Transform)
         self.TransformFilter.Update()
  
-        self.TransformedSurface.ShallowCopy(self.TransformFilter.GetOutput())
-        self.TransformedSurface.Update()
+        self.TransformedSurface.ShallowCopy(self.TransformFilter.GetOutputData())
  
         if self.TransformedSurface.GetSource():
             self.TransformedSurface.GetSource().UnregisterAllOutputs()
@@ -126,17 +125,15 @@ class vmtkSurfaceTransformInteractive(pypes.pypeScript):
         if self.TransformFilter == None:
             self.TransformFilter= vtk.vtkTransformPolyDataFilter()
  
-        self.TransformFilter.SetInput(self.Surface)
+        self.TransformFilter.SetInputData(self.Surface)
         self.TransformFilter.SetTransform(self.Transform)
  
         self.TransformFilter.Update()
-        self.TransformFilter.GetOutput().Update()
  
-        self.TransformedSurface.ShallowCopy(self.TransformFilter.GetOutput())
-        self.TransformedSurface.Update()
+        self.TransformedSurface.ShallowCopy(self.TransformFilter.GetOutputData())
  
         mapper = vtk.vtkPolyDataMapper()
-        mapper.SetInput(self.TransformedSurface)
+        mapper.SetInputData(self.TransformedSurface)
  
         mapper.ScalarVisibilityOff()
  
@@ -148,7 +145,7 @@ class vmtkSurfaceTransformInteractive(pypes.pypeScript):
 
         if self.ReferenceSurface: 
             mapper2 = vtk.vtkPolyDataMapper()
-            mapper2.SetInput(self.ReferenceSurface)
+            mapper2.SetInputData(self.ReferenceSurface)
             mapper2.ScalarVisibilityOff()
      
             self.Actor2 = vtk.vtkActor()

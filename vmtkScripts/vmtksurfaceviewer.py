@@ -115,7 +115,7 @@ class vmtkSurfaceViewer(pypes.pypeScript):
 
         if self.Surface:
             mapper = vtk.vtkPolyDataMapper()
-            mapper.SetInput(self.Surface)
+            mapper.SetInputData(self.Surface)
             if self.ArrayName:
                 if self.DisplayCellData == 0:
                     self.Surface.GetPointData().SetActiveScalars(self.ArrayName)

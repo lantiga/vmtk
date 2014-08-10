@@ -64,7 +64,7 @@ class vmtkMeshReader(pypes.pypeScript):
         reader.SetFileName(inputFileName)
         reader.SetBoundaryDataArrayName(self.CellEntityIdsArrayName)
         reader.Update()
-        self.Mesh = reader.GetOutput()
+        self.Mesh = reader.GetOutputData()
 
     def ReadGAMBITMeshFile(self):
         if (self.InputFileName == ''):
@@ -73,7 +73,7 @@ class vmtkMeshReader(pypes.pypeScript):
         reader = vtk.vtkGAMBITReader()
         reader.SetFileName(self.InputFileName)
         reader.Update()
-        self.Mesh = reader.GetOutput()
+        self.Mesh = reader.GetOutputData()
 
     def ReadVTKMeshFile(self):
         if (self.InputFileName == ''):
@@ -82,7 +82,7 @@ class vmtkMeshReader(pypes.pypeScript):
         reader = vtk.vtkUnstructuredGridReader()
         reader.SetFileName(self.InputFileName)
         reader.Update()
-        self.Mesh = reader.GetOutput()
+        self.Mesh = reader.GetOutputData()
 
     def ReadVTKXMLMeshFile(self):
         if (self.InputFileName == ''):
@@ -91,7 +91,7 @@ class vmtkMeshReader(pypes.pypeScript):
         reader = vtk.vtkXMLUnstructuredGridReader()
         reader.SetFileName(self.InputFileName)
         reader.Update()
-        self.Mesh = reader.GetOutput()
+        self.Mesh = reader.GetOutputData()
 
     def ReadXdaMeshFile(self):
         if (self.InputFileName == ''):
@@ -114,7 +114,7 @@ class vmtkMeshReader(pypes.pypeScript):
         reader.SetSingleCellDataEntityArrayName(self.CellEntityIdsArrayName)
         reader.SetVolumeElementsOnly(self.VolumeElementsOnly)
         reader.Update()
-        self.Mesh = reader.GetOutput()
+        self.Mesh = reader.GetOutputData()
 
     def ReadNGNEUTMeshFile(self):
         if (self.InputFileName == ''):

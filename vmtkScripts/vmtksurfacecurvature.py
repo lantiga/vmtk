@@ -63,7 +63,7 @@ class vmtkSurfaceCurvature(pypes.pypeScript):
             self.PrintError('Error: No input surface.')
 
         curvatureFilter = vtk.vtkCurvatures()
-        curvatureFilter.SetInput(self.Surface)
+        curvatureFilter.SetInputData(self.Surface)
         if self.CurvatureType == 'mean':
             curvatureFilter.SetCurvatureTypeToMean()
         elif self.CurvatureType == 'gaussian':
@@ -74,7 +74,7 @@ class vmtkSurfaceCurvature(pypes.pypeScript):
             curvatureFilter.SetCurvatureTypeToMinimum()
         curvatureFilter.Update()
 
-        activeScalars = curvatureFilter.GetOutput().GetPointData().GetScalars()
+        activeScalars = curvatureFilter.GetOutputData().GetPointData().GetScalars()
         activeScalars.SetName('Curvature')
 
         if self.AbsoluteCurvature:
@@ -91,9 +91,9 @@ class vmtkSurfaceCurvature(pypes.pypeScript):
 
         if not self.CurvatureOnBoundaries:
             boundaryExtractor = vtkvmtk.vtkvmtkPolyDataBoundaryExtractor()
-            boundaryExtractor.SetInput(self.Surface)
+            boundaryExtractor.SetInputData(self.Surface)
             boundaryExtractor.Update()
-            boundaryIdsArray = vtk.vtkIdTypeArray.SafeDownCast(boundaryExtractor.GetOutput().GetPointData().GetScalars())
+            boundaryIdsArray = vtk.vtkIdTypeArray.SafeDownCast(boundaryExtractor.GetOutputData().GetPointData().GetScalars())
             boundaryIds = vtk.vtkIdList()
             boundaryIds.SetNumberOfIds(boundaryIdsArray.GetNumberOfTuples())
             for i in range(boundaryIdsArray.GetNumberOfTuples()):

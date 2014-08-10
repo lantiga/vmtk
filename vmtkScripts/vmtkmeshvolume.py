@@ -46,11 +46,11 @@ class vmtkMeshVolume(pypes.pypeScript):
             self.PrintError('Error: No input mesh.')
 
         tetrahedralizeFilter = vtk.vtkDataSetTriangleFilter()
-        tetrahedralizeFilter.SetInput(self.Mesh)
+        tetrahedralizeFilter.SetInputData(self.Mesh)
         tetrahedralizeFilter.TetrahedraOnlyOn()
         tetrahedralizeFilter.Update()
 
-        self.Mesh = tetrahedralizeFilter.GetOutput()
+        self.Mesh = tetrahedralizeFilter.GetOutputData()
 
         self.Volume = 0.0
         cellPoints = vtk.vtkIdList()

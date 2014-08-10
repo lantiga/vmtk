@@ -48,19 +48,19 @@ class vmtkSurfaceModeller(pypes.pypeScript):
             self.PrintError('Error: No input surface.')
 
         surfaceModellerFilter = vtk.vtkSurfaceReconstructionFilter()
-        surfaceModellerFilter.SetInput(self.Surface)
+        surfaceModellerFilter.SetInputData(self.Surface)
         surfaceModellerFilter.SetSampleSpacing(self.SampleSpacing)
         surfaceModellerFilter.SetNeighborhoodSize(40)
         surfaceModellerFilter.Update()
-        self.Image = surfaceModellerFilter.GetOutput()
+        self.Image = surfaceModellerFilter.GetOutputData()
 
         if self.NegativeInside:
             negate = vtk.vtkImageMathematics()
-            negate.SetInput(self.Image)
+            negate.SetInputData(self.Image)
             negate.SetConstantK(-1.0)
             negate.SetOperationToMultiplyByK()
             negate.Update()
-            self.Image = negate.GetOutput()
+            self.Image = negate.GetOutputData()
 
         if self.Image.GetSource():
             self.Image.GetSource().UnRegisterAllOutputs()

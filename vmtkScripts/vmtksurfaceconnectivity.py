@@ -75,7 +75,7 @@ class vmtkSurfaceConnectivity(pypes.pypeScript):
             barycenter[2] /= n
 
         connectivityFilter = vtk.vtkPolyDataConnectivityFilter()
-        connectivityFilter.SetInput(self.Surface)
+        connectivityFilter.SetInputData(self.Surface)
         connectivityFilter.ColorRegionsOff()       
         if self.Method == 'largest':
             connectivityFilter.SetExtractionModeToLargestRegion()
@@ -91,14 +91,14 @@ class vmtkSurfaceConnectivity(pypes.pypeScript):
             connectivityFilter.SetScalarRange(scalarRange)
         connectivityFilter.Update()
 
-        self.Surface = connectivityFilter.GetOutput()
+        self.Surface = connectivityFilter.GetOutputData()
 	
       	if self.CleanOutput == 1:
       	    cleaner = vtk.vtkCleanPolyData()
-      	    cleaner.SetInput(connectivityFilter.GetOutput())
+      	    cleaner.SetInputConnection(connectivityFilter.GetOutputPort())
       	    cleaner.Update()
 
-            self.Surface = cleaner.GetOutput()
+            self.Surface = cleaner.GetOutputData()
 
         if self.Surface.GetSource():
             self.Surface.GetSource().UnRegisterAllOutputs()

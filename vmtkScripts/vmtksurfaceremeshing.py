@@ -90,27 +90,27 @@ class vmtkSurfaceRemeshing(pypes.pypeScript):
             self.PrintError('Error: No input surface.')
 
         cleaner = vtk.vtkCleanPolyData()
-        cleaner.SetInput(self.Surface)
+        cleaner.SetInputData(self.Surface)
         cleaner.Update()
 
         triangleFilter = vtk.vtkTriangleFilter()
-        triangleFilter.SetInput(cleaner.GetOutput())
+        triangleFilter.SetInputConnection(cleaner.GetOutputPort())
         triangleFilter.Update()
 
-        self.Surface = triangleFilter.GetOutput()
+        self.Surface = triangleFilter.GetOutputData()
 
         if self.ElementSizeMode == 'edgelength':
             self.TargetArea = 0.25 * 3.0**0.5 * self.TargetEdgeLength**2
         elif self.ElementSizeMode == 'edgelengtharray':
             calculator = vtk.vtkArrayCalculator()
-            calculator.SetInput(self.Surface)
+            calculator.SetInputData(self.Surface)
             calculator.AddScalarArrayName(self.TargetEdgeLengthArrayName,0)
             calculator.SetFunction("%f^2 * 0.25 * sqrt(3) * %s^2" % (self.TargetEdgeLengthFactor,self.TargetEdgeLengthArrayName))
             calculator.SetResultArrayName(self.TargetAreaArrayName)
             calculator.Update()
             self.MaxArea = 0.25 * 3.0**0.5 * self.MaxEdgeLength**2
             self.MinArea = 0.25 * 3.0**0.5 * self.MinEdgeLength**2
-            self.Surface = calculator.GetOutput()
+            self.Surface = calculator.GetOutputData()
 
         excludedIds = vtk.vtkIdList()
         if self.ExcludeEntityIds:
@@ -118,7 +118,7 @@ class vmtkSurfaceRemeshing(pypes.pypeScript):
                 excludedIds.InsertNextId(excludedId)
 
         surfaceRemeshing = vtkvmtk.vtkvmtkPolyDataSurfaceRemeshing()
-        surfaceRemeshing.SetInput(self.Surface)
+        surfaceRemeshing.SetInputData(self.Surface)
         if self.CellEntityIdsArrayName:
             surfaceRemeshing.SetCellEntityIdsArrayName(self.CellEntityIdsArrayName)
         if self.ElementSizeMode in ['area','edgelength']:
@@ -145,7 +145,7 @@ class vmtkSurfaceRemeshing(pypes.pypeScript):
         surfaceRemeshing.SetExcludedEntityIds(excludedIds)
         surfaceRemeshing.Update()
 
-        self.Surface = surfaceRemeshing.GetOutput()
+        self.Surface = surfaceRemeshing.GetOutputData()
 
         if self.Surface.GetSource():
             self.Surface.GetSource().UnRegisterAllOutputs()

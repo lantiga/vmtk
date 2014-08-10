@@ -58,7 +58,7 @@ class vmtkMeshVorticityHelicity(pypes.pypeScript):
             self.PrintError('Error: no Mesh.')
 
         vorticityFilter = vtkvmtk.vtkvmtkUnstructuredGridVorticityFilter()
-        vorticityFilter.SetInput(self.Mesh)
+        vorticityFilter.SetInputData(self.Mesh)
         vorticityFilter.SetVelocityArrayName(self.VelocityArrayName)
         vorticityFilter.SetVorticityArrayName(self.VorticityArrayName)
         vorticityFilter.SetHelicityFactorArrayName(self.HelicityArrayName)
@@ -70,7 +70,7 @@ class vmtkMeshVorticityHelicity(pypes.pypeScript):
             vorticityFilter.ComputeHelicityFactorOff()
         vorticityFilter.Update()
 
-        self.Mesh = vorticityFilter.GetOutput()
+        self.Mesh = vorticityFilter.GetOutputData()
 
         if self.Mesh.GetSource():
             self.Mesh.GetSource().UnRegisterAllOutputs()

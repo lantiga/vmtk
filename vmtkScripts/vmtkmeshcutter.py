@@ -57,7 +57,7 @@ class vmtkMeshCutter(pypes.pypeScript):
         self.MeshCutFilter.Update()
         self.Actor = vtk.vtkActor()
         mapper = vtk.vtkDataSetMapper()
-        mapper.SetInput(self.MeshCutFilter.GetOutput())
+        mapper.SetInputConnection(self.MeshCutFilter.GetOutputPort())
         self.Actor.SetMapper(mapper)
         self.vmtkRenderer.Renderer.AddActor(self.Actor)
   
@@ -84,18 +84,18 @@ class vmtkMeshCutter(pypes.pypeScript):
         if self.Mesh != None:
 
             self.MeshCutFilter = vtk.vtkCutter()
-            self.MeshCutFilter.SetInput(self.Mesh)
+            self.MeshCutFilter.SetInputData(self.Mesh)
             cutPlane = vtk.vtkPlane()
             self.PlaneWidget.GetPlane(cutPlane)
             self.MeshCutFilter.SetCutFunction(cutPlane)
             self.MeshCutFilter.Update()
-            self.Surface = self.MeshCutFilter.GetOutput()
+            self.Surface = self.MeshCutFilter.GetOutputData()
  
             self.PlaneWidget.AddObserver("StartInteractionEvent",self.StartPlaneCallback)
             self.PlaneWidget.AddObserver("EndInteractionEvent",self.EndPlaneCallback)
 
             mapper = vtk.vtkDataSetMapper()
-            mapper.SetInput(self.Mesh)
+            mapper.SetInputData(self.Mesh)
             
             self.Actor = vtk.vtkActor()
             self.Actor.SetMapper(mapper)

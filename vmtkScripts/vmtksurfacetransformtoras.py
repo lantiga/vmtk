@@ -54,11 +54,11 @@ class vmtkSurfaceTransformToRAS(pypes.pypeScript):
         transform.SetMatrix(matrix)
 
         transformFilter = vtk.vtkTransformPolyDataFilter()
-        transformFilter.SetInput(self.Surface)
+        transformFilter.SetInputData(self.Surface)
         transformFilter.SetTransform(transform)
         transformFilter.Update()
 
-        self.Surface = transformFilter.GetOutput()
+        self.Surface = transformFilter.GetOutputData()
 
         if self.Surface.GetSource():
             self.Surface.GetSource().UnRegisterAllOutputs()

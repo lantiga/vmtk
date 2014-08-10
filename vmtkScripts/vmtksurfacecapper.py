@@ -96,10 +96,10 @@ class vmtkSurfaceCapper(pypes.pypeScript):
             self.vmtkRenderer.RegisterScript(self)
 
             boundaryExtractor = vtkvmtk.vtkvmtkPolyDataBoundaryExtractor()
-            boundaryExtractor.SetInput(self.Surface)
+            boundaryExtractor.SetInputData(self.Surface)
             boundaryExtractor.Update()
 
-            boundaries = boundaryExtractor.GetOutput()
+            boundaries = boundaryExtractor.GetOutputData()
             numberOfBoundaries = boundaries.GetNumberOfCells()
             seedPoints = vtk.vtkPoints()
             for i in range(numberOfBoundaries):
@@ -110,7 +110,7 @@ class vmtkSurfaceCapper(pypes.pypeScript):
             seedPolyData.SetPoints(seedPoints)
             seedPolyData.Update()
             labelsMapper = vtk.vtkLabeledDataMapper();
-            labelsMapper.SetInput(seedPolyData)
+            labelsMapper.SetInputData(seedPolyData)
             labelsMapper.SetLabelModeToLabelIds()
             labelsActor = vtk.vtkActor2D()
             labelsActor.SetMapper(labelsMapper)
@@ -118,7 +118,7 @@ class vmtkSurfaceCapper(pypes.pypeScript):
             self.vmtkRenderer.Renderer.AddActor(labelsActor)
 
             surfaceMapper = vtk.vtkPolyDataMapper()
-            surfaceMapper.SetInput(self.Surface)
+            surfaceMapper.SetInputData(self.Surface)
             surfaceMapper.ScalarVisibilityOff()
             surfaceActor = vtk.vtkActor()
             surfaceActor.SetMapper(surfaceMapper)
@@ -144,56 +144,56 @@ class vmtkSurfaceCapper(pypes.pypeScript):
 
         if self.Method == 'simple':
             capper = vtkvmtk.vtkvmtkSimpleCapPolyData()
-            capper.SetInput(self.Surface)
+            capper.SetInputData(self.Surface)
 
         elif self.Method == 'centerpoint':
             capper = vtkvmtk.vtkvmtkCapPolyData()
-            capper.SetInput(self.Surface)
+            capper.SetInputData(self.Surface)
             capper.SetDisplacement(0.0)
             capper.SetInPlaneDisplacement(0.0)
 
         elif self.Method == 'smooth':
             triangle = vtk.vtkTriangleFilter()
-            triangle.SetInput(self.Surface)
+            triangle.SetInputData(self.Surface)
             triangle.PassLinesOff()
             triangle.PassVertsOff()
             triangle.Update()
             capper = vtkvmtk.vtkvmtkSmoothCapPolyData()
-            capper.SetInput(triangle.GetOutput())
+            capper.SetInputConnection(triangle.GetOutputPort())
             capper.SetConstraintFactor(self.ConstraintFactor)
             capper.SetNumberOfRings(self.NumberOfRings)
 
         elif self.Method == 'annular':
             capper = vtkvmtk.vtkvmtkAnnularCapPolyData()
-            capper.SetInput(self.Surface)
+            capper.SetInputData(self.Surface)
 
         elif self.Method == 'concaveannular':
             import vtkvmtkcontrib
             capper = vtkvmtkcontrib.vtkvmtkConcaveAnnularCapPolyData()
-            capper.SetInput(self.Surface)
+            capper.SetInputData(self.Surface)
 
         if self.Interactive:
             capper.SetBoundaryIds(boundaryIds)
         capper.SetCellEntityIdsArrayName(self.CellEntityIdsArrayName)
         capper.SetCellEntityIdOffset(self.CellEntityIdOffset)
         capper.Update()
-        self.Surface = capper.GetOutput()
+        self.Surface = capper.GetOutputData()
 
         if self.TriangleOutput == 1:
             triangle = vtk.vtkTriangleFilter()
-            triangle.SetInput(self.Surface)
+            triangle.SetInputData(self.Surface)
             triangle.PassLinesOff()
             triangle.PassVertsOff()
             triangle.Update()
-            self.Surface = triangle.GetOutput()
+            self.Surface = triangle.GetOutputData()
 
         normals = vtk.vtkPolyDataNormals()
-        normals.SetInput(self.Surface)
+        normals.SetInputData(self.Surface)
         normals.AutoOrientNormalsOn()
         normals.SplittingOff()
         normals.ConsistencyOn()
         normals.Update()
-        self.Surface = normals.GetOutput()
+        self.Surface = normals.GetOutputData()
 
         if self.Surface.GetSource():
             self.Surface.GetSource().UnRegisterAllOutputs()

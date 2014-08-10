@@ -62,7 +62,7 @@ class vmtkSurfaceSmoothing(pypes.pypeScript):
 
         if self.Method is 'taubin':
             smoothingFilter = vtk.vtkWindowedSincPolyDataFilter()
-            smoothingFilter.SetInput(self.Surface)
+            smoothingFilter.SetInputData(self.Surface)
             smoothingFilter.SetNumberOfIterations(self.NumberOfIterations)
             smoothingFilter.SetPassBand(self.PassBand)
             smoothingFilter.SetBoundarySmoothing(self.BoundarySmoothing)
@@ -70,14 +70,14 @@ class vmtkSurfaceSmoothing(pypes.pypeScript):
             smoothingFilter.Update()
         elif self.Method is 'laplace':
             smoothingFilter = vtk.vtkSmoothPolyDataFilter()
-            smoothingFilter.SetInput(self.Surface)
+            smoothingFilter.SetInputData(self.Surface)
             smoothingFilter.SetNumberOfIterations(self.NumberOfIterations)
             smoothingFilter.SetRelaxationFactor(self.RelaxationFactor)
             smoothingFilter.Update()
         else:
             self.PrintError('Error: smoothing method not supported.')
 
-        self.Surface = smoothingFilter.GetOutput()
+        self.Surface = smoothingFilter.GetOutputData()
 
         normals = vmtkscripts.vmtkSurfaceNormals()
         normals.Surface = self.Surface

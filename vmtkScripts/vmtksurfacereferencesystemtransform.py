@@ -129,11 +129,11 @@ class vmtkSurfaceReferenceSystemTransform(pypes.pypeScript):
         transform.RotateWXYZ(angle,cross)
 
         transformFilter = vtk.vtkTransformPolyDataFilter()
-        transformFilter.SetInput(self.Surface)
+        transformFilter.SetInputData(self.Surface)
         transformFilter.SetTransform(transform)
         transformFilter.Update()
 
-        self.Surface = transformFilter.GetOutput()
+        self.Surface = transformFilter.GetOutputData()
 
         if self.Surface.GetSource():
             self.Surface.GetSource().UnRegisterAllOutputs()

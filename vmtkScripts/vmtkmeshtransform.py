@@ -85,11 +85,11 @@ class vmtkMeshTransform(pypes.pypeScript):
         transform.SetInput(self.Matrix4x4)
 
         transformFilter = vtk.vtkTransformFilter()
-        transformFilter.SetInput(self.Mesh)
+        transformFilter.SetInputData(self.Mesh)
         transformFilter.SetTransform(transform)
         transformFilter.Update()
 
-        self.Mesh = transformFilter.GetOutput()
+        self.Mesh = transformFilter.GetOutputData()
 
         if self.Mesh.GetSource():
             self.Mesh.GetSource().UnRegisterAllOutputs()
