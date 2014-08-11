@@ -67,10 +67,8 @@ class vmtkSurfaceDecimation(pypes.pypeScript):
         triangleFilter.SetInputConnection(cleaner.GetOutputPort())
         triangleFilter.Update()
 
-        self.Surface = triangleFilter.GetOutputData()
+        self.Surface = triangleFilter.GetOutput()
 
-        if self.Surface.GetSource():
-            self.Surface.GetSource().UnRegisterAllOutputs()
 
 
 if __name__=='__main__':

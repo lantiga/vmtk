@@ -99,7 +99,7 @@ class vmtkSurfaceCapper(pypes.pypeScript):
             boundaryExtractor.SetInputData(self.Surface)
             boundaryExtractor.Update()
 
-            boundaries = boundaryExtractor.GetOutputData()
+            boundaries = boundaryExtractor.GetOutput()
             numberOfBoundaries = boundaries.GetNumberOfCells()
             seedPoints = vtk.vtkPoints()
             for i in range(numberOfBoundaries):
@@ -177,7 +177,7 @@ class vmtkSurfaceCapper(pypes.pypeScript):
         capper.SetCellEntityIdsArrayName(self.CellEntityIdsArrayName)
         capper.SetCellEntityIdOffset(self.CellEntityIdOffset)
         capper.Update()
-        self.Surface = capper.GetOutputData()
+        self.Surface = capper.GetOutput()
 
         if self.TriangleOutput == 1:
             triangle = vtk.vtkTriangleFilter()
@@ -185,7 +185,7 @@ class vmtkSurfaceCapper(pypes.pypeScript):
             triangle.PassLinesOff()
             triangle.PassVertsOff()
             triangle.Update()
-            self.Surface = triangle.GetOutputData()
+            self.Surface = triangle.GetOutput()
 
         normals = vtk.vtkPolyDataNormals()
         normals.SetInputData(self.Surface)
@@ -193,10 +193,8 @@ class vmtkSurfaceCapper(pypes.pypeScript):
         normals.SplittingOff()
         normals.ConsistencyOn()
         normals.Update()
-        self.Surface = normals.GetOutputData()
+        self.Surface = normals.GetOutput()
 
-        if self.Surface.GetSource():
-            self.Surface.GetSource().UnRegisterAllOutputs()
 
 
 if __name__=='__main__':

@@ -76,7 +76,7 @@ class vmtkImageObjectEnhancement(pypes.pypeScript):
         objectness.Update()
 
         self.EnhancedImage = vtk.vtkImageData()
-        self.EnhancedImage.DeepCopy(objectness.GetOutputData())
+        self.EnhancedImage.DeepCopy(objectness.GetOutput())
 
         self.ScalesImage = vtk.vtkImageData()
         self.ScalesImage.DeepCopy(objectness.GetScalesOutput())

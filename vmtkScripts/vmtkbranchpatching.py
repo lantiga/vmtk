@@ -91,15 +91,9 @@ class vmtkBranchPatching(pypes.pypeScript):
         patchingFilter.SetPatchSize(self.PatchSize)
         patchingFilter.Update()
 
-        self.Surface = patchingFilter.GetOutputData()
-
-        if self.Surface.GetSource():
-            self.Surface.GetSource().UnRegisterAllOutputs()
+        self.Surface = patchingFilter.GetOutput()
 
         self.PatchedData = patchingFilter.GetPatchedData()
-
-        if self.PatchedData.GetSource():
-            self.PatchedData.GetSource().UnRegisterAllOutputs()
 
 
 if __name__=='__main__':

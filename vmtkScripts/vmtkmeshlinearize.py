@@ -51,10 +51,8 @@ class vmtkMeshLinearize(pypes.pypeScript):
         linearizeFilter.SetCleanOutput(self.CleanOutput)
         linearizeFilter.Update()
 
-        self.Mesh = linearizeFilter.GetOutputData()
+        self.Mesh = linearizeFilter.GetOutput()
 
-        if self.Mesh.GetSource():
-            self.Mesh.GetSource().UnRegisterAllOutputs()
 
 
 if __name__=='__main__':

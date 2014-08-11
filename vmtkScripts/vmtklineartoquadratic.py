@@ -74,7 +74,7 @@ class vmtkLinearToQuadratic(pypes.pypeScript):
                 capper.SetInputData(self.Surface)
                 capper.SetCellEntityIdsArrayName('foo') 
                 capper.Update()
-                surface = capper.GetOutputData()
+                surface = capper.GetOutput()
             linearToQuadraticFilter = vtkvmtk.vtkvmtkLinearToQuadraticMeshFilter()
             linearToQuadraticFilter.SetReferenceSurface(surface)
             linearToQuadraticFilter.SetUseBiquadraticWedge(self.UseBiquadraticWedge)
@@ -98,10 +98,7 @@ class vmtkLinearToQuadratic(pypes.pypeScript):
         linearToQuadraticFilter.SetInputData(self.Mesh)
         linearToQuadraticFilter.Update()
 
-        self.Mesh = linearToQuadraticFilter.GetOutputData()
-
-        if self.Mesh.GetSource():
-            self.Mesh.GetSource().UnRegisterAllOutputs()
+        self.Mesh = linearToQuadraticFilter.GetOutput()
 
 
 if __name__=='__main__':

@@ -91,17 +91,15 @@ class vmtkSurfaceConnectivity(pypes.pypeScript):
             connectivityFilter.SetScalarRange(scalarRange)
         connectivityFilter.Update()
 
-        self.Surface = connectivityFilter.GetOutputData()
+        self.Surface = connectivityFilter.GetOutput()
 	
       	if self.CleanOutput == 1:
       	    cleaner = vtk.vtkCleanPolyData()
       	    cleaner.SetInputConnection(connectivityFilter.GetOutputPort())
       	    cleaner.Update()
 
-            self.Surface = cleaner.GetOutputData()
+            self.Surface = cleaner.GetOutput()
 
-        if self.Surface.GetSource():
-            self.Surface.GetSource().UnRegisterAllOutputs()
 
 
 if __name__=='__main__':

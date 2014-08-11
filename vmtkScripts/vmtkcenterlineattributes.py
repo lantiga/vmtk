@@ -57,10 +57,8 @@ class vmtkCenterlineAttributes(pypes.pypeScript):
       	centerlineAttributes.SetParallelTransportNormalsArrayName(self.NormalsArrayName)
         centerlineAttributes.Update()
 
-        self.Centerlines = centerlineAttributes.GetOutputData()
+        self.Centerlines = centerlineAttributes.GetOutput()
 
-        if self.Centerlines.GetSource():
-            self.Centerlines.GetSource().UnRegisterAllOutputs()
 
 
 if __name__=='__main__':

@@ -117,11 +117,9 @@ class vmtkBoundaryLayer(pypes.pypeScript):
         boundaryLayerGenerator.SetVolumeCellEntityId(self.VolumeCellEntityId)
         boundaryLayerGenerator.Update()
         
-        self.Mesh = boundaryLayerGenerator.GetOutputData()
+        self.Mesh = boundaryLayerGenerator.GetOutput()
         self.InnerSurfaceMesh = boundaryLayerGenerator.GetInnerSurface()
 
-        if self.Mesh.GetSource():
-            self.Mesh.GetSource().UnRegisterAllOutputs()
 
 
 if __name__=='__main__':

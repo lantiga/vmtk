@@ -86,7 +86,7 @@ class vmtkImageReslice(pypes.pypeScript):
             cast.SetInputData(self.Image)
             cast.SetOutputScalarTypeToFloat()
             cast.Update()
-            self.Image = cast.GetOutputData()
+            self.Image = cast.GetOutput()
 
         resliceFilter = vtk.vtkImageReslice()
         resliceFilter.SetInputData(self.Image)
@@ -140,7 +140,7 @@ class vmtkImageReslice(pypes.pypeScript):
 
         resliceFilter.Update()
 
-        self.Image = resliceFilter.GetOutputData()
+        self.Image = resliceFilter.GetOutput()
 
 
 if __name__=='__main__':

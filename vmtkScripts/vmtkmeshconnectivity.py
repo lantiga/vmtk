@@ -76,11 +76,8 @@ class vmtkMeshConnectivity(pypes.pypeScript):
                 connectivityFilter.SetClosestPoint(barycenter)
         connectivityFilter.Update()
 
-        self.Mesh = connectivityFilter.GetOutputData()
+        self.Mesh = connectivityFilter.GetOutput()
 	
-        if self.Mesh.GetSource():
-            self.Mesh.GetSource().UnRegisterAllOutputs()
-
 
 if __name__=='__main__':
 

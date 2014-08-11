@@ -108,7 +108,7 @@ class vmtkBranchSections(pypes.pypeScript):
         branchSections.SetBranchSectionDistanceSpheresArrayName(self.BranchSectionDistanceSpheresArrayName)
         branchSections.Update()
 
-        self.BranchSections = branchSections.GetOutputData()
+        self.BranchSections = branchSections.GetOutput()
 
 
 if __name__=='__main__':

@@ -63,10 +63,8 @@ class vmtkMeshWallShearRate(pypes.pypeScript):
         wallShearRateFilter.ComputeIndividualPartialDerivativesOn()
         wallShearRateFilter.Update()
 
-        self.Surface = wallShearRateFilter.GetOutputData()
+        self.Surface = wallShearRateFilter.GetOutput()
 
-        if self.Surface.GetSource():
-            self.Surface.GetSource().UnRegisterAllOutputs()
 
 
 if __name__=='__main__':

@@ -108,8 +108,8 @@ class vmtkBranchClipper(pypes.pypeScript):
             viewer.OutputText = self.OutputText
             viewer.PrintError = self.PrintError
             viewer.PringLog = self.PrintLog
-	    viewer.Display = 0
-	    viewer.Execute()         
+            viewer.Display = 0
+            viewer.Execute()         
 
             groupIdsString = self.InputText("Please input groupIds to clip:\n",self.GroupIdsValidator)
             self.GroupIds = [int(groupId) for groupId in groupIdsString.split()]
@@ -139,16 +139,9 @@ class vmtkBranchClipper(pypes.pypeScript):
         clipper.Update()
 
         if not self.InsideOut:
-            self.Surface = clipper.GetOutputData()
+            self.Surface = clipper.GetOutput()
         else:
             self.Surface = clipper.GetClippedOutputData()
-
-        if self.Surface:
-            if self.Surface.GetSource():
-                self.Surface.GetSource().UnRegisterAllOutputs()
-
-        if self.Centerlines.GetSource():
-            self.Centerlines.GetSource().UnRegisterAllOutputs()
 
         if self.OwnRenderer:
             self.vmtkRenderer.Deallocate()

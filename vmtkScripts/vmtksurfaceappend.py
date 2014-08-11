@@ -49,10 +49,8 @@ class vmtkSurfaceAppend(pypes.pypeScript):
         appendFilter.AddInputData(self.Surface2)
         appendFilter.Update()
 
-        self.Surface = appendFilter.GetOutputData()
+        self.Surface = appendFilter.GetOutput()
 
-        if self.Surface.GetSource():
-            self.Surface.GetSource().UnRegisterAllOutputs()
 
 
 if __name__=='__main__':

@@ -201,7 +201,7 @@ class vmtkPickPointSeedSelector(vmtkSeedSelector):
         glyphs = vtk.vtkGlyph3D()
         glyphSource = vtk.vtkSphereSource()
         glyphs.SetInputData(self.PickedSeeds)
-        glyphs.SetSourceData(glyphSource.GetOutputData())
+        glyphs.SetSourceData(glyphSource.GetOutput())
         glyphs.SetScaleModeToDataScalingOff()
         glyphs.SetScaleFactor(self._Surface.GetLength()*0.01)
         glyphMapper = vtk.vtkPolyDataMapper()
@@ -544,7 +544,7 @@ class vmtkCenterlines(pypes.pypeScript):
         surfaceTriangulator.PassVertsOff()
         surfaceTriangulator.Update()
 
-        centerlineInputSurface = surfaceTriangulator.GetOutputData()
+        centerlineInputSurface = surfaceTriangulator.GetOutput()
 
         capCenterIds = None
 
@@ -555,7 +555,7 @@ class vmtkCenterlines(pypes.pypeScript):
             surfaceCapper.SetDisplacement(self.CapDisplacement)
             surfaceCapper.SetInPlaneDisplacement(self.CapDisplacement)
             surfaceCapper.Update()
-            centerlineInputSurface = surfaceCapper.GetOutputData()
+            centerlineInputSurface = surfaceCapper.GetOutput()
             capCenterIds = surfaceCapper.GetCapCenterIds()
 
         if self.SeedSelector:
@@ -652,7 +652,7 @@ class vmtkCenterlines(pypes.pypeScript):
         centerlineFilter.SetResamplingStepLength(self.ResamplingStepLength)
         centerlineFilter.Update()
 
-        self.Centerlines = centerlineFilter.GetOutputData()
+        self.Centerlines = centerlineFilter.GetOutput()
         self.VoronoiDiagram = centerlineFilter.GetVoronoiDiagram()
         self.DelaunayTessellation = centerlineFilter.GetDelaunayTessellation()
         self.PoleIds = centerlineFilter.GetPoleIds()

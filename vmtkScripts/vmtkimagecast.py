@@ -66,7 +66,7 @@ class vmtkImageCast(pypes.pypeScript):
             shiftScale.SetOutputScalarTypeToUnsignedChar()
             shiftScale.ClampOverflowOn()
             shiftScale.Update()
-            self.Image = shiftScale.GetOutputData()
+            self.Image = shiftScale.GetOutput()
         else:
             cast = vtk.vtkImageCast()
             cast.SetInputData(self.Image)
@@ -79,7 +79,7 @@ class vmtkImageCast(pypes.pypeScript):
             elif self.OutputType == 'short':
                 cast.SetOutputScalarTypeToShort()
             cast.Update()
-            self.Image = cast.GetOutputData()
+            self.Image = cast.GetOutput()
         
 
 if __name__=='__main__':

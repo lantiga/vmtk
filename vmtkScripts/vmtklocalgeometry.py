@@ -126,7 +126,7 @@ class vmtkLocalGeometry(pypes.pypeScript):
             voronoiRadialFastMarching.SetBoundaryPolyData(self.Centerlines)
             voronoiRadialFastMarching.SetIntersectedEdgesArrayName(self.EdgeArrayName)
             voronoiRadialFastMarching.Update()
-            voronoi = voronoiRadialFastMarching.GetOutputData()
+            voronoi = voronoiRadialFastMarching.GetOutput()
 
         if self.ComputeEuclideanDistance | self.ComputeCenterlineVectors | self.ComputeCellIds | self.ComputePCoords:
 
@@ -139,7 +139,7 @@ class vmtkLocalGeometry(pypes.pypeScript):
             voronoiShooter.SetTargetVectorsArrayName(self.VoronoiPoleCenterlineVectorsArrayName)
             voronoiShooter.SetTargetCellIdsArrayName(self.VoronoiCellIdsArrayName)
             voronoiShooter.Update()
-            voronoi = voronoiShooter.GetOutputData()
+            voronoi = voronoiShooter.GetOutput()
 
         surfaceLocalGeometry = vtkvmtk.vtkvmtkPolyDataLocalGeometry()
         
@@ -172,10 +172,8 @@ class vmtkLocalGeometry(pypes.pypeScript):
 
         surfaceLocalGeometry.Update()
 
-        self.Surface = surfaceLocalGeometry.GetOutputData()
+        self.Surface = surfaceLocalGeometry.GetOutput()
 
-        if self.Surface.GetSource():
-            self.Surface.GetSource().UnRegisterAllOutputs()
 
 
 if __name__=='__main__':

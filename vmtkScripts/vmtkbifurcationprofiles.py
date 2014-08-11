@@ -85,7 +85,7 @@ class vmtkBifurcationProfiles(pypes.pypeScript):
         bifurcationProfiles.SetBifurcationProfileOrientationArrayName(self.BifurcationProfileOrientationArrayName)
         bifurcationProfiles.Update()
 
-        self.BifurcationProfiles = bifurcationProfiles.GetOutputData()
+        self.BifurcationProfiles = bifurcationProfiles.GetOutput()
 
 if __name__=='__main__':
 

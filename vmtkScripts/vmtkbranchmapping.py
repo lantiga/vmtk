@@ -119,10 +119,7 @@ class vmtkBranchMapping(pypes.pypeScript):
         stretchFilter.UseBoundaryMetricOn()
         stretchFilter.Update()
         
-        self.Surface = stretchFilter.GetOutputData()
-
-        if self.Surface.GetSource():
-            self.Surface.GetSource().UnRegisterAllOutputs()
+        self.Surface = stretchFilter.GetOutput()
 
 
 if __name__=='__main__':

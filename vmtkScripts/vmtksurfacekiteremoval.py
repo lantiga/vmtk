@@ -50,10 +50,8 @@ class vmtkSurfaceKiteRemoval(pypes.pypeScript):
         kiteRemoval.SetSizeFactor(self.SizeFactor)
         kiteRemoval.Update()
 
-        self.Surface = kiteRemoval.GetOutputData()
+        self.Surface = kiteRemoval.GetOutput()
 
-        if self.Surface.GetSource():
-            self.Surface.GetSource().UnRegisterAllOutputs()
 
 
 if __name__=='__main__':

@@ -51,8 +51,6 @@ class vmtkSurfaceCellDataToPointData(pypes.pypeScript):
 
         self.Surface = cellDataToPointDataFilter.GetPolyDataOutput()
 
-        if self.Surface.GetSource():
-            self.Surface.GetSource().UnRegisterAllOutputs()
 
 if __name__=='__main__':
     main = pypes.pypeMain()

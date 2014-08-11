@@ -89,7 +89,7 @@ class vmtkMeshCutter(pypes.pypeScript):
             self.PlaneWidget.GetPlane(cutPlane)
             self.MeshCutFilter.SetCutFunction(cutPlane)
             self.MeshCutFilter.Update()
-            self.Surface = self.MeshCutFilter.GetOutputData()
+            self.Surface = self.MeshCutFilter.GetOutput()
  
             self.PlaneWidget.AddObserver("StartInteractionEvent",self.StartPlaneCallback)
             self.PlaneWidget.AddObserver("EndInteractionEvent",self.EndPlaneCallback)

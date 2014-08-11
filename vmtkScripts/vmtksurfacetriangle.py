@@ -51,10 +51,7 @@ class vmtkSurfaceTriangle(pypes.pypeScript):
         triangleFilter.SetInputConnection(cleaner.GetOutputPort())
         triangleFilter.Update()
 
-        self.Surface = triangleFilter.GetOutputData()
-
-        if self.Surface.GetSource():
-            self.Surface.GetSource().UnRegisterAllOutputs()
+        self.Surface = triangleFilter.GetOutput()
 
 
 if __name__=='__main__':

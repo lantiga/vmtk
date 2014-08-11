@@ -89,7 +89,7 @@ class vmtkRBFInterpolation(pypes.pypeScript):
         sampleFunction.ComputeNormalsOff()
         sampleFunction.Update()
         
-        self.Image = sampleFunction.GetOutputData() 
+        self.Image = sampleFunction.GetOutput() 
         
 
 if __name__=='__main__':

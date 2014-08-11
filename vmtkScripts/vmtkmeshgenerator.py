@@ -225,7 +225,7 @@ class vmtkMeshGenerator(pypes.pypeScript):
             sizingFunction.Update()
 
             surfaceToMesh2 = vmtkscripts.vmtkSurfaceToMesh()
-            surfaceToMesh2.Surface = sizingFunction.GetOutputData()
+            surfaceToMesh2.Surface = sizingFunction.GetOutput()
             surfaceToMesh2.Execute()
             
             self.PrintLog("Generating volume mesh")
@@ -268,12 +268,12 @@ class vmtkMeshGenerator(pypes.pypeScript):
                 threshold.ThresholdByUpper(1.5)
                 threshold.SetInputArrayToProcess(0,0,0,1,self.CellEntityIdsArrayName)
                 threshold.Update()
-                endcaps = threshold.GetOutputData()
+                endcaps = threshold.GetOutput()
                 appendFilter.AddInputData(endcaps)
 
             appendFilter.Update()
 
-            self.Mesh = appendFilter.GetOutputData()
+            self.Mesh = appendFilter.GetOutput()
 
             if not self.BoundaryLayerOnCaps:
                 cellEntityIdsArray = self.Mesh.GetCellData().GetArray(self.CellEntityIdsArrayName)
@@ -323,7 +323,7 @@ class vmtkMeshGenerator(pypes.pypeScript):
 
             self.PrintLog("Converting surface to mesh")
             surfaceToMesh = vmtkscripts.vmtkSurfaceToMesh()
-            surfaceToMesh.Surface = sizingFunction.GetOutputData()
+            surfaceToMesh.Surface = sizingFunction.GetOutput()
             surfaceToMesh.Execute()
 
             self.PrintLog("Generating volume mesh")
@@ -354,7 +354,7 @@ class vmtkMeshGenerator(pypes.pypeScript):
             tetrahedralize.SetInputData(self.Mesh)
             tetrahedralize.Update()
 
-            self.Mesh = tetrahedralize.GetOutputData()
+            self.Mesh = tetrahedralize.GetOutput()
 
         self.RemeshedSurface = remeshedSurface
 

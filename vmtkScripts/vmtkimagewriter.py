@@ -105,7 +105,7 @@ class vmtkImageWriter(pypes.pypeScript):
             shiftScale.SetOutputScalarTypeToUnsignedChar()
             shiftScale.ClampOverflowOn()
             shiftScale.Update()
-            outputImage = shiftScale.GetOutputData()
+            outputImage = shiftScale.GetOutput()
         writer = vtk.vtkPNGWriter()
         writer.SetInputData(outputImage)
         if self.Image.GetDimensions()[2] == 1:
@@ -133,7 +133,7 @@ class vmtkImageWriter(pypes.pypeScript):
             shiftScale.SetOutputScalarTypeToUnsignedChar()
             shiftScale.ClampOverflowOn()
             shiftScale.Update()
-            outputImage = shiftScale.GetOutputData()
+            outputImage = shiftScale.GetOutput()
         writer = vtk.vtkTIFFWriter()
         writer.SetInputData(outputImage)
         if self.Image.GetDimensions()[2] == 1:
@@ -243,7 +243,7 @@ class vmtkImageWriter(pypes.pypeScript):
       	    else:
                 self.PrintError('Error: unsupported pixel representation '+ self.PixelRepresentation + '.')
             cast.Update()
-            self.Image = cast.GetOutputData()
+            self.Image = cast.GetOutput()
 
         if self.UseITKIO and self.Format not in ['vtkxml','vtk','tiff','png','dat']:
             self.WriteITKIO()

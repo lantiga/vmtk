@@ -124,7 +124,7 @@ class vmtkMeshWriter(pypes.pypeScript):
         triangleFilter = vtk.vtkDataSetTriangleFilter()
         triangleFilter.SetInputData(self.Mesh)
         triangleFilter.Update()
-        self.Mesh = triangleFilter.GetOutputData()
+        self.Mesh = triangleFilter.GetOutput()
         f=open(self.OutputFileName, 'w')
         line = "VARIABLES = X,Y,Z"
         arrayNames = []

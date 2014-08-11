@@ -70,10 +70,8 @@ class vmtkMeshVorticityHelicity(pypes.pypeScript):
             vorticityFilter.ComputeHelicityFactorOff()
         vorticityFilter.Update()
 
-        self.Mesh = vorticityFilter.GetOutputData()
+        self.Mesh = vorticityFilter.GetOutput()
 
-        if self.Mesh.GetSource():
-            self.Mesh.GetSource().UnRegisterAllOutputs()
 
 
 if __name__=='__main__':

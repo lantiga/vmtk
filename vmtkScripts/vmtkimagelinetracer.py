@@ -113,10 +113,7 @@ class vmtkImageLineTracer(pypes.pypeScript):
         pathTransform.SetTransform(transform)
         pathTransform.Update()
 
-        self.Line = pathTransform.GetOutputData()
-
-        if self.Line.GetSource():
-            self.Line.GetSource().UnRegisterAllOutputs()
+        self.Line = pathTransform.GetOutput()
 
     def ChangeSlice(self,obj,event):
         currentSlice = self.SliceVOI[self.Axis*2]
@@ -156,7 +153,7 @@ class vmtkImageLineTracer(pypes.pypeScript):
         imageShifter.SetScale(scale)
         imageShifter.SetOutputScalarTypeToUnsignedChar()
 
-        widgetImage = imageShifter.GetOutputData()
+        widgetImage = imageShifter.GetOutput()
 
         self.ImageActor.SetInputData(widgetImage)
         self.ImageActor.SetDisplayExtent(self.SliceVOI)

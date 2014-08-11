@@ -66,10 +66,8 @@ class vmtkBoundaryReferenceSystems(pypes.pypeScript):
         boundaryReferenceSystems.SetPoint2ArrayName(self.Point2ArrayName)
         boundaryReferenceSystems.Update()
 
-        self.ReferenceSystems = boundaryReferenceSystems.GetOutputData()
+        self.ReferenceSystems = boundaryReferenceSystems.GetOutput()
 
-        if self.ReferenceSystems.GetSource():
-            self.ReferenceSystems.GetSource().UnRegisterAllOutputs()
 
 
 if __name__=='__main__':

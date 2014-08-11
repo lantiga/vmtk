@@ -89,7 +89,7 @@ class vmtkSurfaceCompare(pypes.pypeScript):
         calculator.SetResultArrayName('ResultArray')
         calculator.Update()
 
-        self.ResultData = calculator.GetOutputData()
+        self.ResultData = calculator.GetOutput()
 
         if self.Method in ['addpointarray','projection']:
             resultRange = self.ResultData.GetPointData().GetArray('ResultArray').GetRange()

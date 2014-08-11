@@ -97,7 +97,7 @@ class vmtkSurfaceRemeshing(pypes.pypeScript):
         triangleFilter.SetInputConnection(cleaner.GetOutputPort())
         triangleFilter.Update()
 
-        self.Surface = triangleFilter.GetOutputData()
+        self.Surface = triangleFilter.GetOutput()
 
         if self.ElementSizeMode == 'edgelength':
             self.TargetArea = 0.25 * 3.0**0.5 * self.TargetEdgeLength**2
@@ -110,7 +110,7 @@ class vmtkSurfaceRemeshing(pypes.pypeScript):
             calculator.Update()
             self.MaxArea = 0.25 * 3.0**0.5 * self.MaxEdgeLength**2
             self.MinArea = 0.25 * 3.0**0.5 * self.MinEdgeLength**2
-            self.Surface = calculator.GetOutputData()
+            self.Surface = calculator.GetOutput()
 
         excludedIds = vtk.vtkIdList()
         if self.ExcludeEntityIds:
@@ -145,10 +145,7 @@ class vmtkSurfaceRemeshing(pypes.pypeScript):
         surfaceRemeshing.SetExcludedEntityIds(excludedIds)
         surfaceRemeshing.Update()
 
-        self.Surface = surfaceRemeshing.GetOutputData()
-
-        if self.Surface.GetSource():
-            self.Surface.GetSource().UnRegisterAllOutputs()
+        self.Surface = surfaceRemeshing.GetOutput()
 
 
 if __name__=='__main__':

@@ -70,7 +70,7 @@ class vmtkNetworkExtraction(pypes.pypeScript):
 
         self.EndProgress()
 
-        self.Network = networkExtraction.GetOutputData()
+        self.Network = networkExtraction.GetOutput()
         self.GraphLayout = networkExtraction.GetGraphLayout()
 
 

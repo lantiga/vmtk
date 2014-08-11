@@ -51,10 +51,7 @@ class vmtkSurfMesh(pypes.pypeScript):
         surfmesh.SetNodeSpacing(self.NodeSpacing)
         surfmesh.Update()
 
-        self.Surface = surfmesh.GetOutputData()
-
-        if self.Surface.GetSource():
-            self.Surface.GetSource().UnRegisterAllOutputs()
+        self.Surface = surfmesh.GetOutput()
 
 if __name__=='__main__':
     main = pypes.pypeMain()

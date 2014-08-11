@@ -178,7 +178,7 @@ class vmtkDelaunayVoronoi(pypes.pypeScript):
         surfaceNormals.ConsistencyOn()
         surfaceNormals.Update()
         
-        inputSurface = surfaceNormals.GetOutputData()
+        inputSurface = surfaceNormals.GetOutput()
 
         if self.UseTetGen:
             self.PrintLog('Running TetGen.')
@@ -203,9 +203,9 @@ class vmtkDelaunayVoronoi(pypes.pypeScript):
             delaunayTessellator.SetInputConnection(surfaceNormals.GetOutputPort())
             delaunayTessellator.SetTolerance(self.DelaunayTolerance)
             delaunayTessellator.Update()
-            self.DelaunayTessellation = delaunayTessellator.GetOutputData()
+            self.DelaunayTessellation = delaunayTessellator.GetOutput()
 
-        normalsArray = surfaceNormals.GetOutputData().GetPointData().GetNormals()
+        normalsArray = surfaceNormals.GetOutput().GetPointData().GetNormals()
         self.DelaunayTessellation.GetPointData().AddArray(normalsArray)
 
         internalTetrahedraExtractor = vtkvmtk.vtkvmtkInternalTetrahedraExtractor()
@@ -220,7 +220,7 @@ class vmtkDelaunayVoronoi(pypes.pypeScript):
           internalTetrahedraExtractor.SetCapCenterIds(capCenterIds)
         internalTetrahedraExtractor.Update()
 
-        self.DelaunayTessellation = internalTetrahedraExtractor.GetOutputData()
+        self.DelaunayTessellation = internalTetrahedraExtractor.GetOutput()
 
         voronoiDiagramFilter = vtkvmtk.vtkvmtkVoronoiDiagram3D()
         voronoiDiagramFilter.SetInputData(self.DelaunayTessellation)
@@ -229,14 +229,14 @@ class vmtkDelaunayVoronoi(pypes.pypeScript):
 
         self.PoleIds = voronoiDiagramFilter.GetPoleIds()
 
-        self.VoronoiDiagram = voronoiDiagramFilter.GetOutputData()
+        self.VoronoiDiagram = voronoiDiagramFilter.GetOutput()
 
         if self.SimplifyVoronoi:
             voronoiDiagramSimplifier = vtkvmtk.vtkvmtkSimplifyVoronoiDiagram()
             voronoiDiagramSimplifier.SetInputConnection(voronoiDiagramFilter.GetOutputPort())
             voronoiDiagramSimplifier.SetUnremovablePointIds(voronoiDiagramFilter.GetPoleIds())
             voronoiDiagramSimplifier.Update()
-            self.VoronoiDiagram = voronoiDiagramSimplifier.GetOutputData()
+            self.VoronoiDiagram = voronoiDiagramSimplifier.GetOutput()
 
         self.Mesh = self.DelaunayTessellation
         self.Surface = self.VoronoiDiagram

@@ -75,10 +75,7 @@ class vmtkEndpointExtractor(pypes.pypeScript):
       	endpointExtractor.SetNumberOfGapSpheres(self.NumberOfGapSpheres)
         endpointExtractor.Update()
 
-        self.Centerlines = endpointExtractor.GetOutputData()
-
-        if self.Centerlines.GetSource():
-            self.Centerlines.GetSource().UnRegisterAllOutputs()
+        self.Centerlines = endpointExtractor.GetOutput()
 
 
 if __name__=='__main__':

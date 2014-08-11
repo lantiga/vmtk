@@ -68,10 +68,7 @@ class vmtkBifurcationReferenceSystems(pypes.pypeScript):
         ##	bifurcationReferenceSystems.SetReferenceGroupId(self.ReferenceGroupId)
         bifurcationReferenceSystems.Update()
 
-        self.ReferenceSystems = bifurcationReferenceSystems.GetOutputData()
-
-        if self.ReferenceSystems.GetSource():
-            self.ReferenceSystems.GetSource().UnRegisterAllOutputs()
+        self.ReferenceSystems = bifurcationReferenceSystems.GetOutput()
 
 if __name__=='__main__':
 

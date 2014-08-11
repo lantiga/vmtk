@@ -70,10 +70,10 @@ class vmtkMeshClipper(pypes.pypeScript):
             return
         self.BoxWidget.GetPlanes(self.Planes)
         self.Clipper.Update()
-        self.Mesh.DeepCopy(self.Clipper.GetOutputData())
+        self.Mesh.DeepCopy(self.Clipper.GetOutput())
         self.ClippedMesh.DeepCopy(self.Clipper.GetClippedOutputData())
         self.Cutter.Update()
-        self.Surface.DeepCopy(self.Cutter.GetOutputData())
+        self.Surface.DeepCopy(self.Cutter.GetOutput())
         mapper = vtk.vtkDataSetMapper()
         mapper.SetInputData(self.Mesh)
         mapper.ScalarVisibilityOff()
@@ -149,12 +149,10 @@ class vmtkMeshClipper(pypes.pypeScript):
             self.Cutter.SetValue(0,self.ClipValue)
             self.Cutter.Update()
 
-            self.Mesh = self.Clipper.GetOutputData()
-            self.Surface = self.Cutter.GetOutputData()
+            self.Mesh = self.Clipper.GetOutput()
+            self.Surface = self.Cutter.GetOutput()
             self.ClippedMesh = self.Clipper.GetClippedOutputData()
         
-        if self.Mesh.GetSource():
-            self.Mesh.GetSource().UnRegisterAllOutputs()
 
 
 if __name__=='__main__':

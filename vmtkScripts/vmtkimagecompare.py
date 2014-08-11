@@ -71,7 +71,7 @@ class vmtkImageCompare(pypes.pypeScript):
         imageMath.SetInput2Data(self.ReferenceImage) 
         imageMath.SetOperationToSubtract()
         imageMath.Update()
-        differenceImage = imageMath.GetOutputData()
+        differenceImage = imageMath.GetOutput()
         differenceRange = differenceImage.GetPointData().GetScalars().GetRange()
 
         self.InputInfo('Difference Range: ' + str(differenceRange))

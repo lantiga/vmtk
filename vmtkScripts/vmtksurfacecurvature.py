@@ -74,7 +74,7 @@ class vmtkSurfaceCurvature(pypes.pypeScript):
             curvatureFilter.SetCurvatureTypeToMinimum()
         curvatureFilter.Update()
 
-        activeScalars = curvatureFilter.GetOutputData().GetPointData().GetScalars()
+        activeScalars = curvatureFilter.GetOutput().GetPointData().GetScalars()
         activeScalars.SetName('Curvature')
 
         if self.AbsoluteCurvature:
@@ -93,7 +93,7 @@ class vmtkSurfaceCurvature(pypes.pypeScript):
             boundaryExtractor = vtkvmtk.vtkvmtkPolyDataBoundaryExtractor()
             boundaryExtractor.SetInputData(self.Surface)
             boundaryExtractor.Update()
-            boundaryIdsArray = vtk.vtkIdTypeArray.SafeDownCast(boundaryExtractor.GetOutputData().GetPointData().GetScalars())
+            boundaryIdsArray = vtk.vtkIdTypeArray.SafeDownCast(boundaryExtractor.GetOutput().GetPointData().GetScalars())
             boundaryIds = vtk.vtkIdList()
             boundaryIds.SetNumberOfIds(boundaryIdsArray.GetNumberOfTuples())
             for i in range(boundaryIdsArray.GetNumberOfTuples()):

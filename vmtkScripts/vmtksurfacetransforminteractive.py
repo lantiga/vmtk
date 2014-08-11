@@ -66,10 +66,7 @@ class vmtkSurfaceTransformInteractive(pypes.pypeScript):
         self.BoxWidget.GetTransform(self.Transform)
         self.TransformFilter.Update()
  
-        self.TransformedSurface.ShallowCopy(self.TransformFilter.GetOutputData())
- 
-        if self.TransformedSurface.GetSource():
-            self.TransformedSurface.GetSource().UnregisterAllOutputs()
+        self.TransformedSurface.ShallowCopy(self.TransformFilter.GetOutput())
  
         self.vmtkRenderer.RenderWindow.Render()
 
@@ -92,8 +89,6 @@ class vmtkSurfaceTransformInteractive(pypes.pypeScript):
         ##self.TransformedSurface.ShallowCopy(self.TransformFilter.GetOutput())
         ##self.TransformedSurface.Update()
  
-        ##if self.TransformedSurface.GetSource():
-          ##  self.TransformedSurface.GetSource().UnregisterAllOutputs()
  
         ##self.vmtkRenderer.RenderWindow.Render()     
  
@@ -130,7 +125,7 @@ class vmtkSurfaceTransformInteractive(pypes.pypeScript):
  
         self.TransformFilter.Update()
  
-        self.TransformedSurface.ShallowCopy(self.TransformFilter.GetOutputData())
+        self.TransformedSurface.ShallowCopy(self.TransformFilter.GetOutput())
  
         mapper = vtk.vtkPolyDataMapper()
         mapper.SetInputData(self.TransformedSurface)

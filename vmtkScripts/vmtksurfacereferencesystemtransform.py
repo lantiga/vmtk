@@ -133,10 +133,7 @@ class vmtkSurfaceReferenceSystemTransform(pypes.pypeScript):
         transformFilter.SetTransform(transform)
         transformFilter.Update()
 
-        self.Surface = transformFilter.GetOutputData()
-
-        if self.Surface.GetSource():
-            self.Surface.GetSource().UnRegisterAllOutputs()
+        self.Surface = transformFilter.GetOutput()
 
 
 if __name__=='__main__':

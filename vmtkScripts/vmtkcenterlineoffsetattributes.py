@@ -136,13 +136,10 @@ class vmtkCenterlineOffsetAttributes(pypes.pypeScript):
         offsetFilter.SetReferenceGroupId(self.ReferenceGroupId)
         offsetFilter.Update()
         
-        self.Centerlines = offsetFilter.GetOutputData()
+        self.Centerlines = offsetFilter.GetOutput()
 
         if self.ReferenceGroupId == -1:
             self.ReferenceGroupId = offsetFilter.GetReferenceGroupId()
-
-        if self.Centerlines.GetSource():
-            self.Centerlines.GetSource().UnRegisterAllOutputs()
 
         if self.OwnRenderer:
             self.vmtkRenderer.Deallocate()

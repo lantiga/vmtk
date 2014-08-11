@@ -72,7 +72,7 @@ class vmtkImageMorphology(pypes.pypeScript):
         morphologyFilter.SetBallRadius(self.BallRadius)
         morphologyFilter.Update()
 
-        self.Image = morphologyFilter.GetOutputData()
+        self.Image = morphologyFilter.GetOutput()
 
 
 if __name__=='__main__':

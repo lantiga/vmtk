@@ -63,10 +63,8 @@ class vmtkMeshLambda2(pypes.pypeScript):
         lambda2Filter.ForceBoundaryToNegativeOn()
         lambda2Filter.Update()
 
-        self.Mesh = lambda2Filter.GetOutputData()
+        self.Mesh = lambda2Filter.GetOutput()
 
-        if self.Mesh.GetSource():
-            self.Mesh.GetSource().UnRegisterAllOutputs()
 
 
 if __name__=='__main__':

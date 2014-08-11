@@ -58,7 +58,7 @@ class vmtkImageCompose(pypes.pypeScript):
             negateFilter.SetOperationToMultiplyByK()
             negateFilter.SetConstantK(-1.0)
             negateFilter.Update()
-            self.Image2 = negateFilter.GetOutputData()
+            self.Image2 = negateFilter.GetOutput()
 
         composeFilter = vtk.vtkImageMathematics()
         composeFilter.SetInput1Data(self.Image)
@@ -75,7 +75,7 @@ class vmtkImageCompose(pypes.pypeScript):
             self.PrintError('Error: Unsupported operation')
         composeFilter.Update()
 
-        self.Image = composeFilter.GetOutputData()
+        self.Image = composeFilter.GetOutput()
 
 
 if __name__=='__main__':

@@ -82,7 +82,7 @@ class vmtkMeshCompare(pypes.pypeScript):
         calculator.SetResultArrayName('ResultArray')
         calculator.Update()
 
-        self.ResultData = calculator.GetOutputData()
+        self.ResultData = calculator.GetOutput()
         if self.Method == 'pointarray':
             resultRange = self.ResultData.GetPointData().GetArray('ResultArray').GetRange()
         elif self.Method == 'cellarray':
@@ -101,13 +101,13 @@ class vmtkMeshCompare(pypes.pypeScript):
         meshQuality.SetInputData(self.Mesh)
         meshQuality.RatioOn()
         meshQuality.Update()
-        meshQualityOutput = meshQuality.GetOutputData()
+        meshQualityOutput = meshQuality.GetOutput()
 
         referenceQuality = vtk.vtkMeshQuality()
         referenceQuality.SetInputData(self.ReferenceMesh)
         referenceQuality.RatioOn()
         referenceQuality.Update()
-        referenceQualityOutput = referenceQuality.GetOutputData()
+        referenceQualityOutput = referenceQuality.GetOutput()
 
         self.PrintLog("Mesh points: "+ str(meshQualityOutput.GetNumberOfPoints()))
         self.PrintLog("Reference Points: " +str(referenceQualityOutput.GetNumberOfPoints()))

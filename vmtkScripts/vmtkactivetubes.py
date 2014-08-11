@@ -82,7 +82,7 @@ class vmtkActiveTubes(pypes.pypeScript):
         activeTubes.SetNegativeNormWarnings(self.NegativeNormWarnings)
         activeTubes.Update()
 
-        self.Centerline = activeTubes.GetOutputData()
+        self.Centerline = activeTubes.GetOutput()
       
 if __name__=='__main__':
 

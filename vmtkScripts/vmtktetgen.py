@@ -117,7 +117,7 @@ class vmtkTetGen(pypes.pypeScript):
             surfacetomesh = vtkvmtk.vtkvmtkPolyDataToUnstructuredGridFilter()
             surfacetomesh.SetInputConnection(cap.GetOutputPort())
             surfacetomesh.Update()
-            self.Mesh = surfacetomesh.GetOutputData()
+            self.Mesh = surfacetomesh.GetOutput()
 
         tetgen = vtkvmtk.vtkvmtkTetGenWrapper()
         tetgen.SetInputData(self.Mesh)
@@ -149,10 +149,8 @@ class vmtkTetGen(pypes.pypeScript):
         tetgen.SetOutputVolumeElements(self.OutputVolumeElements)
         tetgen.Update()
 
-        self.Mesh = tetgen.GetOutputData()
+        self.Mesh = tetgen.GetOutput()
 
-        if self.Mesh.GetSource():
-            self.Mesh.GetSource().UnRegisterAllOutputs()
 
 
 if __name__=='__main__':

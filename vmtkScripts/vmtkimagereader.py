@@ -85,7 +85,7 @@ class vmtkImageReader(pypes.pypeScript):
         reader = vtk.vtkXMLImageDataReader()
         reader.SetFileName(self.InputFileName)
         reader.Update()
-        self.Image = reader.GetOutputData()
+        self.Image = reader.GetOutput()
 
     def ReadVTKImageFile(self):
         if (self.InputFileName == ''):
@@ -94,7 +94,7 @@ class vmtkImageReader(pypes.pypeScript):
         reader = vtk.vtkStructuredPointsReader()
         reader.SetFileName(self.InputFileName)
         reader.Update()
-        self.Image = reader.GetOutputData()
+        self.Image = reader.GetOutput()
 
     def ReadRawImageFile(self):
         if (self.InputFileName == '') & (self.InputFilePrefix == ''):
@@ -131,7 +131,7 @@ class vmtkImageReader(pypes.pypeScript):
       	elif self.DataScalarType == 'uchar':
       	    reader.SetDataScalarTypeToUnsignedChar()
         reader.Update()
-        self.Image = reader.GetOutputData()
+        self.Image = reader.GetOutput()
 
     def ReadMetaImageFile(self):
         if (self.InputFileName == ''):
@@ -140,7 +140,7 @@ class vmtkImageReader(pypes.pypeScript):
         reader = vtk.vtkMetaImageReader()
         reader.SetFileName(self.InputFileName)
         reader.Update()
-        self.Image = reader.GetOutputData()
+        self.Image = reader.GetOutput()
 
     def ReadTIFFImageFile(self):
         if (self.InputFileName == '') & (self.InputFilePrefix == ''):
@@ -159,7 +159,7 @@ class vmtkImageReader(pypes.pypeScript):
             reader.SetDataSpacing(self.DataSpacing)
             reader.SetDataOrigin(self.DataOrigin)
         reader.Update()
-        self.Image = reader.GetOutputData()
+        self.Image = reader.GetOutput()
 
     def ReadPNGImageFile(self):
         if (self.InputFileName == '') & (self.InputFilePrefix == ''):
@@ -178,7 +178,7 @@ class vmtkImageReader(pypes.pypeScript):
             reader.SetDataSpacing(self.DataSpacing)
             reader.SetDataOrigin(self.DataOrigin)
         reader.Update()
-        self.Image = reader.GetOutputData()
+        self.Image = reader.GetOutput()
 
     def ReadDICOMFile(self):
         if (self.InputFileName == ''):
@@ -188,7 +188,7 @@ class vmtkImageReader(pypes.pypeScript):
         reader.SetFileName(self.InputFileName)
         reader.SetAutoOrientImage(self.AutoOrientDICOMImage)
         reader.Update()
-        self.Image = reader.GetOutputData()
+        self.Image = reader.GetOutput()
 
     def ReadDICOMDirectory(self):
         if (self.InputDirectoryName == ''):
@@ -198,7 +198,7 @@ class vmtkImageReader(pypes.pypeScript):
         reader.SetDirectoryName(self.InputDirectoryName)
         reader.SetAutoOrientImage(self.AutoOrientDICOMImage)
         reader.Update()
-        self.Image = reader.GetOutputData()
+        self.Image = reader.GetOutput()
 
     def ReadITKIO(self):
         if self.InputFileName == '':
@@ -219,7 +219,7 @@ class vmtkImageReader(pypes.pypeScript):
         reader.SetSingleFile(0)
         reader.Update()
         self.Image = vtk.vtkImageData()
-        self.Image.DeepCopy(reader.GetOutputData())
+        self.Image.DeepCopy(reader.GetOutput())
         matrix = reader.GetRasToIjkMatrix()
         self.RasToIjkMatrixCoefficients = [
             matrix.GetElement(0,0), matrix.GetElement(0,1), matrix.GetElement(0,2), matrix.GetElement(0,3),
@@ -322,29 +322,26 @@ class vmtkImageReader(pypes.pypeScript):
                 flipFilter.SetInputData(self.Image)
                 flipFilter.SetFilteredAxis(0)
                 flipFilter.Update()
-                temp0 = flipFilter.GetOutputData()
+                temp0 = flipFilter.GetOutput()
             temp1 = temp0
             if self.Flip[1] == 1:
                 flipFilter = vtk.vtkImageFlip()
                 flipFilter.SetInputData(temp0)
                 flipFilter.SetFilteredAxis(1)
                 flipFilter.Update()
-                temp1 = flipFilter.GetOutputData()
+                temp1 = flipFilter.GetOutput()
             temp2 = temp1
             if self.Flip[2] == 1:
                 flipFilter = vtk.vtkImageFlip()
                 flipFilter.SetInputData(temp1)
                 flipFilter.SetFilteredAxis(2)
                 flipFilter.Update()
-                temp2 = flipFilter.GetOutputData()
+                temp2 = flipFilter.GetOutput()
             self.Image = temp2
 
         self.PrintLog('Spacing %f %f %f' % self.Image.GetSpacing())
         self.PrintLog('Origin %f %f %f' % self.Image.GetOrigin())
         self.PrintLog('Dimensions %d %d %d' % self.Image.GetDimensions())
-
-        if self.Image.GetSource():
-            self.Image.GetSource().UnRegisterAllOutputs()
 
         self.Output = self.Image
 

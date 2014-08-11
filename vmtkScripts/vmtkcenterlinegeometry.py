@@ -87,10 +87,8 @@ class vmtkCenterlineGeometry(pypes.pypeScript):
         centerlineGeometry.SetSmoothingFactor(self.SmoothingFactor)
         centerlineGeometry.Update()
 
-        self.Centerlines = centerlineGeometry.GetOutputData()
+        self.Centerlines = centerlineGeometry.GetOutput()
 
-        if self.Centerlines.GetSource():
-            self.Centerlines.GetSource().UnRegisterAllOutputs()
 
 
 if __name__=='__main__':

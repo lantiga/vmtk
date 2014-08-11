@@ -741,7 +741,7 @@ class vmtkNetworkEditor(pypes.pypeScript):
         glyphSource.SetThetaResolution(20)
         glyphSource.SetPhiResolution(20)
         glyphs.SetInputData(self.Selection)
-        glyphs.SetSourceData(glyphSource.GetOutputData())
+        glyphs.SetSourceData(glyphSource.GetOutput())
         glyphs.SetScaleModeToScaleByScalar()
         glyphs.SetScaleFactor(1.0)
 
@@ -769,7 +769,7 @@ class vmtkNetworkEditor(pypes.pypeScript):
         activeSegmentSeedsGlyphSource.SetThetaResolution(20)
         activeSegmentSeedsGlyphSource.SetPhiResolution(20)
         activeSegmentSeedsGlyphs.SetInputData(self.ActiveSegmentSeeds)
-        activeSegmentSeedsGlyphs.SetSourceData(activeSegmentSeedsGlyphSource.GetOutputData())
+        activeSegmentSeedsGlyphs.SetSourceData(activeSegmentSeedsGlyphSource.GetOutput())
         activeSegmentSeedsGlyphs.SetScaleModeToScaleByScalar()
         activeSegmentSeedsGlyphs.SetScaleFactor(1.0)
 
@@ -880,7 +880,7 @@ class vmtkNetworkEditor(pypes.pypeScript):
 
         self.FirstRender()
 
-        self.Surface = self.NetworkTube.GetOutputData()
+        self.Surface = self.NetworkTube.GetOutput()
 
         if self.OwnRenderer:
             self.vmtkRenderer.Deallocate()

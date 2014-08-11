@@ -80,8 +80,6 @@ class vmtkPointSplitExtractor(pypes.pypeScript):
 
         self.Centerlines = pointSplitExtractor.GetOutputPort()
 
-        if self.Centerlines.GetSource():
-            self.Centerlines.GetSource().UnRegisterAllOutputs()
 
 
 if __name__=='__main__':

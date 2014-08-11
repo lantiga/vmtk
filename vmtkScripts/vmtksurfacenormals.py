@@ -64,10 +64,8 @@ class vmtkSurfaceNormals(pypes.pypeScript):
       	normalsFilter.SplittingOff()
         normalsFilter.Update()
 
-        self.Surface = normalsFilter.GetOutputData()
+        self.Surface = normalsFilter.GetOutput()
 
-        if self.Surface.GetSource():
-            self.Surface.GetSource().UnRegisterAllOutputs()
 
         if self.NormalsArrayName != '':
             self.Surface.GetPointData().GetNormals().SetName(self.NormalsArrayName)

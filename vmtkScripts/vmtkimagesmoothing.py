@@ -60,7 +60,7 @@ class vmtkImageSmoothing(pypes.pypeScript):
         smoothingFilter.SetDimensionality(self.Dimensionality)
         smoothingFilter.Update()
 
-        self.Image = smoothingFilter.GetOutputData()
+        self.Image = smoothingFilter.GetOutput()
 
 
 if __name__=='__main__':

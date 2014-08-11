@@ -93,7 +93,7 @@ class vmtkCenterlineMeshSections(pypes.pypeScript):
             centerlineSections.SetAdditionalScalarsArrayName(self.AdditionalScalarsArrayName)
         centerlineSections.Update()
 
-        self.CenterlineSections = centerlineSections.GetOutputData()
+        self.CenterlineSections = centerlineSections.GetOutput()
 
         self.SectionPointsPolyData = centerlineSections.GetSectionPointsPolyData()
 

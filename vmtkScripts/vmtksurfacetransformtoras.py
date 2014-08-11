@@ -58,10 +58,8 @@ class vmtkSurfaceTransformToRAS(pypes.pypeScript):
         transformFilter.SetTransform(transform)
         transformFilter.Update()
 
-        self.Surface = transformFilter.GetOutputData()
+        self.Surface = transformFilter.GetOutput()
 
-        if self.Surface.GetSource():
-            self.Surface.GetSource().UnRegisterAllOutputs()
 
 
 if __name__=='__main__':

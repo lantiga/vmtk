@@ -88,7 +88,7 @@ class vmtkPotentialFit(pypes.pypeScript):
         polyDataPotentialFit.SetDimensionality(self.Dimensionality)
         polyDataPotentialFit.Update()
 
-        self.Surface = polyDataPotentialFit.GetOutputData()
+        self.Surface = polyDataPotentialFit.GetOutput()
 
 if __name__=='__main__':
     

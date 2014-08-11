@@ -87,10 +87,8 @@ class vmtkBranchGeometry(pypes.pypeScript):
 
         centerlineBranchGeometry.Update()
 
-        self.GeometryData = centerlineBranchGeometry.GetOutputData()
+        self.GeometryData = centerlineBranchGeometry.GetOutput()
 
-        if self.GeometryData.GetSource():
-            self.GeometryData.GetSource().UnRegisterAllOutputs()
         
 
 if __name__=='__main__':

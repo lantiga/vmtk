@@ -77,7 +77,7 @@ class vmtkCenterlineSections(pypes.pypeScript):
         centerlineSections.SetCenterlineSectionClosedArrayName(self.CenterlineSectionClosedArrayName)
         centerlineSections.Update()
 
-        self.CenterlineSections = centerlineSections.GetOutputData()
+        self.CenterlineSections = centerlineSections.GetOutput()
         self.Centerlines = centerlineSections.GetCenterlines()
 
 

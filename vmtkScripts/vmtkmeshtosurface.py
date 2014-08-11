@@ -49,16 +49,13 @@ class vmtkMeshToSurface(pypes.pypeScript):
         meshToSurfaceFilter.SetInputData(self.Mesh)
         meshToSurfaceFilter.Update()
 
-        self.Surface = meshToSurfaceFilter.GetOutputData()
+        self.Surface = meshToSurfaceFilter.GetOutput()
 
         if self.CleanOutput == 1:
             cleaner = vtk.vtkCleanPolyData()
             cleaner.SetInputConnection(meshToSurfaceFilter.GetOutputPort())
             cleaner.Update()
-            self.Surface = cleaner.GetOutputData()
-
-        if self.Surface.GetSource():
-            self.Surface.GetSource().UnRegisterAllOutputs()
+            self.Surface = cleaner.GetOutput()
 
 
 if __name__=='__main__':

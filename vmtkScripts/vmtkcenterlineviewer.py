@@ -69,7 +69,7 @@ class vmtkCenterlineViewer(pypes.pypeScript):
             cellCenters = vtk.vtkCellCenters()
             cellCenters.SetInputData(self.Centerlines)
             cellCenters.Update()
-            cellCenters.GetOutputData().GetPointData().SetActiveScalars(self.CellDataArrayName)
+            cellCenters.GetOutput().GetPointData().SetActiveScalars(self.CellDataArrayName)
             labelsMapper = vtk.vtkLabeledDataMapper();
             labelsMapper.SetInputConnection(cellCenters.GetOutputPort())
             labelsMapper.SetLabelModeToLabelScalars()

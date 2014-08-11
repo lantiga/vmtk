@@ -55,10 +55,7 @@ class vmtkCenterlineSmoothing(pypes.pypeScript):
         centerlineSmoothing.SetSmoothingFactor(self.SmoothingFactor)
         centerlineSmoothing.Update()
 
-        self.Centerlines = centerlineSmoothing.GetOutputData()
-
-        if self.Centerlines.GetSource():
-            self.Centerlines.GetSource().UnRegisterAllOutputs()
+        self.Centerlines = centerlineSmoothing.GetOutput()
 
 
 if __name__=='__main__':

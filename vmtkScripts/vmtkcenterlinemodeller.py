@@ -69,10 +69,8 @@ class vmtkCenterlineModeller(pypes.pypeScript):
         modeller.SetNegateFunction(self.NegateFunction)
         modeller.Update()
 
-        self.Image = modeller.GetOutputData()
+        self.Image = modeller.GetOutput()
         
-        if self.Image.GetSource():
-            self.Image.GetSource().UnRegisterAllOutputs()
 
 
 if __name__=='__main__':

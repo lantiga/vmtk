@@ -51,7 +51,7 @@ class vmtkLineResampling(pypes.pypeScript):
         cleaner.Update()
 
         if self.Length == 0.0:
-            self.Length = cleaner.GetOutputData().GetLength() / 100.0
+            self.Length = cleaner.GetOutput().GetLength() / 100.0
 
         splineFilter = vtk.vtkSplineFilter()
         splineFilter.SetInputConnection(cleaner.GetOutputPort())
@@ -59,10 +59,7 @@ class vmtkLineResampling(pypes.pypeScript):
         splineFilter.SetLength(self.Length)
         splineFilter.Update()
 
-        self.Surface = splineFilter.GetOutputData()
-
-        if self.Surface.GetSource():
-            self.Surface.GetSource().UnRegisterAllOutputs()
+        self.Surface = splineFilter.GetOutput()
 
 
 if __name__=='__main__':

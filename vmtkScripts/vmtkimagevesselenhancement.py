@@ -98,7 +98,7 @@ class vmtkImageVesselEnhancement(pypes.pypeScript):
         vesselness.Update()
 
         self.EnhancedImage = vtk.vtkImageData()
-        self.EnhancedImage.DeepCopy(vesselness.GetOutputData())
+        self.EnhancedImage.DeepCopy(vesselness.GetOutput())
 
     def ApplySatoVesselness(self):
 
@@ -116,7 +116,7 @@ class vmtkImageVesselEnhancement(pypes.pypeScript):
         vesselness.Update()
 
         self.EnhancedImage = vtk.vtkImageData()
-        self.EnhancedImage.DeepCopy(vesselness.GetOutputData())
+        self.EnhancedImage.DeepCopy(vesselness.GetOutput())
 
     def ApplyVED(self):
 
@@ -142,7 +142,7 @@ class vmtkImageVesselEnhancement(pypes.pypeScript):
         vesselness.Update()
 
         self.EnhancedImage = vtk.vtkImageData()
-        self.EnhancedImage.DeepCopy(vesselness.GetOutputData())
+        self.EnhancedImage.DeepCopy(vesselness.GetOutput())
 
     def ApplyVEDManniesing(self):
 
@@ -167,7 +167,7 @@ class vmtkImageVesselEnhancement(pypes.pypeScript):
         vesselness.Update()
 
         self.EnhancedImage = vtk.vtkImageData()
-        self.EnhancedImage.DeepCopy(vesselness.GetOutputData())
+        self.EnhancedImage.DeepCopy(vesselness.GetOutput())
 
     def Execute(self):
 

@@ -111,7 +111,7 @@ class vmtkBifurcationVectors(pypes.pypeScript):
         centerlineBifurcationVectors.SetNormalizeBifurcationVectors(self.NormalizeBifurcationVectors)
         centerlineBifurcationVectors.Update()
 
-        self.BifurcationVectors = centerlineBifurcationVectors.GetOutputData()
+        self.BifurcationVectors = centerlineBifurcationVectors.GetOutput()
 
 
 if __name__=='__main__':

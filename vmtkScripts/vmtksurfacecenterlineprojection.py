@@ -59,7 +59,7 @@ class vmtkSurfaceCenterlineProjection(pypes.pypeScript):
         projectionFilter.SetCenterlineRadiusArrayName(self.RadiusArrayName)
         projectionFilter.Update()
 
-        self.Surface = projectionFilter.GetOutputData()
+        self.Surface = projectionFilter.GetOutput()
 
 
 if __name__=='__main__':

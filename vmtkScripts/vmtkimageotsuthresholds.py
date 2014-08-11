@@ -69,7 +69,7 @@ class vmtkImageOtsuThresholds(pypes.pypeScript):
         otsuFilter.SetLabelOffset(self.LabelOffset)
         otsuFilter.Update()
 
-        self.Image = otsuFilter.GetOutputData()
+        self.Image = otsuFilter.GetOutput()
         self.Thresholds = otsuFilter.GetThresholds()
         self.Threshold = self.Thresholds.GetValue(self.OutputThresholdId)
 

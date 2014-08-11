@@ -51,7 +51,7 @@ class vmtkSurfaceReader(pypes.pypeScript):
         reader = vtk.vtkPolyDataReader()
         reader.SetFileName(self.InputFileName)
         reader.Update()
-        self.Surface = reader.GetOutputData()
+        self.Surface = reader.GetOutput()
 
     def ReadVTKXMLSurfaceFile(self):
         if (self.InputFileName == ''):
@@ -60,7 +60,7 @@ class vmtkSurfaceReader(pypes.pypeScript):
         reader = vtk.vtkXMLPolyDataReader()
         reader.SetFileName(self.InputFileName)
         reader.Update()
-        self.Surface = reader.GetOutputData()
+        self.Surface = reader.GetOutput()
 
     def ReadSTLSurfaceFile(self):
         if (self.InputFileName == ''):
@@ -69,7 +69,7 @@ class vmtkSurfaceReader(pypes.pypeScript):
         reader = vtk.vtkSTLReader()
         reader.SetFileName(self.InputFileName)
         reader.Update()
-        self.Surface = reader.GetOutputData()
+        self.Surface = reader.GetOutput()
 
     def ReadPLYSurfaceFile(self):
         if (self.InputFileName == ''):
@@ -78,7 +78,7 @@ class vmtkSurfaceReader(pypes.pypeScript):
         reader = vtk.vtkPLYReader()
         reader.SetFileName(self.InputFileName)
         reader.Update()
-        self.Surface = reader.GetOutputData()
+        self.Surface = reader.GetOutput()
 
     def ReadTecplotSurfaceFile(self):
         self.PrintLog('Reading Tecplot surface file.')
@@ -220,9 +220,6 @@ class vmtkSurfaceReader(pypes.pypeScript):
             self.ReadTecplotSurfaceFile()
         else:
             self.PrintError('Error: unsupported format '+ self.Format + '.')
-
-        if self.Surface.GetSource():
-            self.Surface.GetSource().UnRegisterAllOutputs()
 
         self.Output = self.Surface
 

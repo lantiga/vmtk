@@ -50,7 +50,7 @@ class vmtkMeshVolume(pypes.pypeScript):
         tetrahedralizeFilter.TetrahedraOnlyOn()
         tetrahedralizeFilter.Update()
 
-        self.Mesh = tetrahedralizeFilter.GetOutputData()
+        self.Mesh = tetrahedralizeFilter.GetOutput()
 
         self.Volume = 0.0
         cellPoints = vtk.vtkIdList()
@@ -62,8 +62,6 @@ class vmtkMeshVolume(pypes.pypeScript):
             point3 = self.Mesh.GetPoint(cellPoints.GetId(3))
             self.Volume += abs(vtk.vtkTetra.ComputeVolume(point0,point1,point2,point3))
 
-        if self.Mesh.GetSource():
-            self.Mesh.GetSource().UnRegisterAllOutputs()
 
 
 if __name__=='__main__':

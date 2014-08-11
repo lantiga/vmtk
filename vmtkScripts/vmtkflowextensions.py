@@ -105,7 +105,7 @@ class vmtkFlowExtensions(pypes.pypeScript):
             boundaryExtractor = vtkvmtk.vtkvmtkPolyDataBoundaryExtractor()
             boundaryExtractor.SetInputData(self.Surface)
             boundaryExtractor.Update()
-            boundaries = boundaryExtractor.GetOutputData()
+            boundaries = boundaryExtractor.GetOutput()
             numberOfBoundaries = boundaries.GetNumberOfCells()
             seedPoints = vtk.vtkPoints()
             for i in range(numberOfBoundaries):
@@ -174,10 +174,8 @@ class vmtkFlowExtensions(pypes.pypeScript):
             flowExtensionsFilter.SetBoundaryIds(boundaryIds)
         flowExtensionsFilter.Update()
 
-        self.Surface = flowExtensionsFilter.GetOutputData()
+        self.Surface = flowExtensionsFilter.GetOutput()
 
-        if self.Surface.GetSource():
-            self.Surface.GetSource().UnRegisterAllOutputs()
 
 
 if __name__=='__main__':

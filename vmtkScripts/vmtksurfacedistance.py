@@ -64,7 +64,7 @@ class vmtkSurfaceDistance(pypes.pypeScript):
             normalsFilter.AutoOrientNormalsOn()
             normalsFilter.SetFlipNormals(self.FlipNormals)
             normalsFilter.Update()
-            self.ReferenceSurface.GetPointData().SetNormals(normalsFilter.GetOutputData().GetPointData().GetNormals())
+            self.ReferenceSurface.GetPointData().SetNormals(normalsFilter.GetOutput().GetPointData().GetNormals())
 
         if self.DistanceArrayName != '' or self.DistanceVectorsArrayName != '' or self.SignedDistanceArrayName != '':
             self.PrintLog('Computing distance.')
@@ -78,7 +78,7 @@ class vmtkSurfaceDistance(pypes.pypeScript):
             if self.SignedDistanceArrayName != '':
                 surfaceDistance.SetSignedDistanceArrayName(self.SignedDistanceArrayName)
             surfaceDistance.Update()
-            self.Surface = surfaceDistance.GetOutputData()
+            self.Surface = surfaceDistance.GetOutput()
 
 if __name__=='__main__':
     main = pypes.pypeMain()

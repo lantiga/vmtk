@@ -52,7 +52,7 @@ class vmtkSurfaceModeller(pypes.pypeScript):
         surfaceModellerFilter.SetSampleSpacing(self.SampleSpacing)
         surfaceModellerFilter.SetNeighborhoodSize(40)
         surfaceModellerFilter.Update()
-        self.Image = surfaceModellerFilter.GetOutputData()
+        self.Image = surfaceModellerFilter.GetOutput()
 
         if self.NegativeInside:
             negate = vtk.vtkImageMathematics()
@@ -60,10 +60,8 @@ class vmtkSurfaceModeller(pypes.pypeScript):
             negate.SetConstantK(-1.0)
             negate.SetOperationToMultiplyByK()
             negate.Update()
-            self.Image = negate.GetOutputData()
+            self.Image = negate.GetOutput()
 
-        if self.Image.GetSource():
-            self.Image.GetSource().UnRegisterAllOutputs()
 
 
 if __name__=='__main__':

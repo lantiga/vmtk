@@ -57,24 +57,21 @@ class vmtkMarchingCubes(pypes.pypeScript):
         translateExtent.Update()
 
         if (self.ArrayName != ''):
-            translateExtent.GetOutputData().GetPointData().SetActiveScalars(self.ArrayName)
+            translateExtent.GetOutput().GetPointData().SetActiveScalars(self.ArrayName)
 
         marchingCubes = vtk.vtkMarchingCubes()
         marchingCubes.SetInputConnection(translateExtent.GetOutputPort())
         marchingCubes.SetValue(0,self.Level)
         marchingCubes.Update()
 
-        self.Surface = marchingCubes.GetOutputData()
+        self.Surface = marchingCubes.GetOutput()
 
         if self.Connectivity == 1:
             connectivityFilter = vtk.vtkPolyDataConnectivityFilter()
             connectivityFilter.SetInputData(self.Surface)
             connectivityFilter.SetExtractionModeToLargestRegion()
             connectivityFilter.Update()
-            self.Surface = connectivityFilter.GetOutputData()
-
-        if self.Surface.GetSource():
-            self.Surface.GetSource().UnRegisterAllOutputs()
+            self.Surface = connectivityFilter.GetOutput()
 
 
 if __name__=='__main__':

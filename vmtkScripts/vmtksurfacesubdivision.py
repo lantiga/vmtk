@@ -61,10 +61,8 @@ class vmtkSurfaceSubdivision(pypes.pypeScript):
         subdivisionFilter.SetNumberOfSubdivisions(self.NumberOfSubdivisions)
         subdivisionFilter.Update()
 
-        self.Surface = subdivisionFilter.GetOutputData()
+        self.Surface = subdivisionFilter.GetOutput()
 
-        if self.Surface.GetSource():
-            self.Surface.GetSource().UnRegisterAllOutputs()
 
 
 if __name__=='__main__':

@@ -510,7 +510,7 @@ class vmtkTetrInGenerator(pypes.pypeScript):
                 normalsFilter.AutoOrientNormalsOn()
                 normalsFilter.ConsistencyOn()
                 normalsFilter.Update()
-                normalsSurface = normalsFilter.GetOutputData()
+                normalsSurface = normalsFilter.GetOutput()
                 locator = vtk.vtkMergePoints()
                 locator.SetDataSet(normalsSurface)
                 locator.BuildLocator()

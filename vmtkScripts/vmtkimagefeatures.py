@@ -83,7 +83,7 @@ class vmtkImageFeatures(pypes.pypeScript):
         imageInvert.Update()
 
         self.FeatureImage = vtk.vtkImageData()
-        self.FeatureImage.DeepCopy(imageInvert.GetOutputData())
+        self.FeatureImage.DeepCopy(imageInvert.GetOutput())
         self.FeatureImage.Update()
 
     def BuildFWHMBasedFeatureImage(self):
@@ -100,7 +100,7 @@ class vmtkImageFeatures(pypes.pypeScript):
         fwhmFeatureImageFilter.Update()
 	
         self.FeatureImage = vtk.vtkImageData()
-        self.FeatureImage.DeepCopy(fwhmFeatureImageFilter.GetOutputData())
+        self.FeatureImage.DeepCopy(fwhmFeatureImageFilter.GetOutput())
         self.FeatureImage.Update()
 
     def BuildUpwindGradientBasedFeatureImage(self):
@@ -117,7 +117,7 @@ class vmtkImageFeatures(pypes.pypeScript):
 
         featureImage = None
         if self.SigmoidRemapping==1:
-            scalarRange = gradientMagnitude.GetOutputData().GetPointData().GetScalars().GetRange()
+            scalarRange = gradientMagnitude.GetOutput().GetPointData().GetScalars().GetRange()
             inputMinimum = scalarRange[0]
             inputMaximum = scalarRange[1]
             alpha = - (inputMaximum - inputMinimum) / 6.0
@@ -129,12 +129,12 @@ class vmtkImageFeatures(pypes.pypeScript):
             sigmoid.SetOutputMinimum(0.0)
             sigmoid.SetOutputMaximum(1.0)
             sigmoid.Update()
-            featureImage = sigmoid.GetOutputData()
+            featureImage = sigmoid.GetOutput()
         else:
             boundedReciprocal = vtkvmtk.vtkvmtkBoundedReciprocalImageFilter()
             boundedReciprocal.SetInputConnection(gradientMagnitude.GetOutputPort())
             boundedReciprocal.Update()
-            featureImage = boundedReciprocal.GetOutputData()
+            featureImage = boundedReciprocal.GetOutput()
  
         self.FeatureImage = vtk.vtkImageData()
         self.FeatureImage.DeepCopy(featureImage)
@@ -160,7 +160,7 @@ class vmtkImageFeatures(pypes.pypeScript):
 
         featureImage = None
         if self.SigmoidRemapping==1:
-            scalarRange = gradientMagnitude.GetOutputData().GetPointData().GetScalars().GetRange()
+            scalarRange = gradientMagnitude.GetOutput().GetPointData().GetScalars().GetRange()
             inputMinimum = scalarRange[0]
             inputMaximum = scalarRange[1]
             alpha = - (inputMaximum - inputMinimum) / 6.0
@@ -172,12 +172,12 @@ class vmtkImageFeatures(pypes.pypeScript):
             sigmoid.SetOutputMinimum(0.0)
             sigmoid.SetOutputMaximum(1.0)
             sigmoid.Update()
-            featureImage = sigmoid.GetOutputData()
+            featureImage = sigmoid.GetOutput()
         else:
             boundedReciprocal = vtkvmtk.vtkvmtkBoundedReciprocalImageFilter()
             boundedReciprocal.SetInputConnection(gradientMagnitude.GetOutputPort())
             boundedReciprocal.Update()
-            featureImage = boundedReciprocal.GetOutputData()
+            featureImage = boundedReciprocal.GetOutput()
 
         self.FeatureImage = vtk.vtkImageData()
         self.FeatureImage.DeepCopy(featureImage)

@@ -50,16 +50,13 @@ class vmtkSurfaceToMesh(pypes.pypeScript):
             cleaner = vtk.vtkCleanPolyData()
             cleaner.SetInputData(self.Surface)
             cleaner.Update()
-            self.Surface = cleaner.GetOutputData()
+            self.Surface = cleaner.GetOutput()
 
         surfaceToMeshFilter = vtkvmtk.vtkvmtkPolyDataToUnstructuredGridFilter()
         surfaceToMeshFilter.SetInputData(self.Surface)
         surfaceToMeshFilter.Update()
 
-        self.Mesh = surfaceToMeshFilter.GetOutputData()
-
-        if self.Mesh.GetSource():
-            self.Mesh.GetSource().UnRegisterAllOutputs()
+        self.Mesh = surfaceToMeshFilter.GetOutput()
 
 
 if __name__=='__main__':

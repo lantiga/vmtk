@@ -66,10 +66,8 @@ class vmtkSurfaceBooleanOperation(pypes.pypeScript):
         booleanOperationFilter.SetTolerance(self.Tolerance)
         booleanOperationFilter.Update()
 
-        self.Surface = booleanOperationFilter.GetOutputData()
+        self.Surface = booleanOperationFilter.GetOutput()
 
-        if self.Surface.GetSource():
-            self.Surface.GetSource().UnRegisterAllOutputs()
 
 if __name__=='__main__':
     main = pypes.pypeMain()

@@ -138,7 +138,7 @@ class vmtkImageInitialization(pypes.pypeScript):
         subtract.Update()
 
         self.InitialLevelSets = vtk.vtkImageData()
-        self.InitialLevelSets.DeepCopy(subtract.GetOutputData())
+        self.InitialLevelSets.DeepCopy(subtract.GetOutput())
         self.InitialLevelSets.Update()
 
         self.IsoSurfaceValue = 0.0
@@ -173,7 +173,7 @@ class vmtkImageInitialization(pypes.pypeScript):
             threshold.SetOutValue(1.0)
             threshold.Update()
         
-            thresholdedImage = threshold.GetOutputData()
+            thresholdedImage = threshold.GetOutput()
  
         self.InitialLevelSets = vtk.vtkImageData()
         self.InitialLevelSets.DeepCopy(thresholdedImage)
@@ -230,9 +230,9 @@ class vmtkImageInitialization(pypes.pypeScript):
             threshold.SetOutValue(scalarRange[0] - scalarRange[1])
             threshold.Update()
         
-            scalarRange = threshold.GetOutputData().GetScalarRange()
+            scalarRange = threshold.GetOutput().GetScalarRange()
 
-            thresholdedImage = threshold.GetOutputData()
+            thresholdedImage = threshold.GetOutput()
 
         scale = 1.0
         if scalarRange[1]-scalarRange[0] > 0.0:
@@ -245,7 +245,7 @@ class vmtkImageInitialization(pypes.pypeScript):
         shiftScale.SetOutputScalarTypeToFloat()
         shiftScale.Update()
         
-        speedImage = shiftScale.GetOutputData()
+        speedImage = shiftScale.GetOutput()
 
         fastMarching = vtkvmtk.vtkvmtkFastMarchingUpwindGradientImageFilter()
         fastMarching.SetInputData(speedImage)
@@ -266,7 +266,7 @@ class vmtkImageInitialization(pypes.pypeScript):
         subtract.Update()
 
         self.InitialLevelSets = vtk.vtkImageData()
-        self.InitialLevelSets.DeepCopy(subtract.GetOutputData())
+        self.InitialLevelSets.DeepCopy(subtract.GetOutput())
         self.InitialLevelSets.Update()
 
         self.IsoSurfaceValue = 0.0
@@ -313,9 +313,9 @@ class vmtkImageInitialization(pypes.pypeScript):
             threshold.SetOutValue(scalarRange[0] - scalarRange[1])
             threshold.Update()
         
-            scalarRange = threshold.GetOutputData().GetScalarRange()
+            scalarRange = threshold.GetOutput().GetScalarRange()
 
-            thresholdedImage = threshold.GetOutputData()
+            thresholdedImage = threshold.GetOutput()
 
         scale = 1.0
         if scalarRange[1]-scalarRange[0] > 0.0:
@@ -328,7 +328,7 @@ class vmtkImageInitialization(pypes.pypeScript):
         shiftScale.SetOutputScalarTypeToFloat()
         shiftScale.Update()
         
-        speedImage = shiftScale.GetOutputData()
+        speedImage = shiftScale.GetOutput()
 
         collidingFronts = vtkvmtk.vtkvmtkCollidingFrontsImageFilter()
         collidingFronts.SetInputData(speedImage)
@@ -345,7 +345,7 @@ class vmtkImageInitialization(pypes.pypeScript):
         subtract.Update()
 
         self.InitialLevelSets = vtk.vtkImageData()
-        self.InitialLevelSets.DeepCopy(subtract.GetOutputData())
+        self.InitialLevelSets.DeepCopy(subtract.GetOutput())
         self.InitialLevelSets.Update()
 
         self.IsoSurfaceValue = 0.0 
@@ -384,7 +384,7 @@ class vmtkImageInitialization(pypes.pypeScript):
         dilateErode.SetKernelSize(3,3,3)
         dilateErode.Update()
 
-        self.InitialLevelSets.DeepCopy(dilateErode.GetOutputData())
+        self.InitialLevelSets.DeepCopy(dilateErode.GetOutput())
 
         self.IsoSurfaceValue = 0.0
 
@@ -396,13 +396,11 @@ class vmtkImageInitialization(pypes.pypeScript):
         marchingCubes.SetValue(0,value)
         marchingCubes.Update()
 
-        self.Surface = marchingCubes.GetOutputData()
+        self.Surface = marchingCubes.GetOutput()
 
         self.OutputText('Displaying.\n')
   
-        self.SurfaceViewer.Surface = marchingCubes.GetOutputData()
-        if self.SurfaceViewer.Surface.GetSource():
-            self.SurfaceViewer.Surface.GetSource().UnRegisterAllOutputs()
+        self.SurfaceViewer.Surface = marchingCubes.GetOutput()
         self.SurfaceViewer.Display = 0
         self.SurfaceViewer.Opacity = 0.5
         self.SurfaceViewer.BuildView()
@@ -428,7 +426,7 @@ class vmtkImageInitialization(pypes.pypeScript):
             minFilter.SetInput1Data(self.MergedInitialLevelSets)
             minFilter.SetInput2Data(self.InitialLevelSets)
             minFilter.Update()
-            self.MergedInitialLevelSets = minFilter.GetOutputData()
+            self.MergedInitialLevelSets = minFilter.GetOutput()
 
     def Execute(self):    
         if self.Image == None:
@@ -438,7 +436,7 @@ class vmtkImageInitialization(pypes.pypeScript):
         cast.SetInputData(self.Image)
         cast.SetOutputScalarTypeToFloat()
         cast.Update()
-        self.Image = cast.GetOutputData()
+        self.Image = cast.GetOutput()
 
         if self.NegateImage:
             scalarRange = self.Image.GetScalarRange()
@@ -452,7 +450,7 @@ class vmtkImageInitialization(pypes.pypeScript):
             shiftScale.SetShift(scalarRange[1]+scalarRange[0])
             shiftScale.SetOutputScalarTypeToFloat()
             shiftScale.Update()
-            self.Image = shiftScale.GetOutputData()
+            self.Image = shiftScale.GetOutput()
 
         if self.Interactive:
             if not self.vmtkRenderer:

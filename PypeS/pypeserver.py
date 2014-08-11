@@ -43,6 +43,7 @@ def RunPypeProcess(arguments, inputStream=None, outputStream=None, logOn=True):
         pipe.ParseArguments()
         pipe.Execute() 
     except BaseException, e:
+        print 'Exception:', e
         pass
     del pipe
 

@@ -53,7 +53,7 @@ class vmtkImageNormalize(pypes.pypeScript):
         normalizeFilter.SetInputConnection(cast.GetOutputPort())
         normalizeFilter.Update()
 
-        self.Image = normalizeFilter.GetOutputData()
+        self.Image = normalizeFilter.GetOutput()
 
 
 if __name__=='__main__':

@@ -193,11 +193,8 @@ class vmtkLevelSetSegmentation(pypes.pypeScript):
         self.EndProgress()
   
         self.LevelSetsOutput = vtk.vtkImageData()
-        self.LevelSetsOutput.DeepCopy(levelSets.GetOutputData())
+        self.LevelSetsOutput.DeepCopy(levelSets.GetOutput())
         self.LevelSetsOutput.Update()
-
-        if self.LevelSetsOutput.GetSource():
-            self.LevelSetsOutput.GetSource().UnRegisterAllOutputs()
 
     def MergeLevelSet(self):
 
@@ -209,10 +206,7 @@ class vmtkLevelSetSegmentation(pypes.pypeScript):
             minFilter.SetInput1Data(self.LevelSets)
             minFilter.SetInput2Data(self.LevelSetsOutput)
             minFilter.Update()
-            self.LevelSets = minFilter.GetOutputData()
-
-        if self.LevelSets.GetSource():
-            self.LevelSets.GetSource().UnRegisterAllOutputs()
+            self.LevelSets = minFilter.GetOutput()
 
     def DisplayLevelSetSurface(self,levelSets,value=0.0):
       
@@ -223,9 +217,7 @@ class vmtkLevelSetSegmentation(pypes.pypeScript):
 
         self.OutputText('Displaying.\n')
 
-        self.SurfaceViewer.Surface = marchingCubes.GetOutputData()
-        if self.SurfaceViewer.Surface.GetSource():
-            self.SurfaceViewer.Surface.GetSource().UnRegisterAllOutputs()
+        self.SurfaceViewer.Surface = marchingCubes.GetOutput()
         self.SurfaceViewer.Display = 0
         self.SurfaceViewer.Opacity = 0.5
         self.SurfaceViewer.BuildView()
@@ -261,7 +253,7 @@ class vmtkLevelSetSegmentation(pypes.pypeScript):
         cast.SetInputData(self.Image)
         cast.SetOutputScalarTypeToFloat()
         cast.Update()
-        self.Image = cast.GetOutputData()
+        self.Image = cast.GetOutput()
 
         if not self.InitializationImage:
             self.InitializationImage = self.Image

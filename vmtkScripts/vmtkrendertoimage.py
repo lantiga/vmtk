@@ -52,7 +52,7 @@ class vmtkRenderToImage(pypes.pypeScript):
         windowToImage.Update()
         self.vmtkRenderer.RenderWindow.Render()
 
-        self.Image = windowToImage.GetOutputData()
+        self.Image = windowToImage.GetOutput()
  
         
 if __name__=='__main__':

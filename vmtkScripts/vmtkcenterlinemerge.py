@@ -71,7 +71,7 @@ class vmtkCenterlineMerge(pypes.pypeScript):
         mergeCenterlines.SetMergeBlanked(self.MergeBlanked)
         mergeCenterlines.Update()
 
-        self.Centerlines = mergeCenterlines.GetOutputData()
+        self.Centerlines = mergeCenterlines.GetOutput()
 
 
 if __name__=='__main__':

@@ -75,12 +75,12 @@ class vmtkSurfaceClipper(pypes.pypeScript):
         elif self.WidgetType == "sphere":
             self.ClipWidget.GetSphere(self.ClipFunction)
         self.Clipper.Update()
-        self.Surface.DeepCopy(self.Clipper.GetOutputData())
+        self.Surface.DeepCopy(self.Clipper.GetOutput())
         self.Surface.Update()
         self.ClippedSurface.DeepCopy(self.Clipper.GetClippedOutputData())
         self.ClippedSurface.Update()
         self.Cutter.Update()
-        self.CutLines.DeepCopy(self.Cutter.GetOutputData())
+        self.CutLines.DeepCopy(self.Cutter.GetOutput())
         self.ClipWidget.Off()
 
     def InteractCallback(self, obj):
@@ -181,22 +181,22 @@ class vmtkSurfaceClipper(pypes.pypeScript):
             self.Cutter.SetValue(0,self.ClipValue)
             self.Cutter.Update()
 
-            self.Surface = self.Clipper.GetOutputData()
+            self.Surface = self.Clipper.GetOutput()
             self.ClippedSurface = self.Clipper.GetClippedOutputData()
 
-            self.CutLines = self.Cutter.GetOutputData()
+            self.CutLines = self.Cutter.GetOutput()
 
         if self.CleanOutput == 1:
 
             cleaner = vtk.vtkCleanPolyData()
             cleaner.SetInputData(self.Surface)
             cleaner.Update()
-            self.Surface = cleaner.GetOutputData()
+            self.Surface = cleaner.GetOutput()
 
             cleaner = vtk.vtkCleanPolyData()
             cleaner.SetInputData(self.ClippedSurface)
             cleaner.Update()
-            self.ClippedSurface = cleaner.GetOutputData()
+            self.ClippedSurface = cleaner.GetOutput()
 
             cleaner = vtk.vtkCleanPolyData()
             cleaner.SetInputData(self.CutLines)
@@ -204,10 +204,8 @@ class vmtkSurfaceClipper(pypes.pypeScript):
             stripper = vtk.vtkStripper()
             stripper.SetInputConnection(cleaner.GetOutputPort())
             stripper.Update()
-            self.CutLines = stripper.GetOutputData()
+            self.CutLines = stripper.GetOutput()
 
-        if self.Surface.GetSource():
-            self.Surface.GetSource().UnRegisterAllOutputs()
 
 
 if __name__=='__main__':

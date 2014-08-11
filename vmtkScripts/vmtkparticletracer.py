@@ -146,7 +146,7 @@ class vmtkParticleTracer(pypes.pypeScript):
             sd.SetInputData(self.Source)
             sd.SetNumberOfSubdivisions(1)
             sd.Update()
-            self.Source = sd.GetOutputData()
+            self.Source = sd.GetOutput()
             
         self.Source.GetPointData().SetActiveScalars('speed')
         cp = vtk.vtkClipPolyData()
@@ -154,7 +154,7 @@ class vmtkParticleTracer(pypes.pypeScript):
         cp.GenerateClipScalarsOff()
         cp.SetValue(self.MinSpeed)
         cp.Update()
-        self.Source = cp.GetOutputData()
+        self.Source = cp.GetOutput()
         
         tracer = vtkvmtk.vtkvmtkStaticTemporalStreamTracer()
         tracer.SetInputData(self.Mesh)
@@ -181,7 +181,7 @@ class vmtkParticleTracer(pypes.pypeScript):
             tracer.PeriodicOn()
         tracer.Update()
 
-        self.Traces = tracer.GetOutputData()
+        self.Traces = tracer.GetOutput()
 
 if __name__=='__main__':
     main = pypes.pypeMain()

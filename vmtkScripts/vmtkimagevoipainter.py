@@ -201,7 +201,7 @@ class vmtkImageVOIPainter(pypes.pypeScript):
         translate.SetTranslation(wholeExtent[0],wholeExtent[2],wholeExtent[4])
         translate.Update()
 
-        self.Image.ShallowCopy(translate.GetOutputData())
+        self.Image.ShallowCopy(translate.GetOutput())
 
     def Execute(self):
 

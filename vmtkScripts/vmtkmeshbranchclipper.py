@@ -139,16 +139,9 @@ class vmtkMeshBranchClipper(pypes.pypeScript):
         clipper.Update()
 
         if not self.InsideOut:
-            self.Mesh = clipper.GetOutputData()
+            self.Mesh = clipper.GetOutput()
         else:
             self.Mesh = clipper.GetClippedOutputData()
-
-        if self.Mesh:
-            if self.Mesh.GetSource():
-                self.Mesh.GetSource().UnRegisterAllOutputs()
-
-        if self.Centerlines.GetSource():
-            self.Centerlines.GetSource().UnRegisterAllOutputs()
 
         if self.OwnRenderer:
             self.vmtkRenderer.Deallocate()

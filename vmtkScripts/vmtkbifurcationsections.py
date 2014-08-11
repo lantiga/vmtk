@@ -132,7 +132,7 @@ class vmtkBifurcationSections(pypes.pypeScript):
         bifurcationSections.SetBifurcationSectionDistanceSpheresArrayName(self.BifurcationSectionDistanceSpheresArrayName)
         bifurcationSections.Update()
 
-        self.BifurcationSections = bifurcationSections.GetOutputData()
+        self.BifurcationSections = bifurcationSections.GetOutput()
 
         if self.OutputSectionPointGroupId != None and self.OutputSectionPointBifurcationGroupId != None:
             groupIds = self.BifurcationSections.GetCellData().GetArray(self.BifurcationSectionGroupIdsArrayName)

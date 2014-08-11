@@ -74,7 +74,7 @@ class vmtkImageCurvedMPR(pypes.pypeScript):
         curvedMPRImageFilter.SetReslicingBackgroundLevel(self.ReslicingBackgroundLevel)
         curvedMPRImageFilter.Update()
 
-        self.Image = curvedMPRImageFilter.GetOutputData()
+        self.Image = curvedMPRImageFilter.GetOutput()
 
         
 if __name__=='__main__':

@@ -75,7 +75,7 @@ class vmtkDistanceToCenterlines(pypes.pypeScript):
             distanceToCenterlinesFilter.SetCenterlineRadiusArrayName(self.RadiusArrayName)
             distanceToCenterlinesFilter.Update()    
             
-            surface = distanceToCenterlinesFilter.GetOutputData()
+            surface = distanceToCenterlinesFilter.GetOutput()
             centerlineArray = surface.GetPointData().GetArray(self.DistanceToCenterlinesArrayName)
             radiusArray = surface.GetPointData().GetArray(self.RadiusArrayName)
 
@@ -101,11 +101,8 @@ class vmtkDistanceToCenterlines(pypes.pypeScript):
             distanceToCenterlinesFilter.SetCenterlineRadiusArrayName(self.RadiusArrayName)
             distanceToCenterlinesFilter.Update()
     
-            self.Surface = distanceToCenterlinesFilter.GetOutputData()
+            self.Surface = distanceToCenterlinesFilter.GetOutput()
 
-
-        if self.Surface.GetSource():
-            self.Surface.GetSource().UnRegisterAllOutputs()
 
 
 if __name__=='__main__':

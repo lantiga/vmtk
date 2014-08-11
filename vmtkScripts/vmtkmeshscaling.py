@@ -53,10 +53,7 @@ class vmtkMeshScaling(pypes.pypeScript):
         transformFilter.SetTransform(transform)
         transformFilter.Update()
 
-        self.Mesh = transformFilter.GetOutputData()
-
-        if self.Mesh.GetSource():
-            self.Mesh.GetSource().UnRegisterAllOutputs()
+        self.Mesh = transformFilter.GetOutput()
 
 
 if __name__=='__main__':
