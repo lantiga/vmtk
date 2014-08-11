@@ -59,7 +59,7 @@ class vmtkImageLineTracer(pypes.pypeScript):
             ])
 
     def NextCallback(self, obj):
-           if self.SliceVOI[self.Axis*2+1] < self.Image.GetWholeExtent()[self.Axis*2+1]:
+           if self.SliceVOI[self.Axis*2+1] < self.Image.GetExtent()[self.Axis*2+1]:
                 self.SliceVOI[self.Axis*2+1] += 1
                 self.SliceVOI[self.Axis*2] = self.SliceVOI[self.Axis*2+1]
                 origin = self.Image.GetOrigin()
@@ -71,7 +71,7 @@ class vmtkImageLineTracer(pypes.pypeScript):
            obj.Render()
 
     def PreviousCallback(self, obj):
-	   if self.SliceVOI[self.Axis*2] > self.Image.GetWholeExtent()[self.Axis*2]:
+	   if self.SliceVOI[self.Axis*2] > self.Image.GetExtent()[self.Axis*2]:
                 self.SliceVOI[self.Axis*2] -= 1
                 self.SliceVOI[self.Axis*2+1] = self.SliceVOI[self.Axis*2]
                 origin = self.Image.GetOrigin()

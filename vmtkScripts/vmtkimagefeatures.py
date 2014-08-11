@@ -84,7 +84,6 @@ class vmtkImageFeatures(pypes.pypeScript):
 
         self.FeatureImage = vtk.vtkImageData()
         self.FeatureImage.DeepCopy(imageInvert.GetOutput())
-        self.FeatureImage.Update()
 
     def BuildFWHMBasedFeatureImage(self):
         
@@ -101,7 +100,6 @@ class vmtkImageFeatures(pypes.pypeScript):
 	
         self.FeatureImage = vtk.vtkImageData()
         self.FeatureImage.DeepCopy(fwhmFeatureImageFilter.GetOutput())
-        self.FeatureImage.Update()
 
     def BuildUpwindGradientBasedFeatureImage(self):
  
@@ -138,7 +136,6 @@ class vmtkImageFeatures(pypes.pypeScript):
  
         self.FeatureImage = vtk.vtkImageData()
         self.FeatureImage.DeepCopy(featureImage)
-        self.FeatureImage.Update()
   
     def BuildGradientBasedFeatureImage(self):
 
@@ -181,7 +178,6 @@ class vmtkImageFeatures(pypes.pypeScript):
 
         self.FeatureImage = vtk.vtkImageData()
         self.FeatureImage.DeepCopy(featureImage)
-        self.FeatureImage.Update()
 
     def Execute(self):
 

@@ -77,7 +77,7 @@ class vmtkImageViewer(pypes.pypeScript):
 
         if (self.ArrayName != ''):
             self.Image.GetPointData().SetActiveScalars(self.ArrayName)
-        wholeExtent = self.Image.GetWholeExtent()
+        wholeExtent = self.Image.GetExtent()
 
         if self.Picker == None:
             self.Picker = vtk.vtkCellPicker()

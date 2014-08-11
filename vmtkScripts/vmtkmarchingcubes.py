@@ -50,7 +50,7 @@ class vmtkMarchingCubes(pypes.pypeScript):
         if self.Image == None:
             self.PrintError('Error: No Image.')
 
-        extent = self.Image.GetWholeExtent()
+        extent = self.Image.GetExtent()
         translateExtent = vtk.vtkImageTranslateExtent()
         translateExtent.SetInputData(self.Image)
         translateExtent.SetTranslation(-extent[0],-extent[2],-extent[4])

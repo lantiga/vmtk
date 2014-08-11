@@ -80,7 +80,7 @@ class vmtkImageVOISelector(pypes.pypeScript):
 
     def Display(self):
 
-        wholeExtent = self.Image.GetWholeExtent()
+        wholeExtent = self.Image.GetExtent()
 
         picker = vtk.vtkCellPicker()
         picker.SetTolerance(0.005)
@@ -166,7 +166,7 @@ class vmtkImageVOISelector(pypes.pypeScript):
 
     def ExtractVOI(self):
 
-        wholeExtent = self.Image.GetWholeExtent()
+        wholeExtent = self.Image.GetExtent()
         origin = self.Image.GetOrigin()
         spacing = self.Image.GetSpacing()
 

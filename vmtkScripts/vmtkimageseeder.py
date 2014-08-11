@@ -68,7 +68,7 @@ class vmtkImageSeeder(pypes.pypeScript):
         obj.GetCursorData(cursorData)
         spacing = self.Image.GetSpacing()
         origin = self.Image.GetOrigin()
-        extent = self.Image.GetWholeExtent()
+        extent = self.Image.GetExtent()
         point = [0.0,0.0,0.0]
         point[0] = cursorData[0] * spacing[0] + origin[0]
         point[1] = cursorData[1] * spacing[1] + origin[1]
@@ -96,7 +96,7 @@ class vmtkImageSeeder(pypes.pypeScript):
 
         if (self.ArrayName != ''):
             self.Image.GetPointData().SetActiveScalars(self.ArrayName)
-        wholeExtent = self.Image.GetWholeExtent()
+        wholeExtent = self.Image.GetExtent()
 
 #        self.PlaneWidgetX.SetResliceInterpolateToNearestNeighbour()
         self.PlaneWidgetX.SetResliceInterpolateToLinear()

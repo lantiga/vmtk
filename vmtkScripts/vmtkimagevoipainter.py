@@ -80,7 +80,7 @@ class vmtkImageVOIPainter(pypes.pypeScript):
 
     def Display(self):
 
-        wholeExtent = self.Image.GetWholeExtent()
+        wholeExtent = self.Image.GetExtent()
 
         picker = vtk.vtkCellPicker()
         picker.SetTolerance(0.005)
@@ -164,7 +164,7 @@ class vmtkImageVOIPainter(pypes.pypeScript):
 
     def PaintVOI(self):
 
-        wholeExtent = self.Image.GetWholeExtent()[:]
+        wholeExtent = self.Image.GetExtent()[:]
         origin = self.Image.GetOrigin()
         spacing = self.Image.GetSpacing()
 
