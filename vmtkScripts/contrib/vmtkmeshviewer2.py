@@ -92,7 +92,7 @@ class vmtkMeshViewer2(pypes.pypeScript):
         self.PlaneWidget.GetPlane(clipPlane)
         meshClipFilter.SetClipFunction(clipPlane)
         meshClipFilter.Update()
-        return meshClipFilter.GetOutputData()
+        return meshClipFilter.GetOutput()
         
     def ExtractMesh(self):
         meshExtractFilter = vtk.vtkExtractGeometry()
@@ -102,7 +102,7 @@ class vmtkMeshViewer2(pypes.pypeScript):
         self.PlaneWidget.GetPlane(clipPlane)
         meshExtractFilter.SetImplicitFunction(clipPlane)
         meshExtractFilter.Update()
-        return meshExtractFilter.GetOutputData()
+        return meshExtractFilter.GetOutput()
         
     def ThresholdMesh(self):
         thresholder = vtk.vtkThreshold()
@@ -113,7 +113,7 @@ class vmtkMeshViewer2(pypes.pypeScript):
             thresholder.ThresholdByLower(self.Threshold)
         thresholder.SetInputArrayToProcess(0,0,0,1,self.ArrayName)
         thresholder.Update()
-        self.Mesh = thresholder.GetOutputData()
+        self.Mesh = thresholder.GetOutput()
           
 
     def PlaneCallback(self,widget,event_string):

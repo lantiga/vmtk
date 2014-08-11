@@ -85,7 +85,7 @@ class vmtkSufaceResolution(pypes.pypeScript):
         sampler.SetImplicitFunction(rbf)
         sampler.SetSampleArrayName(self.ResolutionArrayName)
         sampler.Update()
-        return sampler.GetOutputData()
+        return sampler.GetOutput()
       
     
     def InitializeSpheres(self):
@@ -246,11 +246,11 @@ class vmtkSufaceResolution(pypes.pypeScript):
         glyphSource = vtk.vtkSphereSource()
         glyphSource.SetRadius(1)
         glyphs.SetInputData(self.Spheres)
-        glyphs.SetSourceData(glyphSource.GetOutputData())
+        glyphs.SetSourceData(glyphSource.GetOutput())
         glyphs.SetScaleModeToScaleByScalar()
         glyphs.SetScaleFactor(1.)
         glyphMapper = vtk.vtkPolyDataMapper()
-        glyphMapper.SetInputConnection(glyphs.GetOutputData())
+        glyphMapper.SetInputConnection(glyphs.GetOutput())
         glyphMapper.ScalarVisibilityOff()
         self.SpheresActor = vtk.vtkActor()
         self.SpheresActor.SetMapper(glyphMapper)
@@ -263,7 +263,7 @@ class vmtkSufaceResolution(pypes.pypeScript):
         examineGlyphSource = vtk.vtkSphereSource()
         examineGlyphSource.SetRadius(1)
         examineGlyphs.SetInputData(self.ExamineSpheres)
-        examineGlyphs.SetSourceData(examineGlyphSource.GetOutputData())
+        examineGlyphs.SetSourceData(examineGlyphSource.GetOutput())
         examineGlyphs.SetScaleModeToScaleByScalar()
         examineGlyphs.SetScaleFactor(1.)
         examineGlyphMapper = vtk.vtkPolyDataMapper()
@@ -328,9 +328,6 @@ class vmtkSufaceResolution(pypes.pypeScript):
             self.InputInfo('Please position the mouse and press space to add spheres, \'u\' to undo\nInsert at least 2 spheres.')
         
         self.Surface = self.ComputeArray()
-
-        if self.Surface.GetSource():
-            self.Surface.GetSource().UnRegisterAllOutputs()
 
         if self.OwnRenderer:
             self.vmtkRenderer.Deallocate()

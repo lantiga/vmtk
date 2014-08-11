@@ -57,10 +57,7 @@ class vmtkMeshTetrahedralize2(pypes.pypeScript):
         tetrahedralizeFilter.SetTetrahedraOnly(self.TetrahedraOnly)
         tetrahedralizeFilter.Update()
 
-        self.Mesh = tetrahedralizeFilter.GetOutputData()
-
-        if self.Mesh.GetSource():
-            self.Mesh.GetSource().UnRegisterAllOutputs()
+        self.Mesh = tetrahedralizeFilter.GetOutput()
 
 
 if __name__=='__main__':

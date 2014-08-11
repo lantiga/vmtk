@@ -64,7 +64,7 @@ class vmtkMeshMerge(pypes.pypeScript):
         merger.SetMergeDuplicatePoints(1)
         merger.Update()
 
-        self.Mesh = merger.GetOutputData()
+        self.Mesh = merger.GetOutput()
 
 if __name__ == '__main__':
     main = pypes.pypeMain()

@@ -73,7 +73,7 @@ class VmtkSurfaceExtractInnerCylinder(pypes.pypeScript):
         gf.SetInputConnection(th.GetOutputPort())
         gf.Update()
 
-        self.DoubleSurface = gf.GetOutputData()
+        self.DoubleSurface = gf.GetOutput()
 
     def colorSurfaceRegions(self):
         self.PrintLog("Coloring surface regions.")
@@ -86,7 +86,7 @@ class VmtkSurfaceExtractInnerCylinder(pypes.pypeScript):
 
         assert connectivityFilter.GetNumberOfExtractedRegions() == 2
 
-        self.ColoredSurface = connectivityFilter.GetOutputData()
+        self.ColoredSurface = connectivityFilter.GetOutput()
 
     def extractInnerSurface(self):
         self.PrintLog("Extracting inner surface.")
@@ -111,7 +111,7 @@ class VmtkSurfaceExtractInnerCylinder(pypes.pypeScript):
             connectivityFilter.ColorRegionsOff()
             connectivityFilter.SetScalarConnectivity(0)
             connectivityFilter.Update()
-            subsurface = connectivityFilter.GetOutputData()
+            subsurface = connectivityFilter.GetOutput()
 
             # The inner surface has smaller bounds
             if bnorm(subsurface) < bounds_norm - 1e-12:

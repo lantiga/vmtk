@@ -138,7 +138,7 @@ class vmtkSurfaceWriter2(pypes.pypeScript):
         triangleFilter.PassVertsOff()
         triangleFilter.PassLinesOff()
         triangleFilter.Update()
-        self.Surface = triangleFilter.GetOutputData()
+        self.Surface = triangleFilter.GetOutput()
         f=open(self.OutputFileName, 'w')
         line = "VARIABLES = X,Y,Z"
         arrayNames = []

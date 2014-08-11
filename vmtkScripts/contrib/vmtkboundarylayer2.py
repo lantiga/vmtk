@@ -127,11 +127,9 @@ class vmtkBoundaryLayer2(pypes.pypeScript):
         boundaryLayerGenerator.SetSurfaceEntityId(int(self.SurfaceEntityId))
         boundaryLayerGenerator.SetOpenProfilesEntityId(int(self.OpenProfilesEntityId))
         boundaryLayerGenerator.Update()
-        self.Mesh = boundaryLayerGenerator.GetOutputData()
+        self.Mesh = boundaryLayerGenerator.GetOutput()
         self.InnerSurfaceMesh = boundaryLayerGenerator.GetInnerSurface()
 
-        if self.Mesh.GetSource():
-            self.Mesh.GetSource().UnRegisterAllOutputs()
 
 
 if __name__=='__main__':

@@ -58,13 +58,13 @@ class VmtkThreshold(pypes.pypeScript):
         th.Update()
 
         if self.Mesh != None:
-            self.Mesh = th.GetOutputData()
+            self.Mesh = th.GetOutput()
         else:
             assert self.Surface != None
             gf = vtk.vtkGeometryFilter()
             gf.SetInputConnection(th.GetOutputPort())
             gf.Update()
-            self.Surface = gf.GetOutputData()
+            self.Surface = gf.GetOutput()
 
 if __name__ == '__main__':
     main = pypes.pypeMain()

@@ -99,7 +99,7 @@ class vmtkDistanceToSpheres(pypes.pypeScript):
         distanceToSpheresFilter.SetMaxDistance(self.MaxDistance);
         distanceToSpheresFilter.SetDistanceToSpheresArrayName(self.DistanceToSpheresArrayName)
         distanceToSpheresFilter.Update()
-        return distanceToSpheresFilter.GetOutputData()
+        return distanceToSpheresFilter.GetOutput()
       
     
     def InitializeSpheres(self):
@@ -276,7 +276,7 @@ class vmtkDistanceToSpheres(pypes.pypeScript):
         glyphSource = vtk.vtkSphereSource()
         glyphSource.SetRadius(1)
         glyphs.SetInputData(self.Spheres)
-        glyphs.SetSourceData(glyphSource.GetOutputData())
+        glyphs.SetSourceData(glyphSource.GetOutput())
         glyphs.SetScaleModeToScaleByScalar()
         glyphs.SetScaleFactor(1.)
         glyphMapper = vtk.vtkPolyDataMapper()
@@ -293,7 +293,7 @@ class vmtkDistanceToSpheres(pypes.pypeScript):
         examineGlyphSource = vtk.vtkSphereSource()
         examineGlyphSource.SetRadius(1)
         examineGlyphs.SetInputData(self.ExamineSpheres)
-        examineGlyphs.SetSourceData(examineGlyphSource.GetOutputData())
+        examineGlyphs.SetSourceData(examineGlyphSource.GetOutput())
         examineGlyphs.SetScaleModeToScaleByScalar()
         examineGlyphs.SetScaleFactor(1.)
         examineGlyphMapper = vtk.vtkPolyDataMapper()
@@ -361,9 +361,6 @@ class vmtkDistanceToSpheres(pypes.pypeScript):
             any = self.Spheres.GetNumberOfPoints()
         
         self.Surface = self.ComputeDistances()
-
-        if self.Surface.GetSource():
-            self.Surface.GetSource().UnRegisterAllOutputs()
 
         if self.OwnRenderer:
             self.vmtkRenderer.Deallocate()

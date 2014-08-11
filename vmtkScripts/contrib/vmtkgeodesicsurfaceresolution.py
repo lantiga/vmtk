@@ -86,7 +86,7 @@ class vmtkGeodesicSurfaceResolution(pypes.pypeScript):
             rbf.SetInputData(self.Surface)
             rbf.SetInterpolatedArrayName(self.ResolutionArrayName)
             rbf.Update()
-        return rbf.GetOutputData()
+        return rbf.GetOutput()
       
     
     def InitializeSpheres(self):
@@ -256,7 +256,7 @@ class vmtkGeodesicSurfaceResolution(pypes.pypeScript):
         glyphSource = vtk.vtkSphereSource()
         glyphSource.SetRadius(1)
         glyphs.SetInputData(self.Spheres)
-        glyphs.SetSourceData(glyphSource.GetOutputData())
+        glyphs.SetSourceData(glyphSource.GetOutput())
         glyphs.SetScaleModeToScaleByScalar()
         glyphs.SetScaleFactor(1.)
         glyphMapper = vtk.vtkPolyDataMapper()
@@ -273,7 +273,7 @@ class vmtkGeodesicSurfaceResolution(pypes.pypeScript):
         examineGlyphSource = vtk.vtkSphereSource()
         examineGlyphSource.SetRadius(1)
         examineGlyphs.SetInputData(self.ExamineSpheres)
-        examineGlyphs.SetSourceData(examineGlyphSource.GetOutputData())
+        examineGlyphs.SetSourceData(examineGlyphSource.GetOutput())
         examineGlyphs.SetScaleModeToScaleByScalar()
         examineGlyphs.SetScaleFactor(1.)
         examineGlyphMapper = vtk.vtkPolyDataMapper()
@@ -341,9 +341,6 @@ class vmtkGeodesicSurfaceResolution(pypes.pypeScript):
             any = (self.Spheres.GetNumberOfPoints()>1)
         
         self.Surface = self.ComputeArray()
-
-        if self.Surface.GetSource():
-            self.Surface.GetSource().UnRegisterAllOutputs()
 
         if self.OwnRenderer:
             self.vmtkRenderer.Deallocate()

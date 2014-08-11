@@ -151,7 +151,7 @@ class vmtkMeshClipCenterlines(pypes.pypeScript):
       interpolator.SetValuesIds(self.SpheresIndices)
       interpolator.SetInterpolatedArrayName("InterpolatedRadius")
       interpolator.Update()
-      self.Centerlines = interpolator.GetOutputData()
+      self.Centerlines = interpolator.GetOutput()
       self.Centerlines.GetPointData().SetActiveScalars("InterpolatedRadius")
       self.InterpolatedGlyphs.SetInputData(self.Centerlines)
       #enable scaling
@@ -220,7 +220,7 @@ class vmtkMeshClipCenterlines(pypes.pypeScript):
         
         self.Clipper.SetClipFunction(self.PolyBall)
         self.Clipper.Update()
-        self.PreviewMesh = self.Clipper.GetOutputData()
+        self.PreviewMesh = self.Clipper.GetOutput()
         self.ClippedMesh = self.Clipper.GetClippedOutputData()
       
     #Clip the mesh using vtkvmtkClipDataSetLine
@@ -251,13 +251,13 @@ class vmtkMeshClipCenterlines(pypes.pypeScript):
         cellDimFilter.SetInputData(inMesh)
         cellDimFilter.ThresholdByUpper(3)
         cellDimFilter.Update()
-        volumetricMesh = cellDimFilter.GetOutputData()
+        volumetricMesh = cellDimFilter.GetOutput()
         
         #Get new surface cells
         geomFilter = vtk.vtkGeometryFilter()
         geomFilter.SetInputConnection(cellDimFilter.GetOutputPort())
         geomFilter.Update()
-        newSurfaceCells = geomFilter.GetOutputData()
+        newSurfaceCells = geomFilter.GetOutput()
         
         #If the celEntityIdArray exist, project the original entity ids
         cellEntityIdsArray = newSurfaceCells.GetCellData().GetArray(self.CellEntityIdsArrayName)
@@ -275,7 +275,7 @@ class vmtkMeshClipCenterlines(pypes.pypeScript):
             meshThreshold.Update()
             
             meshToSurface = vmtkscripts.vmtkMeshToSurface()
-            meshToSurface.Mesh = meshThreshold.GetOutputData()
+            meshToSurface.Mesh = meshThreshold.GetOutput()
             meshToSurface.Execute()
             
             #Project the entity ids form the old surface cells to the new surface cells
@@ -290,7 +290,7 @@ class vmtkMeshClipCenterlines(pypes.pypeScript):
             
             #Convert the surface cells back to unstructured grid
             surfaceToMesh = vmtkscripts.vmtkSurfaceToMesh()
-            surfaceToMesh.Surface = projector.GetOutputData()
+            surfaceToMesh.Surface = projector.GetOutput()
             surfaceToMesh.Execute()
             
             newSurfaceCells = surfaceToMesh.Mesh
@@ -302,7 +302,7 @@ class vmtkMeshClipCenterlines(pypes.pypeScript):
         appendFilter.AddInputData(newSurfaceCells)
         appendFilter.Update()
         
-        return appendFilter.GetOutputData()
+        return appendFilter.GetOutput()
 
     def LCallback(self,obj):
 	self.DisplayedMesh = (self.DisplayedMesh+1)%3
@@ -528,7 +528,7 @@ class vmtkMeshClipCenterlines(pypes.pypeScript):
         cleaner = vtk.vtkCleanPolyData()
         cleaner.SetInputData(self.Centerlines)
         cleaner.Update()
-        self.Centerlines = cleaner.GetOutputData()
+        self.Centerlines = cleaner.GetOutput()
 
         if self.Tolerance == -1:
             self.Tolerance = 0.000001*self.Mesh.GetLength()
@@ -563,7 +563,7 @@ class vmtkMeshClipCenterlines(pypes.pypeScript):
         glyphSource = vtk.vtkSphereSource()
         glyphSource.SetRadius(1)
         glyphs.SetInputData(self.Spheres)
-        glyphs.SetSourceData(glyphSource.GetOutputData())
+        glyphs.SetSourceData(glyphSource.GetOutput())
         glyphs.SetScaleModeToScaleByScalar()
         glyphs.SetScaleFactor(1.)
         glyphMapper = vtk.vtkPolyDataMapper()
@@ -580,7 +580,7 @@ class vmtkMeshClipCenterlines(pypes.pypeScript):
         interpolatedGlyphSource = vtk.vtkSphereSource()
         interpolatedGlyphSource.SetRadius(1)
         self.InterpolatedGlyphs.SetInputData(self.Centerlines)
-        self.InterpolatedGlyphs.SetSourceData(interpolatedGlyphSource.GetOutputData())
+        self.InterpolatedGlyphs.SetSourceData(interpolatedGlyphSource.GetOutput())
         #scaling is off for now
         self.InterpolatedGlyphs.SetScaleModeToDataScalingOff()
         self.InterpolatedGlyphs.SetScaleFactor(0.)
@@ -644,9 +644,6 @@ class vmtkMeshClipCenterlines(pypes.pypeScript):
         if self.OwnRenderer:
             self.vmtkRenderer.Deallocate()
         
-        if self.Mesh.GetSource():
-            self.Mesh.GetSource().UnRegisterAllOutputs()
-
         #Restore the centerlines
         self.Centerlines = previousCenterlines
 

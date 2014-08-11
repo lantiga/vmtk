@@ -99,7 +99,7 @@ class vmtkDijkstraDistanceToPoints(pypes.pypeScript):
         dijkstraFilter.SetMaxDistance(self.MaxDistance)
         dijkstraFilter.SetDijkstraDistanceToPointsArrayName(self.DijkstraDistanceToPointsArrayName)
         dijkstraFilter.Update()
-        return dijkstraFilter.GetOutputData()
+        return dijkstraFilter.GetOutput()
     
     def InitializeSeeds(self):
         if (self.InteractionMode==0):
@@ -218,7 +218,7 @@ class vmtkDijkstraDistanceToPoints(pypes.pypeScript):
         glyphSource = vtk.vtkSphereSource()
         glyphSource.SetRadius(1)
         glyphs.SetInputData(self.SeedPoints)
-        glyphs.SetSourceData(glyphSource.GetOutputData())
+        glyphs.SetSourceData(glyphSource.GetOutput())
         glyphs.SetScaleModeToDataScalingOff()
         glyphs.SetScaleFactor(self.Surface.GetLength()*0.01)
         glyphMapper = vtk.vtkPolyDataMapper()
@@ -235,7 +235,7 @@ class vmtkDijkstraDistanceToPoints(pypes.pypeScript):
         examineGlyphSource = vtk.vtkSphereSource()
         examineGlyphSource.SetRadius(1)
         examineGlyphs.SetInputData(self.ExamineSpheres)
-        examineGlyphs.SetSourceData(examineGlyphSource.GetOutputData())
+        examineGlyphs.SetSourceData(examineGlyphSource.GetOutput())
         examineGlyphs.SetScaleModeToScaleByScalar()
         examineGlyphs.SetScaleFactor(1.)
         examineGlyphMapper = vtk.vtkPolyDataMapper()
@@ -290,9 +290,6 @@ class vmtkDijkstraDistanceToPoints(pypes.pypeScript):
             any = self.SeedIds.GetNumberOfIds()
  
         self.Surface = self.ComputeDistances()
-
-        if self.Surface.GetSource():
-            self.Surface.GetSource().UnRegisterAllOutputs()
 
         if self.OwnRenderer:
             self.vmtkRenderer.Deallocate()

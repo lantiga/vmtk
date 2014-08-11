@@ -77,7 +77,7 @@ class VmtkSurfaceExtractAnnularWalls(pypes.pypeScript):
         gf.SetInputConnection(th.GetOutputPort())
         gf.Update()
 
-        self.DoubleSurface = gf.GetOutputData()
+        self.DoubleSurface = gf.GetOutput()
 
     def colorSurfaceRegions(self):
         self.PrintLog("Coloring surface regions.")
@@ -90,7 +90,7 @@ class VmtkSurfaceExtractAnnularWalls(pypes.pypeScript):
 
         assert connectivityFilter.GetNumberOfExtractedRegions() == 2
 
-        self.ColoredSurface = connectivityFilter.GetOutputData()
+        self.ColoredSurface = connectivityFilter.GetOutput()
 
     def extractSurfaces(self):
         self.PrintLog("Extracting surfaces.")
@@ -116,7 +116,7 @@ class VmtkSurfaceExtractAnnularWalls(pypes.pypeScript):
             connectivityFilter.ColorRegionsOff()
             connectivityFilter.SetScalarConnectivity(0)
             connectivityFilter.Update()
-            subsurfaces[k] = connectivityFilter.GetOutputData()
+            subsurfaces[k] = connectivityFilter.GetOutput()
 
         # The inner surface has smaller bounds
         if bnorm(subsurfaces[region_ids[0]]) < bnorm(subsurfaces[region_ids[1]]):
